@@ -22,3 +22,16 @@ export interface Guest {
     occupiedBy?: string;
     side?: 'front' | 'top' | 'bottom'; // Add side property
   }
+
+  export interface TableComponentProps {
+    table: Table;
+    guests: Guest[];
+    onChairDrop: (chairId: string, guestId: string) => void;
+    setTables: React.Dispatch<React.SetStateAction<Table[]>>;
+    calculateChairPositions: (
+      type: "rectangle" | "circle",
+      count: number,
+      width: number,
+      height: number
+    ) => Chair[];
+  }
