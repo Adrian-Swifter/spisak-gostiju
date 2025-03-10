@@ -25,7 +25,22 @@
 .canvas {
   flex: 1;
   position: relative;
-  background: #f8fafc;
+  background: #fff;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .canvas,
+  .canvas * {
+    visibility: visible;
+  }
+  .canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
 }
 
 /* Guest List Styles */
