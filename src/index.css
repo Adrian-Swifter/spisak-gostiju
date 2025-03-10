@@ -88,13 +88,24 @@
 }
 
 .table.rectangle {
-  border: 2px solid var(--accent);
   border-radius: 0.5rem;
 }
 
+/* For circle tables */
 .table.circle {
-  border: 2px solid var(--accent);
   border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* For rectangle chairs */
+.chair[data-side="front"] {
+  border-radius: 2px 2px 8px 8px;
+}
+.chair[data-side="left"],
+.chair[data-side="right"] {
+  border-radius: 8px;
 }
 
 .chair {
@@ -220,4 +231,20 @@ input[type="file"] {
   outline: none;
   background: rgba(255, 255, 255, 0.9);
   border-radius: 4px;
+}
+
+/* Front chair (left side) */
+.chair.front {
+  border-radius: 2px 8px 8px 2px !important;
+}
+
+/* Top/Bottom chairs */
+.chair.top,
+.chair.bottom {
+  border-radius: 8px 8px 2px 2px;
+}
+
+/* Circle table chairs */
+.table.circle .chair {
+  border-radius: 50%;
 }

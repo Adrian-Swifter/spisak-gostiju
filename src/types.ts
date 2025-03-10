@@ -20,4 +20,5 @@ export interface Guest {
     x: number;
     y: number;
     occupiedBy?: string;
+    side?: 'front' | 'top' | 'bottom'; // Add side property
   }

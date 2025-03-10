@@ -33,8 +33,12 @@ const App = () => {
     localStorage.setItem("guests", JSON.stringify([...guests, newGuest]));
   };
 
+  // Update the circle table creation in addTable function
   const addTable = (type: "rectangle" | "circle") => {
     if (!newTableName) return alert("Please enter table name");
+
+    const initialSize = type === "circle" ? 200 : 200; // Increased initial size
+    const initialHeight = type === "circle" ? 200 : 100;
 
     const newTable: Table = {
       id: uuidv4(),
@@ -42,16 +46,18 @@ const App = () => {
       type,
       x: 100,
       y: 100,
-      width: type === "circle" ? 150 : 200,
-      height: type === "circle" ? 150 : 100,
+      width: initialSize,
+      height: initialHeight,
       chairsCount: newChairCount,
-      chairs: calculateChairPositions(type, newChairCount, 200, 100),
+      chairs: calculateChairPositions(
+        type,
+        newChairCount,
+        initialSize,
+        initialHeight
+      ),
     };
 
     setTables([...tables, newTable]);
-    localStorage.setItem("tables", JSON.stringify([...tables, newTable]));
-    setNewTableName("");
-    setNewChairCount(8);
   };
 
   const handleChairDrop = (chairId: string, guestId: string) => {
@@ -406,6 +412,7 @@ const ChairComponent = ({
         backgroundColor: isOver ? "lightgreen" : guest ? "gold" : "white",
       }}
       onClick={handleClick}
+      data-side={chair.side}
     >
       {guest?.name || " "}
     </div>
@@ -421,57 +428,46 @@ const calculateChairPositions = (
 ): Chair[] => {
   const chairSize = 20;
   const chairs: Chair[] = [];
-  const preservedChairs = existingChairs.slice(0, count);
+  const preservedChairs = existingChairs.slice(0, count); // Fix: Define preservedChairs
 
-  // Generate new chair positions
   if (type === "rectangle") {
-    const chairsPerSide = Math.ceil(count / 4);
-    const sides = ["top", "right", "bottom", "left"];
+    // Front side (left) - 1 chair
+    const frontChairs = 1;
+    const remaining = Math.max(0, count - frontChairs);
+    const perVerticalSide = Math.ceil(remaining / 2);
 
-    sides.forEach((side, sideIndex) => {
-      const chairsOnThisSide = Math.min(
-        chairsPerSide,
-        count - sideIndex * chairsPerSide
-      );
-      const step =
-        side === "top" || side === "bottom"
-          ? width / (chairsOnThisSide + 1)
-          : height / (chairsOnThisSide + 1);
+    // Front chair (left side)
+    if (frontChairs > 0) {
+      chairs.push({
+        x: -chairSize,
+        y: height / 2 - chairSize / 2,
+        side: "front",
+      });
+    }
 
-      for (let i = 0; i < chairsOnThisSide; i++) {
-        let x = 0,
-          y = 0;
-        switch (side) {
-          case "top":
-            x = step * (i + 1) - chairSize / 2;
-            y = -chairSize;
-            break;
-          case "right":
-            x = width;
-            y = step * (i + 1) - chairSize / 2;
-            break;
-          case "bottom":
-            x = step * (i + 1) - chairSize / 2;
-            y = height;
-            break;
-          case "left":
-            x = -chairSize;
-            y = step * (i + 1) - chairSize / 2;
-            break;
-        }
-        chairs.push({ x, y });
+    // Top and bottom sides
+    ["top", "bottom"].forEach((side) => {
+      const step = width / (perVerticalSide + 1);
+      for (let i = 0; i < perVerticalSide; i++) {
+        chairs.push({
+          x: step * (i + 1) - chairSize / 2,
+          y: side === "top" ? -chairSize : height,
+          side: side as "top" | "bottom",
+        });
       }
     });
   } else {
+    // Circle table logic
     const centerX = width / 2;
     const centerY = height / 2;
-    const radius = Math.min(width, height) / 2 - chairSize;
+    const radius = Math.min(width, height) / 2 - chairSize * 1.5;
 
     for (let i = 0; i < count; i++) {
-      const angle = (i * (360 / count) * Math.PI) / 180;
-      const x = centerX + radius * Math.cos(angle) - chairSize / 2;
-      const y = centerY + radius * Math.sin(angle) - chairSize / 2;
-      chairs.push({ x, y });
+      const angle = (i * (360 / count) * Math.PI) / 180 - Math.PI / 2;
+      chairs.push({
+        x: centerX + radius * Math.cos(angle) - chairSize / 2,
+        y: centerY + radius * Math.sin(angle) - chairSize / 2,
+      });
     }
   }
 
