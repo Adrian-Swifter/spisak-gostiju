@@ -9,8 +9,7 @@ import calculateChairPositions from "./utils/calculateChairPositions";
 import GuestForm from "./components/guests/GuestForm";
 import GuestList from "./components/guests/GuestList";
 import TableComponent from "./components/TableComponent";
-import exportCanvasToPDF from "./utils/ExportCanvasToPDF";
-
+import exportCanvasToPDF from "./utils/exportCanvasToPDF";
 const App = () => {
   const [newTableName, setNewTableName] = useState("");
   const [newChairCount, setNewChairCount] = useState(8);
@@ -137,7 +136,6 @@ const App = () => {
           <button onClick={exportData}>Export JSON</button>
           <button onClick={exportExcel}>Export Excel</button>
           <button onClick={exportPDF}>Export PDF</button>
-          <button onClick={exportCanvasToPDF}>Export Floor Plan as PDF</button>
           <GuestList guests={guests} />
           <div className="table-creator">
             <h3>Create Table</h3>
