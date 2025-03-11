@@ -21,6 +21,7 @@ const TableComponent = ({
 
   const handleResize = (width: number, height: number) => {
     if (table.type === "circle") {
+      // Maintain aspect ratio
       const size = Math.max(width, height);
       width = size;
       height = size;
@@ -32,13 +33,14 @@ const TableComponent = ({
           ? {
               ...t,
               width,
-              height,
+              height: t.type === "circle" ? width : height,
               chairs: calculateChairPositions(
                 t.type,
                 t.chairsCount,
                 width,
                 height,
-                t.chairs
+                t.chairs,
+                t.seatingType
               ),
             }
           : t
@@ -71,7 +73,8 @@ const TableComponent = ({
                 newCount,
                 t.width,
                 t.height,
-                t.chairs.slice(0, newCount) // Keep only the first newCount chairs
+                t.chairs.slice(0, newCount),
+                t.seatingType
               ),
             }
           : t

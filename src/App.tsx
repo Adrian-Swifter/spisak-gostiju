@@ -25,7 +25,6 @@ const App = () => {
     return saved ? JSON.parse(saved) : [];
   });
 
-  // In App component
   useEffect(() => {
     localStorage.setItem("tables", JSON.stringify(tables));
     localStorage.setItem("guests", JSON.stringify(guests));
@@ -51,27 +50,52 @@ const App = () => {
     localStorage.setItem("guests", JSON.stringify(updatedGuests));
   };
 
-  // Update the circle table creation in addTable function
+  const [seatingType, setSeatingType] = useState<"one-sided" | "two-sided">(
+    "two-sided"
+  );
+
+  const [tableType, setTableType] = useState<"rectangle" | "circle">(
+    "rectangle"
+  );
+
+  const calculateInitialSize = (
+    type: "rectangle" | "circle",
+    chairsCount: number
+  ) => {
+    const chairWidth = 40;
+    const minWidth = 200;
+
+    if (type === "rectangle") {
+      const chairsPerSide =
+        seatingType === "one-sided" ? chairsCount : Math.ceil(chairsCount / 2);
+      return Math.max(minWidth, chairsPerSide * chairWidth);
+    }
+    return 200;
+  };
+
   const addTable = (type: "rectangle" | "circle") => {
     if (!newTableName) return alert("Please enter table name");
 
-    const initialSize = type === "circle" ? 200 : 200; // Increased initial size
-    const initialHeight = type === "circle" ? 200 : 100;
+    const initialWidth = calculateInitialSize(type, newChairCount);
+    const initialHeight = type === "circle" ? initialWidth : 100;
 
     const newTable: Table = {
       id: uuidv4(),
       name: newTableName,
       type,
+      seatingType: type === "rectangle" ? seatingType : undefined,
       x: 100,
       y: 100,
-      width: initialSize,
+      width: initialWidth,
       height: initialHeight,
       chairsCount: newChairCount,
       chairs: calculateChairPositions(
         type,
         newChairCount,
-        initialSize,
-        initialHeight
+        initialWidth,
+        initialHeight,
+        [],
+        seatingType
       ),
     };
 
@@ -234,6 +258,27 @@ const App = () => {
           />
           <div className="table-creator">
             <h3>Create Table</h3>
+            <select
+              value={tableType}
+              onChange={(e) =>
+                setTableType(e.target.value as "rectangle" | "circle")
+              }
+            >
+              <option value="rectangle">Rectangle</option>
+              <option value="circle">Circle</option>
+            </select>
+
+            {tableType === "rectangle" && (
+              <select
+                value={seatingType}
+                onChange={(e) =>
+                  setSeatingType(e.target.value as "one-sided" | "two-sided")
+                }
+              >
+                <option value="one-sided">One-sided seating</option>
+                <option value="two-sided">Two-sided seating</option>
+              </select>
+            )}
             <input
               type="text"
               placeholder="Table name"
@@ -247,7 +292,7 @@ const App = () => {
               onChange={(e) => setNewChairCount(Number(e.target.value))}
             />
             <button
-              onClick={() => addTable("rectangle")}
+              onClick={() => addTable(tableType)}
               style={{
                 padding: "10px",
                 border: "none",
@@ -255,24 +300,9 @@ const App = () => {
                 backgroundColor: "#007bff",
                 color: "#fff",
                 cursor: "pointer",
-                fontSize: "16px",
               }}
             >
-              Add Rectangle Table
-            </button>
-            <button
-              onClick={() => addTable("circle")}
-              style={{
-                padding: "10px",
-                border: "none",
-                borderRadius: "5px",
-                backgroundColor: "#28a745",
-                color: "#fff",
-                cursor: "pointer",
-                fontSize: "16px",
-              }}
-            >
-              Add Circle Table
+              Add Table
             </button>
           </div>
           <div className="table-list" style={{ marginTop: "20px" }}>

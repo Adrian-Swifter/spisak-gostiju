@@ -2,74 +2,69 @@ import { v4 as uuidv4 } from "uuid";
 import { Chair } from "../types";
 
 const calculateChairPositions = (
-    type: "rectangle" | "circle",
-    count: number,
-    width: number,
-    height: number,
-    existingChairs: Chair[] = []
-  ): Chair[] => {
-    const chairSize = 20;
-    const chairs: Chair[] = [];
-    const preservedChairs = existingChairs.slice(0, count); 
-  
-    if (type === "rectangle") {
-      // Front side (left) - 1 chair
-      const frontChairs = 1;
-      const remaining = Math.max(0, count - frontChairs);
-      const perVerticalSide = Math.ceil(remaining / 2);
-  
-      // Front chair (left side)
-      if (frontChairs > 0) {
-        chairs.push({
-          x: -chairSize,
-          y: height / 2 - chairSize / 2,
-          side: "front",
-        });
-      }
-  
-      // Top and bottom sides
-      ["top", "bottom"].forEach((side) => {
-        const step = width / (perVerticalSide + 1);
-        for (let i = 0; i < perVerticalSide; i++) {
-          chairs.push({
-            x: step * (i + 1) - chairSize / 2,
-            y: side === "top" ? -chairSize : height,
-            side: side as "top" | "bottom",
-          });
-        }
-      });
-    } else {
-      // Circle table logic
-      const centerX = width / 2;
-      const centerY = height / 2;
-      const radius = Math.min(width, height) / 2 - chairSize * 1.5;
-  
-      for (let i = 0; i < count; i++) {
-        const angle = (i * (360 / count) * Math.PI) / 180 - Math.PI / 2;
-        chairs.push({
-          x: centerX + radius * Math.cos(angle) - chairSize / 2,
-          y: centerY + radius * Math.sin(angle) - chairSize / 2,
-        });
-      }
-    }
-  
-    // Merge existing chairs with new positions
-    return preservedChairs
-      .map((existingChair, index) => ({
-        ...existingChair,
-        x: chairs[index]?.x ?? existingChair.x,
-        y: chairs[index]?.y ?? existingChair.y,
-        id: existingChair.id || uuidv4(),
-      }))
-      .concat(
-        chairs.slice(preservedChairs.length).map((pos) => ({
-          id: uuidv4(),
-          x: pos.x,
-          y: pos.y,
-          occupiedBy: undefined,
-        }))
-      )
-      .slice(0, count);
-  };
+  type: 'rectangle' | 'circle',
+  count: number,
+  width: number,
+  height: number,
+  existingChairs: Chair[] = [],
+  seatingType?: 'one-sided' | 'two-sided' 
+): Chair[] => {
+  const chairs: Chair[] = [];
+  const preservedChairs = existingChairs.slice(0, count);
+  const chairSize = 20;
+  const chairSpacing = 5; // Added spacing between chairs
 
-  export default calculateChairPositions
+  if (type === 'rectangle') {
+    const sides = seatingType === 'one-sided' ? ['top'] : ['top', 'bottom'];
+    const chairsPerSide = Math.ceil(count / sides.length);
+    
+    sides.forEach(side => {
+      for (let i = 0; i < chairsPerSide; i++) {
+        const x = (width / (chairsPerSide + 1)) * (i + 1) - chairSize/2;
+        const y = side === 'top' ? -chairSize : height;
+        
+        if (chairs.length < count) {
+          chairs.push({ x, y, side });
+        }
+      }
+    });
+  }else {
+    // Improved circle calculations
+    const diameter = Math.min(width, height);
+    const radius = (diameter / 2) - chairSize - 10; // Add padding
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const angleStep = (2 * Math.PI) / count; // Proper angle calculation
+
+    for (let i = 0; i < count; i++) {
+      const angle = (i * angleStep) - Math.PI / 2; // Start from top
+      const x = centerX + radius * Math.cos(angle) - chairSize / 2;
+      const y = centerY + radius * Math.sin(angle) - chairSize / 2;
+      
+      chairs.push({
+        x,
+        y,
+        angle: (angle * 180) / Math.PI // Optional: store angle for rotation
+      });
+    }
+  }
+  
+    return preservedChairs
+    .map((existingChair, index) => ({
+      ...existingChair,
+      x: chairs[index]?.x ?? existingChair.x,
+      y: chairs[index]?.y ?? existingChair.y,
+      id: existingChair.id || uuidv4(),
+    }))
+    .concat(
+      chairs.slice(preservedChairs.length).map((pos) => ({
+        id: uuidv4(),
+        x: pos.x,
+        y: pos.y,
+        occupiedBy: undefined,
+      }))
+    )
+    .slice(0, count);
+};
+
+export default calculateChairPositions;

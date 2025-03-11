@@ -139,6 +139,23 @@
   box-shadow: var(--shadow);
 }
 
+.table.circle {
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chair {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;
+}
+
 .chair:hover {
   transform: scale(1.15);
   z-index: 1;
@@ -262,4 +279,20 @@ input[type="file"] {
 /* Circle table chairs */
 .table.circle .chair {
   border-radius: 50%;
+}
+
+/* Ensure chairs stay aligned */
+.chair[data-side="top"] {
+  transform: translateY(-50%);
+}
+.chair[data-side="bottom"] {
+  transform: translateY(50%);
+}
+
+/* Better visual hierarchy for different sides */
+.chair[data-side="top"] {
+  background: #f0f0f0;
+}
+.chair[data-side="bottom"] {
+  background: #e0e0e0;
 }

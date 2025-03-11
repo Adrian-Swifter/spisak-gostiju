@@ -7,12 +7,13 @@ export interface Guest {
     id: string;
     name: string;
     type: 'rectangle' | 'circle';
+    seatingType?: 'one-sided' | 'two-sided'; 
     x: number;
     y: number;
     width: number;
     height: number;
-    chairs: Chair[];
     chairsCount: number;
+    chairs: Chair[];
   }
   
   export interface Chair {
