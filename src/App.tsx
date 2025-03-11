@@ -158,34 +158,6 @@ const App = () => {
               marginTop: "20px",
             }}
           >
-            <button
-              onClick={() => addTable("rectangle")}
-              style={{
-                padding: "10px",
-                border: "none",
-                borderRadius: "5px",
-                backgroundColor: "#007bff",
-                color: "#fff",
-                cursor: "pointer",
-                fontSize: "16px",
-              }}
-            >
-              Add Rectangle Table
-            </button>
-            <button
-              onClick={() => addTable("circle")}
-              style={{
-                padding: "10px",
-                border: "none",
-                borderRadius: "5px",
-                backgroundColor: "#28a745",
-                color: "#fff",
-                cursor: "pointer",
-                fontSize: "16px",
-              }}
-            >
-              Add Circle Table
-            </button>
             <input
               type="file"
               onChange={importData}
@@ -274,10 +246,34 @@ const App = () => {
               value={newChairCount}
               onChange={(e) => setNewChairCount(Number(e.target.value))}
             />
-            <button onClick={() => addTable("rectangle")}>
+            <button
+              onClick={() => addTable("rectangle")}
+              style={{
+                padding: "10px",
+                border: "none",
+                borderRadius: "5px",
+                backgroundColor: "#007bff",
+                color: "#fff",
+                cursor: "pointer",
+                fontSize: "16px",
+              }}
+            >
               Add Rectangle Table
             </button>
-            <button onClick={() => addTable("circle")}>Add Circle Table</button>
+            <button
+              onClick={() => addTable("circle")}
+              style={{
+                padding: "10px",
+                border: "none",
+                borderRadius: "5px",
+                backgroundColor: "#28a745",
+                color: "#fff",
+                cursor: "pointer",
+                fontSize: "16px",
+              }}
+            >
+              Add Circle Table
+            </button>
           </div>
           <div className="table-list" style={{ marginTop: "20px" }}>
             <h3 style={{ textAlign: "center", marginBottom: "10px" }}>
