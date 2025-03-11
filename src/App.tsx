@@ -64,6 +64,12 @@ const App = () => {
     setTables([...tables, newTable]);
   };
 
+  const deleteTable = (tableId: string) => {
+    setTables((prevTables) =>
+      prevTables.filter((table) => table.id !== tableId)
+    );
+  };
+
   const handleChairDrop = (chairId: string, guestId: string) => {
     setTables((prevTables) =>
       prevTables.map((table) => ({
@@ -157,6 +163,44 @@ const App = () => {
               Add Rectangle Table
             </button>
             <button onClick={() => addTable("circle")}>Add Circle Table</button>
+          </div>
+          <div className="table-list" style={{ marginTop: "20px" }}>
+            <h3 style={{ textAlign: "center", marginBottom: "10px" }}>
+              Table List
+            </h3>
+            {tables.map((table) => (
+              <div
+                key={table.id}
+                className="table-item"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "10px",
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                  marginBottom: "10px",
+                  backgroundColor: "#f9f9f9",
+                }}
+              >
+                <span style={{ fontSize: "16px", fontWeight: "500" }}>
+                  {table.name}
+                </span>
+                <button
+                  onClick={() => deleteTable(table.id)}
+                  style={{
+                    padding: "5px 10px",
+                    border: "none",
+                    borderRadius: "3px",
+                    backgroundColor: "#ff4d4d",
+                    color: "#fff",
+                    cursor: "pointer",
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
           </div>
         </div>
         <div className="canvas">
