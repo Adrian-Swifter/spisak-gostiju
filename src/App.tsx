@@ -37,6 +37,20 @@ const App = () => {
     localStorage.setItem("guests", JSON.stringify([...guests, newGuest]));
   };
 
+  const deleteGuest = (id: string) => {
+    const updatedGuests = guests.filter((guest) => guest.id !== id);
+    setGuests(updatedGuests);
+    localStorage.setItem("guests", JSON.stringify(updatedGuests));
+  };
+
+  const editGuest = (id: string, name: string) => {
+    const updatedGuests = guests.map((guest) =>
+      guest.id === id ? { ...guest, name } : guest
+    );
+    setGuests(updatedGuests);
+    localStorage.setItem("guests", JSON.stringify(updatedGuests));
+  };
+
   // Update the circle table creation in addTable function
   const addTable = (type: "rectangle" | "circle") => {
     if (!newTableName) return alert("Please enter table name");
@@ -135,16 +149,117 @@ const App = () => {
       <div className="app">
         <div className="sidebar">
           <GuestForm onAdd={addGuest} />
-          <button onClick={() => addTable("rectangle")}>
-            Add Rectangle Table
-          </button>
-          <button onClick={() => addTable("circle")}>Add Circle Table</button>
-          <input type="file" onChange={importData} accept=".json" />
-          <button onClick={exportData}>Export JSON</button>
-          <button onClick={exportExcel}>Export Excel</button>
-          <button onClick={exportPDF}>Export PDF</button>
-          <button onClick={exportCanvasToPDF}>Exportuj Plan Sale</button>
-          <GuestList guests={guests} />
+          <div
+            className="button-group"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              marginTop: "20px",
+            }}
+          >
+            <button
+              onClick={() => addTable("rectangle")}
+              style={{
+                padding: "10px",
+                border: "none",
+                borderRadius: "5px",
+                backgroundColor: "#007bff",
+                color: "#fff",
+                cursor: "pointer",
+                fontSize: "16px",
+              }}
+            >
+              Add Rectangle Table
+            </button>
+            <button
+              onClick={() => addTable("circle")}
+              style={{
+                padding: "10px",
+                border: "none",
+                borderRadius: "5px",
+                backgroundColor: "#28a745",
+                color: "#fff",
+                cursor: "pointer",
+                fontSize: "16px",
+              }}
+            >
+              Add Circle Table
+            </button>
+            <input
+              type="file"
+              onChange={importData}
+              accept=".json"
+              style={{
+                padding: "10px",
+                border: "1px solid #ccc",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontSize: "16px",
+              }}
+            />
+            <button
+              onClick={exportData}
+              style={{
+                padding: "10px",
+                border: "none",
+                borderRadius: "5px",
+                backgroundColor: "#17a2b8",
+                color: "#fff",
+                cursor: "pointer",
+                fontSize: "16px",
+              }}
+            >
+              Export JSON
+            </button>
+            <button
+              onClick={exportExcel}
+              style={{
+                padding: "10px",
+                border: "none",
+                borderRadius: "5px",
+                backgroundColor: "#ffc107",
+                color: "#fff",
+                cursor: "pointer",
+                fontSize: "16px",
+              }}
+            >
+              Export Excel
+            </button>
+            <button
+              onClick={exportPDF}
+              style={{
+                padding: "10px",
+                border: "none",
+                borderRadius: "5px",
+                backgroundColor: "#dc3545",
+                color: "#fff",
+                cursor: "pointer",
+                fontSize: "16px",
+              }}
+            >
+              Export PDF
+            </button>
+            <button
+              onClick={exportCanvasToPDF}
+              style={{
+                padding: "10px",
+                border: "none",
+                borderRadius: "5px",
+                backgroundColor: "#6c757d",
+                color: "#fff",
+                cursor: "pointer",
+                fontSize: "16px",
+              }}
+            >
+              Exportuj Plan Sale
+            </button>
+          </div>
+          <GuestList
+            guests={guests}
+            onDelete={deleteGuest}
+            onEdit={editGuest}
+          />
           <div className="table-creator">
             <h3>Create Table</h3>
             <input
