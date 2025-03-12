@@ -82,7 +82,7 @@ const App = () => {
   };
 
   const addTable = (type: "rectangle" | "circle") => {
-    if (!newTableName) return alert("Please enter table name");
+    if (!newTableName) return alert("Unesite naziv stola!");
 
     const initialWidth = calculateInitialSize(type, newChairCount);
     const initialHeight = type === "circle" ? initialWidth : 100;
@@ -141,7 +141,7 @@ const App = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "wedding-plan.json";
+    a.download = "spisak-gostiju.json";
     a.click();
   };
 
@@ -163,17 +163,17 @@ const App = () => {
   const exportExcel = () => {
     const ws = utils.json_to_sheet(guests);
     const wb = utils.book_new();
-    utils.book_append_sheet(wb, ws, "Guests");
-    writeFile(wb, "guests.xlsx");
+    utils.book_append_sheet(wb, ws, "Gosti");
+    writeFile(wb, "spisak-gostiju.xlsx");
   };
 
   const exportPDF = () => {
     const doc = new jsPDF();
-    doc.text("Guest List", 10, 10);
+    doc.text("Spisak Gostiju", 10, 10);
     guests.forEach((guest, index) => {
       doc.text(`${index + 1}. ${guest.name}`, 10, 20 + index * 10);
     });
-    doc.save("guests.pdf");
+    doc.save("spisak-gostiju.pdf");
   };
   const buttonStyle = {
     padding: "10px",
@@ -215,7 +215,7 @@ const App = () => {
               }}
             >
               <FaFileImport style={iconStyle} />
-              Import JSON
+              Uvezite konfiguraciju
               <input
                 type="file"
                 onChange={importData}
@@ -235,7 +235,7 @@ const App = () => {
               }}
             >
               <FaFileExport style={iconStyle} />
-              Export JSON
+              Sačuvaj konfiguraciju
             </button>
             <button
               onClick={exportExcel}
@@ -247,7 +247,7 @@ const App = () => {
               }}
             >
               <FaFileExcel style={iconStyle} />
-              Export Excel
+              Izvezi Excel Spisak
             </button>
             <button
               onClick={exportPDF}
@@ -259,7 +259,7 @@ const App = () => {
               }}
             >
               <FaFilePdf style={iconStyle} />
-              Export PDF
+              Izvezi PDF Spisak
             </button>
             <button
               onClick={exportCanvasToPDF}
@@ -271,7 +271,7 @@ const App = () => {
               }}
             >
               <FaChair style={iconStyle} />
-              Exportuj Plan Sale
+              Izvezi Plan Sale
             </button>
           </div>
           <GuestList
@@ -279,7 +279,7 @@ const App = () => {
             onDelete={deleteGuest}
             onEdit={editGuest}
           />
-          <h3>Create Table</h3>
+          <h3>Napravi Sto</h3>
           <div className="table-creator">
             <select
               value={tableType}
@@ -287,8 +287,8 @@ const App = () => {
                 setTableType(e.target.value as "rectangle" | "circle")
               }
             >
-              <option value="rectangle">Rectangle</option>
-              <option value="circle">Circle</option>
+              <option value="rectangle">Četvrtasti</option>
+              <option value="circle">Kružni</option>
             </select>
 
             {tableType === "rectangle" && (
@@ -298,13 +298,13 @@ const App = () => {
                   setSeatingType(e.target.value as "one-sided" | "two-sided")
                 }
               >
-                <option value="one-sided">One-sided seating</option>
-                <option value="two-sided">Two-sided seating</option>
+                <option value="one-sided">Jednostrano sedenje</option>
+                <option value="two-sided">Dvostrano sedenje</option>
               </select>
             )}
             <input
               type="text"
-              placeholder="Table name"
+              placeholder="Ime stola"
               value={newTableName}
               onChange={(e) => setNewTableName(e.target.value)}
             />
@@ -324,10 +324,10 @@ const App = () => {
               }}
             >
               <FaChair style={iconStyle} />
-              Add Table
+              Dodaj Sto
             </button>
           </div>
-          <h3 style={{ marginBottom: "10px" }}>Table List</h3>
+          <h3 style={{ marginBottom: "10px" }}>Lista Stolova</h3>
           <div className="table-list" style={{ marginTop: "20px" }}>
             {tables.map((table) => (
               <div
@@ -351,7 +351,6 @@ const App = () => {
                   onClick={() => deleteTable(table.id)}
                   style={{
                     padding: "5px 10px",
-                    border: "none",
                     borderRadius: "3px",
                     backgroundColor: "#fff",
                     color: "#000",
@@ -359,7 +358,6 @@ const App = () => {
                     display: "flex",
                     alignItems: "center",
                     gap: "5px",
-
                     border: "1px solid #ccc",
                   }}
                 >
@@ -385,197 +383,6 @@ const App = () => {
       </div>
     </DndProvider>
   );
-  // return (
-  //   <DndProvider backend={HTML5Backend}>
-  //     <div className="app">
-  //       <div className="sidebar">
-  //         <GuestForm onAdd={addGuest} />
-  //         <div
-  //           className="button-group"
-  //           style={{
-  //             display: "flex",
-  //             flexDirection: "column",
-  //             gap: "10px",
-  //             marginTop: "20px",
-  //           }}
-  //         >
-  //           <input
-  //             type="file"
-  //             onChange={importData}
-  //             accept=".json"
-  //             style={{
-  //               padding: "10px",
-  //               border: "1px solid #ccc",
-  //               borderRadius: "5px",
-  //               cursor: "pointer",
-  //               fontSize: "16px",
-  //             }}
-  //           />
-  //           <button
-  //             onClick={exportData}
-  //             style={{
-  //               padding: "10px",
-  //               border: "none",
-  //               borderRadius: "5px",
-  //               backgroundColor: "#17a2b8",
-  //               color: "#fff",
-  //               cursor: "pointer",
-  //               fontSize: "16px",
-  //             }}
-  //           >
-  //             Export JSON
-  //           </button>
-  //           <button
-  //             onClick={exportExcel}
-  //             style={{
-  //               padding: "10px",
-  //               border: "none",
-  //               borderRadius: "5px",
-  //               backgroundColor: "#ffc107",
-  //               color: "#fff",
-  //               cursor: "pointer",
-  //               fontSize: "16px",
-  //             }}
-  //           >
-  //             Export Excel
-  //           </button>
-  //           <button
-  //             onClick={exportPDF}
-  //             style={{
-  //               padding: "10px",
-  //               border: "none",
-  //               borderRadius: "5px",
-  //               backgroundColor: "#dc3545",
-  //               color: "#fff",
-  //               cursor: "pointer",
-  //               fontSize: "16px",
-  //             }}
-  //           >
-  //             Export PDF
-  //           </button>
-  //           <button
-  //             onClick={exportCanvasToPDF}
-  //             style={{
-  //               padding: "10px",
-  //               border: "none",
-  //               borderRadius: "5px",
-  //               backgroundColor: "#6c757d",
-  //               color: "#fff",
-  //               cursor: "pointer",
-  //               fontSize: "16px",
-  //             }}
-  //           >
-  //             Exportuj Plan Sale
-  //           </button>
-  //         </div>
-  //         <GuestList
-  //           guests={guests}
-  //           onDelete={deleteGuest}
-  //           onEdit={editGuest}
-  //         />
-  //         <div className="table-creator">
-  //           <h3>Create Table</h3>
-  //           <select
-  //             value={tableType}
-  //             onChange={(e) =>
-  //               setTableType(e.target.value as "rectangle" | "circle")
-  //             }
-  //           >
-  //             <option value="rectangle">Rectangle</option>
-  //             <option value="circle">Circle</option>
-  //           </select>
-
-  //           {tableType === "rectangle" && (
-  //             <select
-  //               value={seatingType}
-  //               onChange={(e) =>
-  //                 setSeatingType(e.target.value as "one-sided" | "two-sided")
-  //               }
-  //             >
-  //               <option value="one-sided">One-sided seating</option>
-  //               <option value="two-sided">Two-sided seating</option>
-  //             </select>
-  //           )}
-  //           <input
-  //             type="text"
-  //             placeholder="Table name"
-  //             value={newTableName}
-  //             onChange={(e) => setNewTableName(e.target.value)}
-  //           />
-  //           <input
-  //             type="number"
-  //             min="1"
-  //             value={newChairCount}
-  //             onChange={(e) => setNewChairCount(Number(e.target.value))}
-  //           />
-  //           <button
-  //             onClick={() => addTable(tableType)}
-  //             style={{
-  //               padding: "10px",
-  //               border: "none",
-  //               borderRadius: "5px",
-  //               backgroundColor: "#007bff",
-  //               color: "#fff",
-  //               cursor: "pointer",
-  //             }}
-  //           >
-  //             Add Table
-  //           </button>
-  //         </div>
-  //         <div className="table-list" style={{ marginTop: "20px" }}>
-  //           <h3 style={{ textAlign: "center", marginBottom: "10px" }}>
-  //             Table List
-  //           </h3>
-  //           {tables.map((table) => (
-  //             <div
-  //               key={table.id}
-  //               className="table-item"
-  //               style={{
-  //                 display: "flex",
-  //                 justifyContent: "space-between",
-  //                 alignItems: "center",
-  //                 padding: "10px",
-  //                 border: "1px solid #ccc",
-  //                 borderRadius: "5px",
-  //                 marginBottom: "10px",
-  //                 backgroundColor: "#f9f9f9",
-  //               }}
-  //             >
-  //               <span style={{ fontSize: "16px", fontWeight: "500" }}>
-  //                 {table.name}
-  //               </span>
-  //               <button
-  //                 onClick={() => deleteTable(table.id)}
-  //                 style={{
-  //                   padding: "5px 10px",
-  //                   border: "none",
-  //                   borderRadius: "3px",
-  //                   backgroundColor: "#ff4d4d",
-  //                   color: "#fff",
-  //                   cursor: "pointer",
-  //                 }}
-  //               >
-  //                 Delete
-  //               </button>
-  //             </div>
-  //           ))}
-  //         </div>
-  //       </div>
-  //       <div className="canvas">
-  //         {tables.map((table) => (
-  //           <TableComponent
-  //             key={table.id}
-  //             table={table}
-  //             guests={guests}
-  //             onChairDrop={handleChairDrop}
-  //             setTables={setTables}
-  //             calculateChairPositions={calculateChairPositions}
-  //           />
-  //         ))}
-  //       </div>
-  //     </div>
-  //   </DndProvider>
-  // );
 };
 
 export default App;

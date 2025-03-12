@@ -57,7 +57,7 @@ const TableComponent = ({
       const hasOccupied = chairsToRemove.some((chair) => chair.occupiedBy);
 
       if (hasOccupied) {
-        alert("Cannot remove chairs with guests!");
+        alert("Ne možete ukloniti stolicu sa gostom!");
         return;
       }
     }
@@ -104,7 +104,6 @@ const TableComponent = ({
       }}
     >
       <div className={`table ${table.type} table-drag-handle`}>
-        {/* <div className="table-drag-handle" /> */}
         <div className="table-header">
           <input
             type="text"

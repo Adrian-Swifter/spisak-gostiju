@@ -29,7 +29,7 @@ const GuestList = ({
 
   return (
     <div>
-      <h3>Guests</h3>
+      <h3>Gosti</h3>
       <div
         className="guest-list"
         style={{
@@ -85,7 +85,7 @@ const GuestList = ({
                     cursor: "pointer",
                   }}
                 >
-                  Save
+                  Sačuvaj
                 </button>
               ) : (
                 <button
@@ -99,7 +99,7 @@ const GuestList = ({
                     cursor: "pointer",
                   }}
                 >
-                  Edit
+                  Izmeni
                 </button>
               )}
               <button
@@ -113,7 +113,7 @@ const GuestList = ({
                   cursor: "pointer",
                 }}
               >
-                Delete
+                Izbriši
               </button>
             </div>
           </div>
