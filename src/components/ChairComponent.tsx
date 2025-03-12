@@ -31,7 +31,7 @@ const ChairComponent = ({
       style={{
         left: chair.x,
         top: chair.y,
-        backgroundColor: isOver ? "lightgreen" : guest ? "lightgreen" : "white",
+        backgroundColor: isOver ? "lightgreen" : guest ? "white" : "white",
       }}
       onClick={handleClick}
       data-side={chair.side}
