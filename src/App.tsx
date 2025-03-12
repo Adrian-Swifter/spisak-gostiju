@@ -108,6 +108,8 @@ const App = () => {
     };
 
     setTables([...tables, newTable]);
+    setNewTableName("");
+    setNewChairCount(8);
   };
 
   const deleteTable = (tableId: string) => {

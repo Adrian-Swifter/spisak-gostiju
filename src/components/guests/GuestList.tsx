@@ -1,6 +1,7 @@
 import { useState } from "react";
 import DraggableGuest from "./DraggableGuest";
 import { Guest } from "../../types";
+import { FaEdit, FaTrash, FaSave } from "react-icons/fa";
 
 const GuestList = ({
   guests,
@@ -13,6 +14,7 @@ const GuestList = ({
 }) => {
   const [editingGuestId, setEditingGuestId] = useState<string | null>(null);
   const [editingGuestName, setEditingGuestName] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const handleEditClick = (guest: Guest) => {
     setEditingGuestId(guest.id);
@@ -27,97 +29,125 @@ const GuestList = ({
     }
   };
 
+  const filteredGuests = guests.filter((guest) =>
+    guest.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div>
       <h3>Gosti</h3>
+      <input
+        type="text"
+        placeholder="Pretraži goste"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        style={{
+          width: "100%",
+          padding: "10px",
+          marginBottom: "10px",
+          boxSizing: "border-box",
+        }}
+      />
       <div
         className="guest-list"
         style={{
           padding: "10px",
-          border: "1px solid #ccc",
-          borderRadius: "5px",
         }}
       >
-        {guests.map((guest) => (
-          <div
-            key={guest.id}
-            className="guest-item"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: "10px",
-              marginBottom: "10px",
-              border: "1px solid #ddd",
-              borderRadius: "5px",
-              backgroundColor: "#f9f9f9",
-            }}
-          >
-            {editingGuestId === guest.id ? (
-              <input
-                type="text"
-                value={editingGuestName}
-                onChange={(e) => setEditingGuestName(e.target.value)}
-                style={{
-                  flex: "1",
-                  marginRight: "10px",
-                  padding: "5px",
-                  border: "1px solid #ccc",
-                  borderRadius: "3px",
-                }}
-              />
-            ) : (
-              <DraggableGuest guest={guest} />
-            )}
-            <div
-              className="guest-controls"
-              style={{ display: "flex", gap: "10px" }}
+        <ol style={{ padding: "0" }}>
+          {filteredGuests.map((guest) => (
+            <li
+              key={guest.id}
+              className="guest-item"
+              style={{
+                padding: "10px",
+                marginBottom: "10px",
+                backgroundColor: "#fff",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                textOverflow: "ellipsis",
+                whiteSpace: "normal",
+                wordWrap: "break-word",
+              }}
             >
-              {editingGuestId === guest.id ? (
-                <button
-                  onClick={handleSaveClick}
-                  style={{
-                    padding: "5px 10px",
-                    border: "none",
-                    borderRadius: "3px",
-                    backgroundColor: "#4CAF50",
-                    color: "white",
-                    cursor: "pointer",
-                  }}
-                >
-                  Sačuvaj
-                </button>
-              ) : (
-                <button
-                  onClick={() => handleEditClick(guest)}
-                  style={{
-                    padding: "5px 10px",
-                    border: "none",
-                    borderRadius: "3px",
-                    backgroundColor: "#008CBA",
-                    color: "white",
-                    cursor: "pointer",
-                  }}
-                >
-                  Izmeni
-                </button>
-              )}
-              <button
-                onClick={() => onDelete(guest.id)}
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {editingGuestId === guest.id ? (
+                  <input
+                    type="text"
+                    value={editingGuestName}
+                    onChange={(e) => setEditingGuestName(e.target.value)}
+                    style={{
+                      flex: "1",
+                      marginRight: "10px",
+                      padding: "5px",
+                    }}
+                  />
+                ) : (
+                  <DraggableGuest guest={guest} />
+                )}
+              </div>
+              <div
+                className="guest-controls"
                 style={{
-                  padding: "5px 10px",
-                  border: "none",
-                  borderRadius: "3px",
-                  backgroundColor: "#f44336",
-                  color: "white",
-                  cursor: "pointer",
+                  display: "flex",
+                  gap: "10px",
+                  marginTop: "10px",
                 }}
               >
-                Izbriši
-              </button>
-            </div>
-          </div>
-        ))}
+                {editingGuestId === guest.id ? (
+                  <button
+                    onClick={handleSaveClick}
+                    style={{
+                      padding: "5px 10px",
+                      border: "none",
+                      borderRadius: "3px",
+                      backgroundColor: "green",
+                      color: "white",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                    }}
+                  >
+                    <FaSave /> Sačuvaj
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleEditClick(guest)}
+                    style={{
+                      padding: "5px 10px",
+                      border: "none",
+                      borderRadius: "3px",
+                      backgroundColor: "goldenrod",
+                      color: "white",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                    }}
+                  >
+                    <FaEdit /> Izmeni
+                  </button>
+                )}
+                <button
+                  onClick={() => onDelete(guest.id)}
+                  style={{
+                    padding: "5px 10px",
+                    border: "none",
+                    borderRadius: "3px",
+                    backgroundColor: "tomato",
+                    color: "white",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                  }}
+                >
+                  <FaTrash /> Izbriši
+                </button>
+              </div>
+            </li>
+          ))}
+        </ol>
       </div>
     </div>
   );

@@ -53,33 +53,58 @@ const TableComponent = ({
 
     // Prevent removing chairs with guests
     if (delta < 0) {
-      const chairsToRemove = table.chairs.slice(newCount);
-      const hasOccupied = chairsToRemove.some((chair) => chair.occupiedBy);
+      let remainingToRemove = Math.abs(delta);
+      const newChairs = table.chairs.filter((chair) => {
+        if (remainingToRemove > 0 && !chair.occupiedBy) {
+          remainingToRemove--;
+          return false;
+        }
+        return true;
+      });
 
-      if (hasOccupied) {
+      if (remainingToRemove > 0) {
         alert("Ne možete ukloniti stolicu sa gostom!");
         return;
       }
-    }
 
-    setTables((prev) =>
-      prev.map((t) =>
-        t.id === table.id
-          ? {
-              ...t,
-              chairsCount: newCount,
-              chairs: calculateChairPositions(
-                t.type,
-                newCount,
-                t.width,
-                t.height,
-                t.chairs.slice(0, newCount),
-                t.seatingType
-              ),
-            }
-          : t
-      )
-    );
+      setTables((prev) =>
+        prev.map((t) =>
+          t.id === table.id
+            ? {
+                ...t,
+                chairsCount: newCount,
+                chairs: calculateChairPositions(
+                  t.type,
+                  newCount,
+                  t.width,
+                  t.height,
+                  newChairs,
+                  t.seatingType
+                ),
+              }
+            : t
+        )
+      );
+    } else {
+      setTables((prev) =>
+        prev.map((t) =>
+          t.id === table.id
+            ? {
+                ...t,
+                chairsCount: newCount,
+                chairs: calculateChairPositions(
+                  t.type,
+                  newCount,
+                  t.width,
+                  t.height,
+                  t.chairs.slice(0, newCount),
+                  t.seatingType
+                ),
+              }
+            : t
+        )
+      );
+    }
   };
 
   return (
@@ -127,7 +152,7 @@ const TableComponent = ({
             >
               -
             </button>
-            <span>{table.chairs.length}</span>
+            <span>{table.chairs.length} stolica</span>
             <button
               onClick={(e) => {
                 e.stopPropagation();

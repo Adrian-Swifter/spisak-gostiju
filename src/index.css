@@ -11,6 +11,13 @@
   display: flex;
   height: 100vh;
   background: var(--background);
+  font-family: "Montserrat", sans-serif;
+}
+
+button,
+select,
+input {
+  font-family: "Montserrat", sans-serif;
 }
 
 .sidebar {
@@ -54,7 +61,6 @@
 .guest-item {
   padding: 0.75rem 1rem;
   background: var(--surface);
-  border: 1px solid #e2e8f0;
   border-radius: 0.375rem;
   cursor: move;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -137,6 +143,8 @@
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: var(--shadow);
+  text-align: center;
+  font-weight: 600;
 }
 
 .table.circle {
