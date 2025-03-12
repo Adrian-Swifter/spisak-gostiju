@@ -12,7 +12,7 @@ const calculateChairPositions = (
   const chairs: Chair[] = [];
   const preservedChairs = existingChairs.slice(0, count);
   const chairSize = 20;
-  const chairSpacing = 5; // Added spacing between chairs
+  const chairSpacing = 5; 
 
   if (type === 'rectangle') {
     const sides = seatingType === 'one-sided' ? ['top'] : ['top', 'bottom'];
@@ -31,20 +31,20 @@ const calculateChairPositions = (
   }else {
     // Improved circle calculations
     const diameter = Math.min(width, height);
-    const radius = (diameter / 2) - chairSize - 10; // Add padding
+    const radius = (diameter / 2) - chairSize - 10; 
     const centerX = width / 2;
     const centerY = height / 2;
-    const angleStep = (2 * Math.PI) / count; // Proper angle calculation
+    const angleStep = (2 * Math.PI) / count; 
 
     for (let i = 0; i < count; i++) {
-      const angle = (i * angleStep) - Math.PI / 2; // Start from top
+      const angle = (i * angleStep) - Math.PI / 2; 
       const x = centerX + radius * Math.cos(angle) - chairSize / 2;
       const y = centerY + radius * Math.sin(angle) - chairSize / 2;
       
       chairs.push({
         x,
         y,
-        angle: (angle * 180) / Math.PI // Optional: store angle for rotation
+        angle: (angle * 180) / Math.PI 
       });
     }
   }
