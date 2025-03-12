@@ -17,11 +17,13 @@ import {
   FaFilePdf,
   FaChair,
   FaTrash,
+  FaRedo,
 } from "react-icons/fa";
 
 const App = () => {
   const [newTableName, setNewTableName] = useState("");
   const [newChairCount, setNewChairCount] = useState(8);
+  const [showResetPopup, setShowResetPopup] = useState(false);
 
   const [guests, setGuests] = useState<Guest[]>(() => {
     const saved = localStorage.getItem("guests");
@@ -177,6 +179,15 @@ const App = () => {
     });
     doc.save("spisak-gostiju.pdf");
   };
+
+  const resetEverything = () => {
+    setGuests([]);
+    setTables([]);
+    localStorage.removeItem("guests");
+    localStorage.removeItem("tables");
+    setShowResetPopup(false);
+  };
+
   const buttonStyle = {
     padding: "10px",
     border: "none",
@@ -274,6 +285,18 @@ const App = () => {
             >
               <FaChair style={iconStyle} />
               Izvezi Plan Sale
+            </button>
+            <button
+              onClick={() => setShowResetPopup(true)}
+              style={{
+                ...buttonStyle,
+                backgroundColor: "#fff",
+                color: "#000",
+                border: "1px solid #ccc",
+              }}
+            >
+              <FaRedo style={iconStyle} />
+              Resetuj Sve
             </button>
           </div>
           <GuestList
@@ -383,6 +406,67 @@ const App = () => {
           ))}
         </div>
       </div>
+      {showResetPopup && (
+        <div
+          className="reset-popup"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: "#fff",
+            padding: "20px",
+            boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+            zIndex: 1000,
+          }}
+        >
+          <h3>Da li želite da sačuvate konfiguraciju pre resetovanja?</h3>
+          <div
+            className="button-group"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "20px",
+            }}
+          >
+            <button
+              onClick={exportData}
+              style={{
+                ...buttonStyle,
+                backgroundColor: "#fff",
+                color: "#000",
+                border: "1px solid #ccc",
+              }}
+            >
+              <FaFileExport style={iconStyle} />
+              Sačuvaj konfiguraciju
+            </button>
+            <button
+              onClick={resetEverything}
+              style={{
+                ...buttonStyle,
+                backgroundColor: "#fff",
+                color: "#000",
+                border: "1px solid #ccc",
+              }}
+            >
+              <FaRedo style={iconStyle} />
+              Resetuj Sve
+            </button>
+            <button
+              onClick={() => setShowResetPopup(false)}
+              style={{
+                ...buttonStyle,
+                backgroundColor: "#fff",
+                color: "#000",
+                border: "1px solid #ccc",
+              }}
+            >
+              Otkaži
+            </button>
+          </div>
+        </div>
+      )}
     </DndProvider>
   );
 };
