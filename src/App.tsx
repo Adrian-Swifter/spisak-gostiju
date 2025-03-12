@@ -228,7 +228,7 @@ const App = () => {
               }}
             >
               <FaFileImport style={iconStyle} />
-              Uvezite konfiguraciju
+              Uvezite Konfiguraciju
               <input
                 type="file"
                 onChange={importData}
@@ -248,7 +248,7 @@ const App = () => {
               }}
             >
               <FaFileExport style={iconStyle} />
-              Sačuvaj konfiguraciju
+              Sačuvaj Konfiguraciju
             </button>
             <button
               onClick={exportExcel}
@@ -260,7 +260,7 @@ const App = () => {
               }}
             >
               <FaFileExcel style={iconStyle} />
-              Izvezi Excel Spisak
+              Izvezi Excel Spisak Gostiju
             </button>
             <button
               onClick={exportPDF}
@@ -272,7 +272,7 @@ const App = () => {
               }}
             >
               <FaFilePdf style={iconStyle} />
-              Izvezi PDF Spisak
+              Izvezi PDF Spisak Gostiju
             </button>
             <button
               onClick={exportCanvasToPDF}
@@ -284,7 +284,7 @@ const App = () => {
               }}
             >
               <FaChair style={iconStyle} />
-              Izvezi Plan Sale
+              Izvezi Plan Sale PDF
             </button>
             <button
               onClick={() => setShowResetPopup(true)}
