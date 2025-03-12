@@ -211,7 +211,6 @@ const App = () => {
                 alignItems: "center",
                 gap: "5px",
                 cursor: "pointer",
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                 border: "1px solid #ccc",
               }}
             >
@@ -232,7 +231,6 @@ const App = () => {
                 ...buttonStyle,
                 backgroundColor: "#fff",
                 color: "#000",
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                 border: "1px solid #ccc",
               }}
             >
@@ -245,7 +243,6 @@ const App = () => {
                 ...buttonStyle,
                 backgroundColor: "#fff",
                 color: "#000",
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                 border: "1px solid #ccc",
               }}
             >
@@ -258,7 +255,6 @@ const App = () => {
                 ...buttonStyle,
                 backgroundColor: "#fff",
                 color: "#000",
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                 border: "1px solid #ccc",
               }}
             >
@@ -271,7 +267,6 @@ const App = () => {
                 ...buttonStyle,
                 backgroundColor: "#fff",
                 color: "#000",
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                 border: "1px solid #ccc",
               }}
             >
@@ -325,7 +320,6 @@ const App = () => {
                 ...buttonStyle,
                 backgroundColor: "#fff",
                 color: "#000",
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                 border: "1px solid #ccc",
               }}
             >
@@ -348,7 +342,6 @@ const App = () => {
                   borderRadius: "5px",
                   marginBottom: "10px",
                   backgroundColor: "#f9f9f9",
-                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                 }}
               >
                 <span style={{ fontSize: "16px", fontWeight: "500" }}>
@@ -366,7 +359,7 @@ const App = () => {
                     display: "flex",
                     alignItems: "center",
                     gap: "5px",
-                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+
                     border: "1px solid #ccc",
                   }}
                 >

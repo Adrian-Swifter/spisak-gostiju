@@ -1,0 +1,112 @@
+{
+  "hash": "073612b9",
+  "configHash": "db9bb917",
+  "lockfileHash": "a4970816",
+  "browserHash": "e5a11418",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "a20df289",
+      "needsInterop": true
+    },
+    "react-dom": {
+      "src": "../../node_modules/react-dom/index.js",
+      "file": "react-dom.js",
+      "fileHash": "ac559435",
+      "needsInterop": true
+    },
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "e0cbf5e6",
+      "needsInterop": true
+    },
+    "react/jsx-runtime": {
+      "src": "../../node_modules/react/jsx-runtime.js",
+      "file": "react_jsx-runtime.js",
+      "fileHash": "52e3e801",
+      "needsInterop": true
+    },
+    "html2canvas": {
+      "src": "../../node_modules/html2canvas/dist/html2canvas.esm.js",
+      "file": "html2canvas.js",
+      "fileHash": "0d005e96",
+      "needsInterop": false
+    },
+    "jspdf": {
+      "src": "../../node_modules/jspdf/dist/jspdf.es.min.js",
+      "file": "jspdf.js",
+      "fileHash": "e522b033",
+      "needsInterop": false
+    },
+    "react-dnd": {
+      "src": "../../node_modules/react-dnd/dist/index.js",
+      "file": "react-dnd.js",
+      "fileHash": "99547f5f",
+      "needsInterop": false
+    },
+    "react-dnd-html5-backend": {
+      "src": "../../node_modules/react-dnd-html5-backend/dist/index.js",
+      "file": "react-dnd-html5-backend.js",
+      "fileHash": "bc4b9f6d",
+      "needsInterop": false
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "67939532",
+      "needsInterop": true
+    },
+    "react-icons/fa": {
+      "src": "../../node_modules/react-icons/fa/index.mjs",
+      "file": "react-icons_fa.js",
+      "fileHash": "f8be668d",
+      "needsInterop": false
+    },
+    "react-rnd": {
+      "src": "../../node_modules/react-rnd/lib/index.js",
+      "file": "react-rnd.js",
+      "fileHash": "bc17db3e",
+      "needsInterop": false
+    },
+    "uuid": {
+      "src": "../../node_modules/uuid/dist/esm-browser/index.js",
+      "file": "uuid.js",
+      "fileHash": "5f669538",
+      "needsInterop": false
+    },
+    "xlsx": {
+      "src": "../../node_modules/xlsx/xlsx.mjs",
+      "file": "xlsx.js",
+      "fileHash": "039ca034",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "purify.es-MO5P2FLV": {
+      "file": "purify__es-MO5P2FLV.js"
+    },
+    "index.es-QQVHLAAH": {
+      "file": "index__es-QQVHLAAH.js"
+    },
+    "chunk-4AJF6FOG": {
+      "file": "chunk-4AJF6FOG.js"
+    },
+    "chunk-SO2FIUG4": {
+      "file": "chunk-SO2FIUG4.js"
+    },
+    "chunk-SITVF2AJ": {
+      "file": "chunk-SITVF2AJ.js"
+    },
+    "chunk-CN66GVJG": {
+      "file": "chunk-CN66GVJG.js"
+    },
+    "chunk-GWAROZSO": {
+      "file": "chunk-GWAROZSO.js"
+    },
+    "chunk-V4OQ3NZ2": {
+      "file": "chunk-V4OQ3NZ2.js"
+    }
+  }
+}
