@@ -6,6 +6,8 @@
   ],
   "compilerOptions": {
     "skipLibCheck": true,
-    "noEmitOnError": false
+    "noEmitOnError": false,
+    "noEmit": true,
+    "isolatedModules": false
   }
 }
