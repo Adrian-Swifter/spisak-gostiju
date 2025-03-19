@@ -20,6 +20,7 @@ import {
   FaRedo,
 } from "react-icons/fa";
 import DeviceWrapper from "./components/DeviceWrapper";
+import logo from "./assets/logo.png";
 
 const App = () => {
   const [newTableName, setNewTableName] = useState("");
@@ -230,7 +231,7 @@ const App = () => {
               }}
             >
               <img
-                src="/src/assets/logo.png"
+                src={logo}
                 alt="App Logo"
                 style={{
                   maxWidth: "100px",
