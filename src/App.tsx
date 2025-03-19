@@ -22,6 +22,8 @@ import {
 import DeviceWrapper from "./components/DeviceWrapper";
 import logo from "./assets/logo.png";
 
+const GA_MEASUREMENT_ID = "G-K7PCLHL61R";
+
 const App = () => {
   const [newTableName, setNewTableName] = useState("");
   const [newChairCount, setNewChairCount] = useState(8);
@@ -36,6 +38,22 @@ const App = () => {
     const saved = localStorage.getItem("tables");
     return saved ? JSON.parse(saved) : [];
   });
+
+  useEffect(() => {
+    // Inject Google Analytics script
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    document.head.appendChild(script);
+
+    // Initialize Google Analytics
+    window.dataLayer = window.dataLayer || [];
+    function gtag(...args: any) {
+      window.dataLayer.push(args);
+    }
+    gtag("js", new Date());
+    gtag("config", GA_MEASUREMENT_ID);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("tables", JSON.stringify(tables));
