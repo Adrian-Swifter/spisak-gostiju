@@ -54,7 +54,7 @@ const GuestList = ({
           padding: "10px",
         }}
       >
-        <ol style={{ padding: "0" }}>
+        <ol style={{ padding: 0 }}>
           {filteredGuests.map((guest) => (
             <li
               key={guest.id}
@@ -69,81 +69,97 @@ const GuestList = ({
                 wordWrap: "break-word",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center" }}>
-                {editingGuestId === guest.id ? (
-                  <input
-                    type="text"
-                    value={editingGuestName}
-                    onChange={(e) => setEditingGuestName(e.target.value)}
-                    style={{
-                      flex: "1",
-                      marginRight: "10px",
-                      padding: "5px",
-                    }}
-                  />
-                ) : (
-                  <DraggableGuest guest={guest} />
-                )}
-              </div>
               <div
-                className="guest-controls"
                 style={{
                   display: "flex",
-                  gap: "10px",
-                  marginTop: "10px",
+                  alignItems: "center",
+                  flex: "1",
+                  justifyContent: "space-between",
                 }}
               >
-                {editingGuestId === guest.id ? (
-                  <button
-                    onClick={handleSaveClick}
-                    style={{
-                      padding: "5px 10px",
-                      border: "none",
-                      borderRadius: "3px",
-                      backgroundColor: "green",
-                      color: "white",
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                    }}
-                  >
-                    <FaSave /> Sačuvaj
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => handleEditClick(guest)}
-                    style={{
-                      padding: "5px 10px",
-                      border: "none",
-                      borderRadius: "3px",
-                      backgroundColor: "goldenrod",
-                      color: "white",
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                    }}
-                  >
-                    <FaEdit /> Izmeni
-                  </button>
-                )}
-                <button
-                  onClick={() => onDelete(guest.id)}
+                <div
+                  style={{ display: "flex", alignItems: "center", flex: "1" }}
+                >
+                  {editingGuestId === guest.id ? (
+                    <input
+                      type="text"
+                      value={editingGuestName}
+                      onChange={(e) => setEditingGuestName(e.target.value)}
+                      style={{
+                        flex: "1",
+                        marginRight: "10px",
+                        padding: "5px",
+                      }}
+                    />
+                  ) : (
+                    <DraggableGuest guest={guest} />
+                  )}
+                </div>
+                <div
+                  className="guest-controls"
                   style={{
-                    padding: "5px 10px",
-                    border: "none",
-                    borderRadius: "3px",
-                    backgroundColor: "tomato",
-                    color: "white",
-                    cursor: "pointer",
                     display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
+                    gap: "10px",
                   }}
                 >
-                  <FaTrash /> Izbriši
-                </button>
+                  {editingGuestId === guest.id ? (
+                    <button
+                      onClick={handleSaveClick}
+                      title="Sačuvaj"
+                      style={{
+                        padding: "5px",
+                        border: "none",
+                        borderRadius: "3px",
+                        backgroundColor: "white",
+                        color: "black",
+                        fontSize: "1.2rem",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <FaSave />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleEditClick(guest)}
+                      title="Izmeni"
+                      style={{
+                        padding: "5px",
+                        border: "none",
+                        borderRadius: "3px",
+                        backgroundColor: "white",
+                        color: "black",
+                        fontSize: "1.2rem",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <FaEdit />
+                    </button>
+                  )}
+                  <button
+                    onClick={() => onDelete(guest.id)}
+                    title="Izbriši"
+                    style={{
+                      padding: "5px",
+                      border: "none",
+                      borderRadius: "3px",
+                      backgroundColor: "white",
+                      color: "black",
+                      fontSize: "1.2rem",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
               </div>
             </li>
           ))}
