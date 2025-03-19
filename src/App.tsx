@@ -184,9 +184,19 @@ const App = () => {
   };
 
   const exportExcel = () => {
-    const ws = utils.json_to_sheet(guests);
+    const formattedData = guests.map((guest, index) => ({
+      "Redni broj": index + 1,
+      "Ime gosta": guest.name,
+    }));
+
+    const ws = utils.json_to_sheet(formattedData, {
+      header: ["Redni broj", "Ime gosta"],
+    });
+
+    ws["!cols"] = [{ wch: 10 }, { wch: 30 }];
+
     const wb = utils.book_new();
-    utils.book_append_sheet(wb, ws, "Gosti");
+    utils.book_append_sheet(wb, ws, "Spisak gostiju");
     writeFile(wb, "spisak-gostiju.xlsx");
   };
 
