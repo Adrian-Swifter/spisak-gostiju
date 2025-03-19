@@ -374,20 +374,19 @@ const App = () => {
                 </span>
                 <button
                   onClick={() => deleteTable(table.id)}
+                  title="Obriši Sto"
                   style={{
                     padding: "5px 10px",
                     borderRadius: "3px",
-                    backgroundColor: "#fff",
-                    color: "#000",
+                    backgroundColor: "white",
+                    color: "black",
+                    fontSize: "1.2rem",
                     cursor: "pointer",
                     display: "flex",
                     alignItems: "center",
-                    gap: "5px",
-                    border: "1px solid #ccc",
                   }}
                 >
                   <FaTrash />
-                  Delete
                 </button>
               </div>
             ))}
