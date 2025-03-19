@@ -155,7 +155,10 @@ const TableComponent = ({
             >
               -
             </button>
-            <span>{table.chairs.length} stolica</span>
+            <span>
+              {table.chairs.length}{" "}
+              {table.chairs.length === 1 ? "mesto" : "mesta"}
+            </span>
             <button
               onClick={(e) => {
                 e.stopPropagation();
