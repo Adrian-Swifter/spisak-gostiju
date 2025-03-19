@@ -46,10 +46,21 @@ const App = () => {
     localStorage.setItem("guests", JSON.stringify([...guests, newGuest]));
   };
 
-  const deleteGuest = (id: string) => {
-    const updatedGuests = guests.filter((guest) => guest.id !== id);
-    setGuests(updatedGuests);
-    localStorage.setItem("guests", JSON.stringify(updatedGuests));
+  const deleteGuest = (guestId: string) => {
+    setGuests((prevGuests) => prevGuests.filter((g) => g.id !== guestId));
+
+    // Clean up chair assignments
+    setTables((prevTables) =>
+      prevTables.map((table) => ({
+        ...table,
+        chairs: table.chairs.map((chair) => {
+          if (chair.occupiedBy === guestId) {
+            return { ...chair, occupiedBy: undefined };
+          }
+          return chair;
+        }),
+      }))
+    );
   };
 
   const editGuest = (id: string, name: string) => {
