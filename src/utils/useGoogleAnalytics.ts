@@ -5,13 +5,13 @@ const GA_MEASUREMENT_ID = "G-K7PCLHL61R";
 declare global {
   interface Window {
     dataLayer: any[];
-    gtag: (...args: any[]) => void;
+    gtag?: (...args: any[]) => void;
   }
 }
 
 const useGoogleAnalytics = () => {
   useEffect(() => {
-    // Add Google Analytics script only once
+    // Load GA script only once
     if (!window.gtag) {
       const script = document.createElement("script");
       script.async = true;
@@ -24,35 +24,15 @@ const useGoogleAnalytics = () => {
           window.dataLayer.push(args);
         };
 
+        // Initialize GA
         window.gtag("js", new Date());
         window.gtag("config", GA_MEASUREMENT_ID, {
-          send_page_view: false, // Prevent duplicate initial page load
+          send_page_view: true,
         });
 
-        // Track the initial page load
-        trackPageView();
+        console.log("✅ Google Analytics initialized");
       };
     }
-  }, []);
-
-  // Function to track page views manually
-  const trackPageView = () => {
-    if (window.gtag) {
-      window.gtag("event", "page_view", {
-        page_path: window.location.hostname + window.location.pathname,
-      });
-    }
-  };
-
-  // Track URL changes in single-page apps
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      trackPageView();
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    return () => observer.disconnect();
   }, []);
 };
 
