@@ -314,6 +314,7 @@ input[type="file"] {
   align-items: center;
   justify-content: center;
   padding: 20px;
+  font-family: "Montserrat", sans-serif;
 }
 
 .warning-box {
@@ -363,6 +364,7 @@ input[type="file"] {
   background: white;
   border-radius: 5px;
   cursor: pointer;
+  color: #007bff;
 }
 
 .secondary-btn:hover {

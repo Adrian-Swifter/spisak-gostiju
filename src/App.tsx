@@ -19,22 +19,12 @@ import {
   FaTrash,
   FaRedo,
 } from "react-icons/fa";
-import { isMobileDevice } from "./utils/deviceDetector";
-import { MobileWarning } from "./components/MobileWarning";
+import DeviceWrapper from "./components/DeviceWrapper";
 
 const App = () => {
   const [newTableName, setNewTableName] = useState("");
   const [newChairCount, setNewChairCount] = useState(8);
   const [showResetPopup, setShowResetPopup] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    setIsMobile(isMobileDevice());
-  }, []);
-
-  if (isMobile) {
-    return <MobileWarning />;
-  }
 
   const [guests, setGuests] = useState<Guest[]>(() => {
     const saved = localStorage.getItem("guests");
@@ -227,271 +217,273 @@ const App = () => {
   const iconStyle = { marginRight: "5px" };
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="app">
-        <div className="sidebar">
-          <GuestForm onAdd={addGuest} />
-          <div
-            className="button-group"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "10px",
-              marginTop: "20px",
-            }}
-          >
-            <label
+    <DeviceWrapper>
+      <DndProvider backend={HTML5Backend}>
+        <div className="app">
+          <div className="sidebar">
+            <GuestForm onAdd={addGuest} />
+            <div
+              className="button-group"
               style={{
-                ...buttonStyle,
-                backgroundColor: "#fff",
-                color: "#000",
                 display: "flex",
-                alignItems: "center",
-                gap: "5px",
-                cursor: "pointer",
-                border: "1px solid #ccc",
+                flexDirection: "column",
+                gap: "10px",
+                marginTop: "20px",
               }}
             >
-              <FaFileImport style={iconStyle} />
-              Uvezite Konfiguraciju
-              <input
-                type="file"
-                onChange={importData}
-                accept=".json"
+              <label
                 style={{
-                  display: "none",
+                  ...buttonStyle,
+                  backgroundColor: "#fff",
+                  color: "#000",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "5px",
+                  cursor: "pointer",
+                  border: "1px solid #ccc",
                 }}
-              />
-            </label>
-            <button
-              onClick={exportData}
-              style={{
-                ...buttonStyle,
-                backgroundColor: "#fff",
-                color: "#000",
-                border: "1px solid #ccc",
-              }}
-            >
-              <FaFileExport style={iconStyle} />
-              Sačuvaj Konfiguraciju
-            </button>
-            <button
-              onClick={exportExcel}
-              style={{
-                ...buttonStyle,
-                backgroundColor: "#fff",
-                color: "#000",
-                border: "1px solid #ccc",
-              }}
-            >
-              <FaFileExcel style={iconStyle} />
-              Izvezi Excel Spisak Gostiju
-            </button>
-            <button
-              onClick={exportPDF}
-              style={{
-                ...buttonStyle,
-                backgroundColor: "#fff",
-                color: "#000",
-                border: "1px solid #ccc",
-              }}
-            >
-              <FaFilePdf style={iconStyle} />
-              Izvezi PDF Spisak Gostiju
-            </button>
-            <button
-              onClick={exportCanvasToPDF}
-              style={{
-                ...buttonStyle,
-                backgroundColor: "#fff",
-                color: "#000",
-                border: "1px solid #ccc",
-              }}
-            >
-              <FaChair style={iconStyle} />
-              Izvezi Plan Sale PDF
-            </button>
-            <button
-              onClick={() => setShowResetPopup(true)}
-              style={{
-                ...buttonStyle,
-                backgroundColor: "#fff",
-                color: "#000",
-                border: "1px solid #ccc",
-              }}
-            >
-              <FaRedo style={iconStyle} />
-              Resetuj Sve
-            </button>
-          </div>
-          <GuestList
-            guests={guests}
-            onDelete={deleteGuest}
-            onEdit={editGuest}
-          />
-          <h3>Napravi Sto</h3>
-          <div className="table-creator">
-            <select
-              value={tableType}
-              onChange={(e) =>
-                setTableType(e.target.value as "rectangle" | "circle")
-              }
-            >
-              <option value="rectangle">Četvrtasti</option>
-              <option value="circle">Kružni</option>
-            </select>
-
-            {tableType === "rectangle" && (
+              >
+                <FaFileImport style={iconStyle} />
+                Uvezite Konfiguraciju
+                <input
+                  type="file"
+                  onChange={importData}
+                  accept=".json"
+                  style={{
+                    display: "none",
+                  }}
+                />
+              </label>
+              <button
+                onClick={exportData}
+                style={{
+                  ...buttonStyle,
+                  backgroundColor: "#fff",
+                  color: "#000",
+                  border: "1px solid #ccc",
+                }}
+              >
+                <FaFileExport style={iconStyle} />
+                Sačuvaj Konfiguraciju
+              </button>
+              <button
+                onClick={exportExcel}
+                style={{
+                  ...buttonStyle,
+                  backgroundColor: "#fff",
+                  color: "#000",
+                  border: "1px solid #ccc",
+                }}
+              >
+                <FaFileExcel style={iconStyle} />
+                Izvezi Excel Spisak Gostiju
+              </button>
+              <button
+                onClick={exportPDF}
+                style={{
+                  ...buttonStyle,
+                  backgroundColor: "#fff",
+                  color: "#000",
+                  border: "1px solid #ccc",
+                }}
+              >
+                <FaFilePdf style={iconStyle} />
+                Izvezi PDF Spisak Gostiju
+              </button>
+              <button
+                onClick={exportCanvasToPDF}
+                style={{
+                  ...buttonStyle,
+                  backgroundColor: "#fff",
+                  color: "#000",
+                  border: "1px solid #ccc",
+                }}
+              >
+                <FaChair style={iconStyle} />
+                Izvezi Plan Sale PDF
+              </button>
+              <button
+                onClick={() => setShowResetPopup(true)}
+                style={{
+                  ...buttonStyle,
+                  backgroundColor: "#fff",
+                  color: "#000",
+                  border: "1px solid #ccc",
+                }}
+              >
+                <FaRedo style={iconStyle} />
+                Resetuj Sve
+              </button>
+            </div>
+            <GuestList
+              guests={guests}
+              onDelete={deleteGuest}
+              onEdit={editGuest}
+            />
+            <h3>Napravi Sto</h3>
+            <div className="table-creator">
               <select
-                value={seatingType}
+                value={tableType}
                 onChange={(e) =>
-                  setSeatingType(e.target.value as "one-sided" | "two-sided")
+                  setTableType(e.target.value as "rectangle" | "circle")
                 }
               >
-                <option value="one-sided">Jednostrano sedenje</option>
-                <option value="two-sided">Dvostrano sedenje</option>
+                <option value="rectangle">Četvrtasti</option>
+                <option value="circle">Kružni</option>
               </select>
-            )}
-            <input
-              type="text"
-              placeholder="Ime stola"
-              value={newTableName}
-              onChange={(e) => setNewTableName(e.target.value)}
-            />
-            <input
-              type="number"
-              min="1"
-              value={newChairCount}
-              onChange={(e) => setNewChairCount(Number(e.target.value))}
-            />
-            <button
-              onClick={() => addTable(tableType)}
-              style={{
-                ...buttonStyle,
-                backgroundColor: "#fff",
-                color: "#000",
-                border: "1px solid #ccc",
-              }}
-            >
-              <FaChair style={iconStyle} />
-              Dodaj Sto
-            </button>
-          </div>
-          <h3 style={{ marginBottom: "10px" }}>Lista Stolova</h3>
-          <div className="table-list" style={{ marginTop: "20px" }}>
-            {tables.map((table) => (
-              <div
-                key={table.id}
-                className="table-item"
+
+              {tableType === "rectangle" && (
+                <select
+                  value={seatingType}
+                  onChange={(e) =>
+                    setSeatingType(e.target.value as "one-sided" | "two-sided")
+                  }
+                >
+                  <option value="one-sided">Jednostrano sedenje</option>
+                  <option value="two-sided">Dvostrano sedenje</option>
+                </select>
+              )}
+              <input
+                type="text"
+                placeholder="Ime stola"
+                value={newTableName}
+                onChange={(e) => setNewTableName(e.target.value)}
+              />
+              <input
+                type="number"
+                min="1"
+                value={newChairCount}
+                onChange={(e) => setNewChairCount(Number(e.target.value))}
+              />
+              <button
+                onClick={() => addTable(tableType)}
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: "10px",
+                  ...buttonStyle,
+                  backgroundColor: "#fff",
+                  color: "#000",
                   border: "1px solid #ccc",
-                  borderRadius: "5px",
-                  marginBottom: "10px",
-                  backgroundColor: "#f9f9f9",
                 }}
               >
-                <span style={{ fontSize: "16px", fontWeight: "500" }}>
-                  {table.name}
-                </span>
-                <button
-                  onClick={() => deleteTable(table.id)}
-                  title="Obriši Sto"
+                <FaChair style={iconStyle} />
+                Dodaj Sto
+              </button>
+            </div>
+            <h3 style={{ marginBottom: "10px" }}>Lista Stolova</h3>
+            <div className="table-list" style={{ marginTop: "20px" }}>
+              {tables.map((table) => (
+                <div
+                  key={table.id}
+                  className="table-item"
                   style={{
-                    padding: "5px 10px",
-                    borderRadius: "3px",
-                    backgroundColor: "inherit",
-                    color: "black",
-                    fontSize: "1.2rem",
-                    cursor: "pointer",
                     display: "flex",
+                    justifyContent: "space-between",
                     alignItems: "center",
+                    padding: "10px",
+                    border: "1px solid #ccc",
+                    borderRadius: "5px",
+                    marginBottom: "10px",
+                    backgroundColor: "#f9f9f9",
                   }}
                 >
-                  <FaTrash />
-                </button>
-              </div>
+                  <span style={{ fontSize: "16px", fontWeight: "500" }}>
+                    {table.name}
+                  </span>
+                  <button
+                    onClick={() => deleteTable(table.id)}
+                    title="Obriši Sto"
+                    style={{
+                      padding: "5px 10px",
+                      borderRadius: "3px",
+                      backgroundColor: "inherit",
+                      color: "black",
+                      fontSize: "1.2rem",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="canvas">
+            {tables.map((table) => (
+              <TableComponent
+                key={table.id}
+                table={table}
+                guests={guests}
+                onChairDrop={handleChairDrop}
+                setTables={setTables}
+                calculateChairPositions={calculateChairPositions}
+              />
             ))}
           </div>
         </div>
-        <div className="canvas">
-          {tables.map((table) => (
-            <TableComponent
-              key={table.id}
-              table={table}
-              guests={guests}
-              onChairDrop={handleChairDrop}
-              setTables={setTables}
-              calculateChairPositions={calculateChairPositions}
-            />
-          ))}
-        </div>
-      </div>
-      {showResetPopup && (
-        <div
-          className="reset-popup"
-          style={{
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            backgroundColor: "#fff",
-            padding: "20px",
-            boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-            zIndex: 1000,
-          }}
-        >
-          <h3>Da li želite da sačuvate konfiguraciju pre resetovanja?</h3>
+        {showResetPopup && (
           <div
-            className="button-group"
+            className="reset-popup"
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: "20px",
+              position: "fixed",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              backgroundColor: "#fff",
+              padding: "20px",
+              boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+              zIndex: 1000,
             }}
           >
-            <button
-              onClick={exportData}
+            <h3>Da li želite da sačuvate konfiguraciju pre resetovanja?</h3>
+            <div
+              className="button-group"
               style={{
-                ...buttonStyle,
-                backgroundColor: "#fff",
-                color: "#000",
-                border: "1px solid #ccc",
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: "20px",
               }}
             >
-              <FaFileExport style={iconStyle} />
-              Sačuvaj konfiguraciju
-            </button>
-            <button
-              onClick={resetEverything}
-              style={{
-                ...buttonStyle,
-                backgroundColor: "#fff",
-                color: "#000",
-                border: "1px solid #ccc",
-              }}
-            >
-              <FaRedo style={iconStyle} />
-              Resetuj Sve
-            </button>
-            <button
-              onClick={() => setShowResetPopup(false)}
-              style={{
-                ...buttonStyle,
-                backgroundColor: "#fff",
-                color: "#000",
-                border: "1px solid #ccc",
-              }}
-            >
-              Otkaži
-            </button>
+              <button
+                onClick={exportData}
+                style={{
+                  ...buttonStyle,
+                  backgroundColor: "#fff",
+                  color: "#000",
+                  border: "1px solid #ccc",
+                }}
+              >
+                <FaFileExport style={iconStyle} />
+                Sačuvaj konfiguraciju
+              </button>
+              <button
+                onClick={resetEverything}
+                style={{
+                  ...buttonStyle,
+                  backgroundColor: "#fff",
+                  color: "#000",
+                  border: "1px solid #ccc",
+                }}
+              >
+                <FaRedo style={iconStyle} />
+                Resetuj Sve
+              </button>
+              <button
+                onClick={() => setShowResetPopup(false)}
+                style={{
+                  ...buttonStyle,
+                  backgroundColor: "#fff",
+                  color: "#000",
+                  border: "1px solid #ccc",
+                }}
+              >
+                Otkaži
+              </button>
+            </div>
           </div>
-        </div>
-      )}
-    </DndProvider>
+        )}
+      </DndProvider>
+    </DeviceWrapper>
   );
 };
 
