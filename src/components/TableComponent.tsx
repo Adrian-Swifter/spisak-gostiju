@@ -157,7 +157,10 @@ const TableComponent = ({
             </button>
             <span>
               {table.chairs.length}{" "}
-              {table.chairs.length === 1 ? "mesto" : "mesta"}
+              {table.chairs.length % 10 === 1 &&
+              table.chairs.length % 100 !== 11
+                ? "mesto"
+                : "mesta"}
             </span>
             <button
               onClick={(e) => {
