@@ -15,6 +15,7 @@ const DraggableGuest = ({ guest }: { guest: Guest }) => {
       ref={drag as any}
       style={{ opacity: isDragging ? 0.5 : 1 }}
       className="guest-item"
+      title="Klikni i prevuci do stolice"
     >
       {guest.name}
     </div>

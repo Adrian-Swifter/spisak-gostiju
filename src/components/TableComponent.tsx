@@ -128,7 +128,10 @@ const TableComponent = ({
         topRight: true,
       }}
     >
-      <div className={`table ${table.type} table-drag-handle`}>
+      <div
+        className={`table ${table.type} table-drag-handle`}
+        title="Prevuci da pomeriš sto"
+      >
         <div className="table-header">
           <input
             type="text"
