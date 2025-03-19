@@ -11,8 +11,7 @@ declare global {
 
 const useGoogleAnalytics = () => {
   useEffect(() => {
-    // Load GA script only once
-    if (!window.gtag) {
+    if (typeof window !== "undefined" && !window.gtag) {
       const script = document.createElement("script");
       script.async = true;
       script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
@@ -24,15 +23,12 @@ const useGoogleAnalytics = () => {
           window.dataLayer.push(args);
         };
 
-        // Initialize GA
         window.gtag("js", new Date());
         window.gtag("config", GA_MEASUREMENT_ID, {
-          debug_mode: true,
           send_page_view: true,
+          debug_mode: true,
+          cookie_flags: "SameSite=None;Secure"
         });
-        
-
-        console.log("✅ Google Analytics initialized");
       };
     }
   }, []);
