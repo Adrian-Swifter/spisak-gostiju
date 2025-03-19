@@ -21,7 +21,6 @@ import {
 } from "react-icons/fa";
 import DeviceWrapper from "./components/DeviceWrapper";
 import logo from "./assets/logo.png";
-import useGoogleAnalytics from "./utils/useGoogleAnalytics";
 
 const App = () => {
   const [newTableName, setNewTableName] = useState("");
@@ -37,8 +36,6 @@ const App = () => {
     const saved = localStorage.getItem("tables");
     return saved ? JSON.parse(saved) : [];
   });
-
-  useGoogleAnalytics();
 
   useEffect(() => {
     localStorage.setItem("tables", JSON.stringify(tables));
@@ -254,22 +251,6 @@ const App = () => {
                 }}
               />
             </div>
-            <button
-              onClick={() => {
-                if (window.gtag) {
-                  window.gtag("event", "test_event", {
-                    event_category: "Debug",
-                    event_label: "React Button Click",
-                  });
-                  console.log("📊 Test event sent to GA");
-                } else {
-                  console.log("⚠️ GA is not loaded");
-                }
-              }}
-            >
-              Send Test Event
-            </button>
-
             <GuestForm onAdd={addGuest} />
             <div
               className="button-group"
