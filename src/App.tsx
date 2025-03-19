@@ -21,8 +21,7 @@ import {
 } from "react-icons/fa";
 import DeviceWrapper from "./components/DeviceWrapper";
 import logo from "./assets/logo.png";
-
-const GA_MEASUREMENT_ID = "G-K7PCLHL61R";
+import useGoogleAnalytics from "./utils/useGoogleAnalytics";
 
 const App = () => {
   const [newTableName, setNewTableName] = useState("");
@@ -39,21 +38,7 @@ const App = () => {
     return saved ? JSON.parse(saved) : [];
   });
 
-  useEffect(() => {
-    // Inject Google Analytics script
-    const script = document.createElement("script");
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-    document.head.appendChild(script);
-
-    // Initialize Google Analytics
-    window.dataLayer = window.dataLayer || [];
-    function gtag(...args: any) {
-      window.dataLayer.push(args);
-    }
-    gtag("js", new Date());
-    gtag("config", GA_MEASUREMENT_ID);
-  }, []);
+  useGoogleAnalytics();
 
   useEffect(() => {
     localStorage.setItem("tables", JSON.stringify(tables));
@@ -457,6 +442,32 @@ const App = () => {
                 calculateChairPositions={calculateChairPositions}
               />
             ))}
+          </div>
+          <div
+            className="zoom-instructions"
+            style={{
+              position: "fixed",
+              bottom: "10px",
+              right: "10px",
+              backgroundColor: "#fff",
+              padding: "10px",
+              borderRadius: "5px",
+              boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+              fontSize: "14px",
+              zIndex: 1000,
+            }}
+          >
+            <p>
+              <strong>Za više prostora za stolove odzumirati:</strong>
+            </p>
+            <p>
+              <strong>Windows:</strong> Držite <kbd>Ctrl</kbd> i pritisnite{" "}
+              <kbd>-</kbd> za odzumiranje.
+            </p>
+            <p>
+              <strong>Mac:</strong> Držite <kbd>⌘ Command</kbd> i pritisnite{" "}
+              <kbd>-</kbd> za odzumiranje.
+            </p>
           </div>
         </div>
         {showResetPopup && (
