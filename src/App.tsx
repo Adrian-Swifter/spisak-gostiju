@@ -378,7 +378,7 @@ const App = () => {
                   style={{
                     padding: "5px 10px",
                     borderRadius: "3px",
-                    backgroundColor: "white",
+                    backgroundColor: "inherit",
                     color: "black",
                     fontSize: "1.2rem",
                     cursor: "pointer",
