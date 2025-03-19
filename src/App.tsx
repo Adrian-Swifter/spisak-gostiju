@@ -19,11 +19,22 @@ import {
   FaTrash,
   FaRedo,
 } from "react-icons/fa";
+import { isMobileDevice } from "./utils/deviceDetector";
+import { MobileWarning } from "./components/MobileWarning";
 
 const App = () => {
   const [newTableName, setNewTableName] = useState("");
   const [newChairCount, setNewChairCount] = useState(8);
   const [showResetPopup, setShowResetPopup] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(isMobileDevice());
+  }, []);
+
+  if (isMobile) {
+    return <MobileWarning />;
+  }
 
   const [guests, setGuests] = useState<Guest[]>(() => {
     const saved = localStorage.getItem("guests");
@@ -48,8 +59,11 @@ const App = () => {
 
   const deleteGuest = (guestId: string) => {
     setGuests((prevGuests) => prevGuests.filter((g) => g.id !== guestId));
+    localStorage.setItem(
+      "guests",
+      JSON.stringify(guests.filter((g) => g.id !== guestId))
+    );
 
-    // Clean up chair assignments
     setTables((prevTables) =>
       prevTables.map((table) => ({
         ...table,
