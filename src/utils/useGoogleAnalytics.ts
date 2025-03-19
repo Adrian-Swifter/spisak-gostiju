@@ -27,8 +27,10 @@ const useGoogleAnalytics = () => {
         // Initialize GA
         window.gtag("js", new Date());
         window.gtag("config", GA_MEASUREMENT_ID, {
+          debug_mode: true,
           send_page_view: true,
         });
+        
 
         console.log("✅ Google Analytics initialized");
       };
