@@ -27,6 +27,8 @@ const useGoogleAnalytics = () => {
         window.gtag("js", new Date());
         window.gtag("config", GA_MEASUREMENT_ID, {
           send_page_view: true,
+          cookie_flags: "SameSite=None;Secure",
+          page_path: window.location.hostname + window.location.pathname,
         });
       };
     }
