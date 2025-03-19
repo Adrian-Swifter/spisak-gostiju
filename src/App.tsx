@@ -221,6 +221,25 @@ const App = () => {
       <DndProvider backend={HTML5Backend}>
         <div className="app">
           <div className="sidebar">
+            <div
+              style={{
+                textAlign: "center",
+                marginBottom: "2rem",
+                padding: "1rem",
+                borderBottom: "1px solid #eee",
+              }}
+            >
+              <img
+                src="/src/assets/logo.png"
+                alt="App Logo"
+                style={{
+                  maxWidth: "100px",
+                  height: "auto",
+                  margin: "0 auto",
+                  display: "block",
+                }}
+              />
+            </div>
             <GuestForm onAdd={addGuest} />
             <div
               className="button-group"
