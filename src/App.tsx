@@ -234,7 +234,7 @@ const App = () => {
                 src={logo}
                 alt="App Logo"
                 style={{
-                  maxWidth: "100px",
+                  maxWidth: "150px",
                   height: "auto",
                   margin: "0 auto",
                   display: "block",
