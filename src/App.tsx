@@ -254,6 +254,22 @@ const App = () => {
                 }}
               />
             </div>
+            <button
+              onClick={() => {
+                if (window.gtag) {
+                  window.gtag("event", "test_event", {
+                    event_category: "Debug",
+                    event_label: "React Button Click",
+                  });
+                  console.log("📊 Test event sent to GA");
+                } else {
+                  console.log("⚠️ GA is not loaded");
+                }
+              }}
+            >
+              Send Test Event
+            </button>
+
             <GuestForm onAdd={addGuest} />
             <div
               className="button-group"
