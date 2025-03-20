@@ -24,19 +24,29 @@ const GuestForm = ({ onAdd }: { onAdd: (name: string) => void }) => {
         backgroundColor: "#fff",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
-        <FaUser style={{ marginRight: "10px", color: "#000" }} />
+      <div style={{ position: "relative", width: "100%" }}>
+        <FaUser
+          style={{
+            position: "absolute",
+            left: "10px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            color: "#000",
+            zIndex: 1,
+          }}
+        />
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
           style={{
-            padding: "12px",
+            padding: "12px 12px 12px 35px",
             borderRadius: "5px",
             border: "1px solid #000",
             width: "100%",
             boxSizing: "border-box",
             fontSize: "16px",
+            position: "relative",
           }}
           placeholder="Unesi ime gosta"
         />

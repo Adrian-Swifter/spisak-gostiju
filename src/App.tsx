@@ -18,6 +18,9 @@ import {
   FaChair,
   FaTrash,
   FaRedo,
+  FaUser,
+  FaTable,
+  FaCog,
 } from "react-icons/fa";
 import DeviceWrapper from "./components/DeviceWrapper";
 import logo from "./assets/logo.png";
@@ -26,16 +29,17 @@ const App = () => {
   const [newTableName, setNewTableName] = useState("");
   const [newChairCount, setNewChairCount] = useState(8);
   const [showResetPopup, setShowResetPopup] = useState(false);
-
   const [guests, setGuests] = useState<Guest[]>(() => {
     const saved = localStorage.getItem("guests");
     return saved ? JSON.parse(saved) : [];
   });
-
   const [tables, setTables] = useState<Table[]>(() => {
     const saved = localStorage.getItem("tables");
     return saved ? JSON.parse(saved) : [];
   });
+  const [activeTab, setActiveTab] = useState<"guests" | "tables" | "settings">(
+    "guests"
+  );
 
   useEffect(() => {
     localStorage.setItem("tables", JSON.stringify(tables));
@@ -235,8 +239,6 @@ const App = () => {
             <div
               style={{
                 textAlign: "center",
-                marginBottom: "2rem",
-                padding: "1rem",
                 borderBottom: "1px solid #eee",
               }}
             >
@@ -251,191 +253,274 @@ const App = () => {
                 }}
               />
             </div>
-            <GuestForm onAdd={addGuest} />
             <div
-              className="button-group"
               style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-                marginTop: "20px",
+                marginBottom: "80px",
+                overflowY: "auto",
+                height: "calc(100vh - 200px)",
               }}
             >
-              <label
-                style={{
-                  ...buttonStyle,
-                  backgroundColor: "#fff",
-                  color: "#000",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "5px",
-                  cursor: "pointer",
-                  border: "1px solid #ccc",
-                }}
-              >
-                <FaFileImport style={iconStyle} />
-                Uvezite Konfiguraciju
-                <input
-                  type="file"
-                  onChange={importData}
-                  accept=".json"
-                  style={{
-                    display: "none",
-                  }}
-                />
-              </label>
-              <button
-                onClick={exportData}
-                style={{
-                  ...buttonStyle,
-                  backgroundColor: "#fff",
-                  color: "#000",
-                  border: "1px solid #ccc",
-                }}
-              >
-                <FaFileExport style={iconStyle} />
-                Sačuvaj Konfiguraciju
-              </button>
-              <button
-                onClick={exportExcel}
-                style={{
-                  ...buttonStyle,
-                  backgroundColor: "#fff",
-                  color: "#000",
-                  border: "1px solid #ccc",
-                }}
-              >
-                <FaFileExcel style={iconStyle} />
-                Izvezi Excel Spisak Gostiju
-              </button>
-              <button
-                onClick={exportPDF}
-                style={{
-                  ...buttonStyle,
-                  backgroundColor: "#fff",
-                  color: "#000",
-                  border: "1px solid #ccc",
-                }}
-              >
-                <FaFilePdf style={iconStyle} />
-                Izvezi PDF Spisak Gostiju
-              </button>
-              <button
-                onClick={exportCanvasToPDF}
-                style={{
-                  ...buttonStyle,
-                  backgroundColor: "#fff",
-                  color: "#000",
-                  border: "1px solid #ccc",
-                }}
-              >
-                <FaChair style={iconStyle} />
-                Izvezi Plan Sale PDF
-              </button>
-              <button
-                onClick={() => setShowResetPopup(true)}
-                style={{
-                  ...buttonStyle,
-                  backgroundColor: "#fff",
-                  color: "#000",
-                  border: "1px solid #ccc",
-                }}
-              >
-                <FaRedo style={iconStyle} />
-                Resetuj Sve
-              </button>
-            </div>
-            <GuestList
-              guests={guests}
-              onDelete={deleteGuest}
-              onEdit={editGuest}
-            />
-            <h3>Napravi Sto</h3>
-            <div className="table-creator">
-              <select
-                value={tableType}
-                onChange={(e) =>
-                  setTableType(e.target.value as "rectangle" | "circle")
-                }
-              >
-                <option value="rectangle">Četvrtasti</option>
-                <option value="circle">Kružni</option>
-              </select>
-
-              {tableType === "rectangle" && (
-                <select
-                  value={seatingType}
-                  onChange={(e) =>
-                    setSeatingType(e.target.value as "one-sided" | "two-sided")
-                  }
-                >
-                  <option value="one-sided">Jednostrano sedenje</option>
-                  <option value="two-sided">Dvostrano sedenje</option>
-                </select>
+              {activeTab === "guests" && (
+                <>
+                  <GuestForm onAdd={addGuest} />
+                  <GuestList
+                    guests={guests}
+                    onDelete={deleteGuest}
+                    onEdit={editGuest}
+                  />
+                </>
               )}
-              <input
-                type="text"
-                placeholder="Ime stola"
-                value={newTableName}
-                onChange={(e) => setNewTableName(e.target.value)}
-              />
-              <input
-                type="number"
-                min="1"
-                value={newChairCount}
-                onChange={(e) => setNewChairCount(Number(e.target.value))}
-              />
-              <button
-                onClick={() => addTable(tableType)}
-                style={{
-                  ...buttonStyle,
-                  backgroundColor: "#fff",
-                  color: "#000",
-                  border: "1px solid #ccc",
-                }}
-              >
-                <FaChair style={iconStyle} />
-                Dodaj Sto
-              </button>
-            </div>
-            <h3 style={{ marginBottom: "10px" }}>Lista Stolova</h3>
-            <div className="table-list" style={{ marginTop: "20px" }}>
-              {tables.map((table) => (
+              {activeTab === "settings" && (
                 <div
-                  key={table.id}
-                  className="table-item"
+                  className="button-group"
                   style={{
                     display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: "10px",
-                    border: "1px solid #ccc",
-                    borderRadius: "5px",
-                    marginBottom: "10px",
-                    backgroundColor: "#f9f9f9",
+                    flexDirection: "column",
+                    gap: "10px",
+                    marginTop: "20px",
                   }}
                 >
-                  <span style={{ fontSize: "16px", fontWeight: "500" }}>
-                    {table.name}
-                  </span>
-                  <button
-                    onClick={() => deleteTable(table.id)}
-                    title="Obriši Sto"
+                  <label
                     style={{
-                      padding: "5px 10px",
-                      borderRadius: "3px",
-                      backgroundColor: "inherit",
-                      color: "black",
-                      fontSize: "1.2rem",
-                      cursor: "pointer",
+                      ...buttonStyle,
+                      backgroundColor: "#fff",
+                      color: "#000",
                       display: "flex",
                       alignItems: "center",
+                      gap: "5px",
+                      cursor: "pointer",
+                      border: "1px solid #ccc",
                     }}
                   >
-                    <FaTrash />
+                    <FaFileImport style={iconStyle} />
+                    Uvezite Konfiguraciju
+                    <input
+                      type="file"
+                      onChange={importData}
+                      accept=".json"
+                      style={{
+                        display: "none",
+                      }}
+                    />
+                  </label>
+                  <button
+                    onClick={exportData}
+                    style={{
+                      ...buttonStyle,
+                      backgroundColor: "#fff",
+                      color: "#000",
+                      border: "1px solid #ccc",
+                    }}
+                  >
+                    <FaFileExport style={iconStyle} />
+                    Sačuvaj Konfiguraciju
+                  </button>
+                  <button
+                    onClick={exportExcel}
+                    style={{
+                      ...buttonStyle,
+                      backgroundColor: "#fff",
+                      color: "#000",
+                      border: "1px solid #ccc",
+                    }}
+                  >
+                    <FaFileExcel style={iconStyle} />
+                    Izvezi Excel Spisak Gostiju
+                  </button>
+                  <button
+                    onClick={exportPDF}
+                    style={{
+                      ...buttonStyle,
+                      backgroundColor: "#fff",
+                      color: "#000",
+                      border: "1px solid #ccc",
+                    }}
+                  >
+                    <FaFilePdf style={iconStyle} />
+                    Izvezi PDF Spisak Gostiju
+                  </button>
+                  <button
+                    onClick={exportCanvasToPDF}
+                    style={{
+                      ...buttonStyle,
+                      backgroundColor: "#fff",
+                      color: "#000",
+                      border: "1px solid #ccc",
+                    }}
+                  >
+                    <FaChair style={iconStyle} />
+                    Izvezi Plan Sale PDF
+                  </button>
+                  <button
+                    onClick={() => setShowResetPopup(true)}
+                    style={{
+                      ...buttonStyle,
+                      backgroundColor: "#fff",
+                      color: "#000",
+                      border: "1px solid #ccc",
+                    }}
+                  >
+                    <FaRedo style={iconStyle} />
+                    Resetuj Sve
                   </button>
                 </div>
-              ))}
+              )}
+
+              {activeTab === "tables" && (
+                <>
+                  <h3 style={{ marginBottom: "10px" }}>Napravi Sto</h3>
+                  <div className="table-creator">
+                    <select
+                      value={tableType}
+                      onChange={(e) =>
+                        setTableType(e.target.value as "rectangle" | "circle")
+                      }
+                    >
+                      <option value="rectangle">Četvrtasti</option>
+                      <option value="circle">Kružni</option>
+                    </select>
+
+                    {tableType === "rectangle" && (
+                      <select
+                        value={seatingType}
+                        onChange={(e) =>
+                          setSeatingType(
+                            e.target.value as "one-sided" | "two-sided"
+                          )
+                        }
+                      >
+                        <option value="one-sided">Jednostrano sedenje</option>
+                        <option value="two-sided">Dvostrano sedenje</option>
+                      </select>
+                    )}
+                    <input
+                      type="text"
+                      placeholder="Ime stola"
+                      value={newTableName}
+                      onChange={(e) => setNewTableName(e.target.value)}
+                    />
+                    <input
+                      type="number"
+                      min="1"
+                      value={newChairCount}
+                      onChange={(e) => setNewChairCount(Number(e.target.value))}
+                    />
+                    <button
+                      onClick={() => addTable(tableType)}
+                      style={{
+                        ...buttonStyle,
+                        backgroundColor: "#fff",
+                        color: "#000",
+                        border: "1px solid #ccc",
+                      }}
+                    >
+                      <FaChair style={iconStyle} />
+                      Dodaj Sto
+                    </button>
+                  </div>
+                  <h3 style={{ marginBottom: "10px" }}>Lista Stolova</h3>
+                  <div className="table-list" style={{ marginTop: "20px" }}>
+                    {tables.map((table) => (
+                      <div
+                        key={table.id}
+                        className="table-item"
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          padding: "10px",
+                          border: "1px solid #ccc",
+                          borderRadius: "5px",
+                          marginBottom: "10px",
+                          backgroundColor: "#f9f9f9",
+                        }}
+                      >
+                        <span style={{ fontSize: "16px", fontWeight: "500" }}>
+                          {table.name}
+                        </span>
+                        <button
+                          onClick={() => deleteTable(table.id)}
+                          title="Obriši Sto"
+                          style={{
+                            padding: "5px 10px",
+                            borderRadius: "3px",
+                            backgroundColor: "inherit",
+                            color: "black",
+                            fontSize: "1.2rem",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                width: "100%",
+                backgroundColor: "#fff",
+                borderTop: "1px solid #eee",
+                display: "flex",
+                justifyContent: "space-around",
+                padding: "10px 0",
+                boxSizing: "border-box",
+              }}
+            >
+              <button
+                onClick={() => setActiveTab("guests")}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: activeTab === "guests" ? "#000" : "#666",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <FaUser size={20} />
+                <span style={{ fontSize: "12px" }}>Gosti</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab("tables")}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: activeTab === "tables" ? "#000" : "#666",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <FaTable size={20} />
+                <span style={{ fontSize: "12px" }}>Stolovi</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab("settings")}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: activeTab === "settings" ? "#000" : "#666",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <FaCog size={20} />
+                <span style={{ fontSize: "12px" }}>Postavke</span>
+              </button>
             </div>
           </div>
           <div className="canvas">

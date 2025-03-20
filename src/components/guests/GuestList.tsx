@@ -54,13 +54,13 @@ const GuestList = ({
           padding: "10px",
         }}
       >
-        <ol style={{ padding: 0 }}>
+        <ol style={{ padding: 0, listStylePosition: "inside" }}>
           {filteredGuests.map((guest) => (
             <li
               key={guest.id}
               className="guest-item"
               style={{
-                padding: "10px",
+                paddingRight: "5px",
                 marginBottom: "10px",
                 backgroundColor: "#fff",
                 boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
