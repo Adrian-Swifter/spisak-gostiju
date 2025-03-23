@@ -19,7 +19,6 @@ import {
   FaTrash,
   FaRedo,
   FaUser,
-  FaTable,
   FaCog,
 } from "react-icons/fa";
 import DeviceWrapper from "./components/DeviceWrapper";
@@ -507,7 +506,7 @@ const App = () => {
                   alignItems: "center",
                 }}
               >
-                <FaTable size={20} />
+                <TableIcon size={"20px"} />
                 <span style={{ fontSize: "12px" }}>Stolovi</span>
               </button>
 
