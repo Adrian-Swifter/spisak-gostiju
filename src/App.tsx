@@ -24,6 +24,8 @@ import {
 } from "react-icons/fa";
 import DeviceWrapper from "./components/DeviceWrapper";
 import logo from "./assets/logo.png";
+import getItemCountFromLocalStorage from "./utils/getItemCountFromLocalStorage";
+import TableIcon from "./utils/TableIcon";
 
 const App = () => {
   const [newTableName, setNewTableName] = useState("");
@@ -265,6 +267,7 @@ const App = () => {
                   <GuestForm onAdd={addGuest} />
                   <GuestList
                     guests={guests}
+                    tables={tables}
                     onDelete={deleteGuest}
                     onEdit={editGuest}
                   />
@@ -414,11 +417,13 @@ const App = () => {
                         border: "1px solid #ccc",
                       }}
                     >
-                      <FaChair style={iconStyle} />
+                      <TableIcon />
                       Dodaj Sto
                     </button>
                   </div>
-                  <h3 style={{ marginBottom: "10px" }}>Lista Stolova</h3>
+                  <h3 style={{ marginBottom: "10px" }}>
+                    Lista Stolova ({getItemCountFromLocalStorage("tables")})
+                  </h3>
                   <div className="table-list" style={{ marginTop: "20px" }}>
                     {tables.map((table) => (
                       <div

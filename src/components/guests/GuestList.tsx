@@ -1,20 +1,27 @@
 import { useState } from "react";
 import DraggableGuest from "./DraggableGuest";
-import { Guest } from "../../types";
+import { Guest, Table } from "../../types";
 import { FaEdit, FaTrash, FaSave } from "react-icons/fa";
+import TableIcon from "../../utils/TableIcon";
 
 const GuestList = ({
   guests,
+  tables,
   onDelete,
   onEdit,
 }: {
   guests: Guest[];
+  tables: Table[];
   onDelete: (id: string) => void;
   onEdit: (id: string, name: string) => void;
 }) => {
   const [editingGuestId, setEditingGuestId] = useState<string | null>(null);
   const [editingGuestName, setEditingGuestName] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [filterOption, setFilterOption] = useState<
+    "all" | "assigned" | "unassigned"
+  >("all");
+  const [sortOption, setSortOption] = useState<"none" | "table">("none");
 
   const handleEditClick = (guest: Guest) => {
     setEditingGuestId(guest.id);
@@ -29,13 +36,44 @@ const GuestList = ({
     }
   };
 
-  const filteredGuests = guests.filter((guest) =>
+  // Find the table name for a guest
+  const getTableNameForGuest = (guestId: string): string | null => {
+    for (const table of tables) {
+      for (const chair of table.chairs) {
+        if (chair.occupiedBy === guestId) {
+          return table.name;
+        }
+      }
+    }
+    return null;
+  };
+
+  // Filter guests based on the selected filter option
+  const filteredGuests = guests.filter((guest) => {
+    const tableName = getTableNameForGuest(guest.id);
+    if (filterOption === "assigned") return tableName !== null;
+    if (filterOption === "unassigned") return tableName === null;
+    return true;
+  });
+
+  // Apply search query to the filtered guests
+  const searchedGuests = filteredGuests.filter((guest) =>
     guest.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Sort guests based on the selected sort option
+  const sortedGuests = [...searchedGuests].sort((a, b) => {
+    if (sortOption === "table") {
+      const tableA = getTableNameForGuest(a.id) || "";
+      const tableB = getTableNameForGuest(b.id) || "";
+      return tableA.localeCompare(tableB);
+    }
+    return 0;
+  });
+
   return (
     <div>
-      <h3>Gosti</h3>
+      <h3>Gosti ({guests.length})</h3>
       <input
         type="text"
         placeholder="Pretraži goste"
@@ -48,6 +86,27 @@ const GuestList = ({
           boxSizing: "border-box",
         }}
       />
+      <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+        <select
+          value={filterOption}
+          onChange={(e) =>
+            setFilterOption(e.target.value as "all" | "assigned" | "unassigned")
+          }
+          style={{ padding: "5px" }}
+        >
+          <option value="all">Svi gosti</option>
+          <option value="assigned">Dodeljeni stolu</option>
+          <option value="unassigned">Nedodeljeni stolu</option>
+        </select>
+        <select
+          value={sortOption}
+          onChange={(e) => setSortOption(e.target.value as "none" | "table")}
+          style={{ padding: "5px" }}
+        >
+          <option value="none">Bez sortiranja</option>
+          <option value="table">Sortiraj po stolu</option>
+        </select>
+      </div>
       <div
         className="guest-list"
         style={{
@@ -55,10 +114,10 @@ const GuestList = ({
         }}
       >
         <ol style={{ padding: 0, listStylePosition: "inside" }}>
-          {filteredGuests.map((guest) => (
+          {sortedGuests.map((guest) => (
             <li
               key={guest.id}
-              className="guest-item"
+              className="guest-item-list"
               style={{
                 paddingRight: "5px",
                 marginBottom: "10px",
@@ -160,6 +219,28 @@ const GuestList = ({
                     <FaTrash />
                   </button>
                 </div>
+              </div>
+              <div
+                style={{
+                  marginTop: "5px",
+                  fontSize: "0.7rem",
+                  color: "#fff",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "5px",
+                  backgroundColor: "#6d4c41",
+                  padding: "3px",
+                  borderRadius: "3px",
+                }}
+              >
+                {getTableNameForGuest(guest.id) ? (
+                  <>
+                    <TableIcon />
+                    {getTableNameForGuest(guest.id)}
+                  </>
+                ) : (
+                  "Nije dodeljen stolu"
+                )}
               </div>
             </li>
           ))}
