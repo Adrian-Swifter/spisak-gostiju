@@ -1,4 +1,6 @@
 export interface Guest {
+    inviteSent: any;
+    confirmedAttendance: any;
     id: string;
     name: string;
   }

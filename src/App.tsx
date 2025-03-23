@@ -269,6 +269,7 @@ const App = () => {
                     tables={tables}
                     onDelete={deleteGuest}
                     onEdit={editGuest}
+                    setGuests={setGuests}
                   />
                 </>
               )}

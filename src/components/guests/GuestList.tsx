@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DraggableGuest from "./DraggableGuest";
 import { Guest, Table } from "../../types";
-import { FaEdit, FaTrash, FaSave } from "react-icons/fa";
+import { FaEdit, FaTrash, FaSave, FaEnvelope, FaCheck } from "react-icons/fa";
 import TableIcon from "../../utils/TableIcon";
 
 const GuestList = ({
@@ -9,11 +9,13 @@ const GuestList = ({
   tables,
   onDelete,
   onEdit,
+  setGuests, // Add setGuests to update the guests array
 }: {
   guests: Guest[];
   tables: Table[];
   onDelete: (id: string) => void;
   onEdit: (id: string, name: string) => void;
+  setGuests: (guests: Guest[]) => void; // Function to update guests
 }) => {
   const [editingGuestId, setEditingGuestId] = useState<string | null>(null);
   const [editingGuestName, setEditingGuestName] = useState<string>("");
@@ -36,7 +38,26 @@ const GuestList = ({
     }
   };
 
-  // Find the table name for a guest
+  const handleInviteClick = (guestId: string) => {
+    const updatedGuests = guests.map((guest) =>
+      guest.id === guestId
+        ? { ...guest, inviteSent: !guest.inviteSent } // Toggle inviteSent
+        : guest
+    );
+    setGuests(updatedGuests);
+    localStorage.setItem("guests", JSON.stringify(updatedGuests)); // Save to local storage
+  };
+
+  const handleConfirmClick = (guestId: string) => {
+    const updatedGuests = guests.map((guest) =>
+      guest.id === guestId
+        ? { ...guest, confirmedAttendance: !guest.confirmedAttendance } // Toggle confirmedAttendance
+        : guest
+    );
+    setGuests(updatedGuests);
+    localStorage.setItem("guests", JSON.stringify(updatedGuests)); // Save to local storage
+  };
+
   const getTableNameForGuest = (guestId: string): string | null => {
     for (const table of tables) {
       for (const chair of table.chairs) {
@@ -48,7 +69,6 @@ const GuestList = ({
     return null;
   };
 
-  // Filter guests based on the selected filter option
   const filteredGuests = guests.filter((guest) => {
     const tableName = getTableNameForGuest(guest.id);
     if (filterOption === "assigned") return tableName !== null;
@@ -56,12 +76,10 @@ const GuestList = ({
     return true;
   });
 
-  // Apply search query to the filtered guests
   const searchedGuests = filteredGuests.filter((guest) =>
     guest.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Sort guests based on the selected sort option
   const sortedGuests = [...searchedGuests].sort((a, b) => {
     if (sortOption === "table") {
       const tableA = getTableNameForGuest(a.id) || "";
@@ -158,20 +176,60 @@ const GuestList = ({
                   className="guest-controls"
                   style={{
                     display: "flex",
-                    gap: "10px",
+                    gap: "2px",
+                    alignItems: "center",
                   }}
                 >
+                  <button
+                    onClick={() => handleInviteClick(guest.id)}
+                    title="Poslata pozivnica"
+                    style={{
+                      padding: "3px",
+                      border: "none",
+                      borderRadius: "3px",
+                      backgroundColor: guest.inviteSent ? "#4caf50" : "white",
+                      color: guest.inviteSent ? "white" : "black",
+                      fontSize: "1rem",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <FaEnvelope />
+                  </button>
+                  <button
+                    onClick={() => handleConfirmClick(guest.id)}
+                    title="Potvrdi dolazak"
+                    style={{
+                      padding: "3px",
+                      border: "none",
+                      borderRadius: "3px",
+                      backgroundColor: guest.confirmedAttendance
+                        ? "#4caf50"
+                        : "white",
+                      color: guest.confirmedAttendance ? "white" : "black",
+                      fontSize: "1rem",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <FaCheck />
+                  </button>
+
                   {editingGuestId === guest.id ? (
                     <button
                       onClick={handleSaveClick}
                       title="Sačuvaj"
                       style={{
-                        padding: "5px",
+                        padding: "3px",
                         border: "none",
                         borderRadius: "3px",
-                        backgroundColor: "white",
-                        color: "black",
-                        fontSize: "1.2rem",
+                        backgroundColor: "#4caf50",
+                        color: "white",
+                        fontSize: "1rem",
                         cursor: "pointer",
                         display: "flex",
                         alignItems: "center",
@@ -185,12 +243,12 @@ const GuestList = ({
                       onClick={() => handleEditClick(guest)}
                       title="Izmeni"
                       style={{
-                        padding: "5px",
+                        padding: "3px",
                         border: "none",
                         borderRadius: "3px",
                         backgroundColor: "white",
                         color: "black",
-                        fontSize: "1.2rem",
+                        fontSize: "1rem",
                         cursor: "pointer",
                         display: "flex",
                         alignItems: "center",
@@ -204,12 +262,12 @@ const GuestList = ({
                     onClick={() => onDelete(guest.id)}
                     title="Izbriši"
                     style={{
-                      padding: "5px",
+                      padding: "3px",
                       border: "none",
                       borderRadius: "3px",
                       backgroundColor: "white",
-                      color: "black",
-                      fontSize: "1.2rem",
+                      color: "#f44336",
+                      fontSize: "1rem",
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
@@ -226,21 +284,21 @@ const GuestList = ({
                   fontSize: "0.7rem",
                   color: "#fff",
                   display: "inline-flex",
-                  alignItems: "center",
-                  gap: "5px",
                   backgroundColor: "#6d4c41",
                   padding: "3px",
                   borderRadius: "3px",
                 }}
               >
-                {getTableNameForGuest(guest.id) ? (
-                  <>
-                    <TableIcon />
-                    {getTableNameForGuest(guest.id)}
-                  </>
-                ) : (
-                  "Nije dodeljen stolu"
-                )}
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  {getTableNameForGuest(guest.id) ? (
+                    <>
+                      <TableIcon />
+                      {getTableNameForGuest(guest.id)}
+                    </>
+                  ) : (
+                    "Nije dodeljen stolu"
+                  )}
+                </div>
               </div>
             </li>
           ))}
