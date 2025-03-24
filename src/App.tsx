@@ -571,7 +571,7 @@ const App = () => {
             style={{
               position: "fixed",
               bottom: "10px",
-              left: "370px",
+              left: "390px",
               backgroundColor: "#fff",
               padding: "10px",
               borderRadius: "5px",

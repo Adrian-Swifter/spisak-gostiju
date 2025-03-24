@@ -40,22 +40,20 @@ const GuestList = ({
 
   const handleInviteClick = (guestId: string) => {
     const updatedGuests = guests.map((guest) =>
-      guest.id === guestId
-        ? { ...guest, inviteSent: !guest.inviteSent } // Toggle inviteSent
-        : guest
+      guest.id === guestId ? { ...guest, inviteSent: !guest.inviteSent } : guest
     );
     setGuests(updatedGuests);
-    localStorage.setItem("guests", JSON.stringify(updatedGuests)); // Save to local storage
+    localStorage.setItem("guests", JSON.stringify(updatedGuests));
   };
 
   const handleConfirmClick = (guestId: string) => {
     const updatedGuests = guests.map((guest) =>
       guest.id === guestId
-        ? { ...guest, confirmedAttendance: !guest.confirmedAttendance } // Toggle confirmedAttendance
+        ? { ...guest, confirmedAttendance: !guest.confirmedAttendance }
         : guest
     );
     setGuests(updatedGuests);
-    localStorage.setItem("guests", JSON.stringify(updatedGuests)); // Save to local storage
+    localStorage.setItem("guests", JSON.stringify(updatedGuests));
   };
 
   const getTableNameForGuest = (guestId: string): string | null => {
@@ -131,8 +129,8 @@ const GuestList = ({
           padding: "10px",
         }}
       >
-        <ol style={{ padding: 0, listStylePosition: "inside" }}>
-          {sortedGuests.map((guest) => (
+        <ol style={{ padding: 0, listStyleType: "none" }}>
+          {sortedGuests.map((guest, index) => (
             <li
               key={guest.id}
               className="guest-item-list"
@@ -155,8 +153,14 @@ const GuestList = ({
                 }}
               >
                 <div
-                  style={{ display: "flex", alignItems: "center", flex: "1" }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    flex: "1",
+                    gap: "10px",
+                  }}
                 >
+                  <span style={{ fontWeight: "bold" }}>{index + 1}.</span>{" "}
                   {editingGuestId === guest.id ? (
                     <input
                       type="text"
@@ -218,7 +222,6 @@ const GuestList = ({
                   >
                     <FaCheck />
                   </button>
-
                   {editingGuestId === guest.id ? (
                     <button
                       onClick={handleSaveClick}

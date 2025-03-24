@@ -25,7 +25,7 @@ input {
 }
 
 .sidebar {
-  width: 340px;
+  width: 360px;
   padding: 0.5rem;
   background: var(--surface);
   border-right: 1px solid #e2e8f0;
