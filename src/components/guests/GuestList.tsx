@@ -9,19 +9,19 @@ const GuestList = ({
   tables,
   onDelete,
   onEdit,
-  setGuests, // Add setGuests to update the guests array
+  setGuests,
 }: {
   guests: Guest[];
   tables: Table[];
   onDelete: (id: string) => void;
   onEdit: (id: string, name: string) => void;
-  setGuests: (guests: Guest[]) => void; // Function to update guests
+  setGuests: (guests: Guest[]) => void;
 }) => {
   const [editingGuestId, setEditingGuestId] = useState<string | null>(null);
   const [editingGuestName, setEditingGuestName] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [filterOption, setFilterOption] = useState<
-    "all" | "assigned" | "unassigned"
+    "all" | "assigned" | "unassigned" | "inviteSent" | "confirmedAttendance"
   >("all");
   const [sortOption, setSortOption] = useState<"none" | "table">("none");
 
@@ -71,7 +71,10 @@ const GuestList = ({
     const tableName = getTableNameForGuest(guest.id);
     if (filterOption === "assigned") return tableName !== null;
     if (filterOption === "unassigned") return tableName === null;
-    return true;
+    if (filterOption === "inviteSent") return guest.inviteSent === true;
+    if (filterOption === "confirmedAttendance")
+      return guest.confirmedAttendance === true;
+    return true; // "all"
   });
 
   const searchedGuests = filteredGuests.filter((guest) =>
@@ -106,13 +109,22 @@ const GuestList = ({
         <select
           value={filterOption}
           onChange={(e) =>
-            setFilterOption(e.target.value as "all" | "assigned" | "unassigned")
+            setFilterOption(
+              e.target.value as
+                | "all"
+                | "assigned"
+                | "unassigned"
+                | "inviteSent"
+                | "confirmedAttendance"
+            )
           }
           style={{ padding: "5px" }}
         >
           <option value="all">Svi gosti</option>
           <option value="assigned">Dodeljeni stolu</option>
           <option value="unassigned">Nedodeljeni stolu</option>
+          <option value="inviteSent">Pozivnica poslata</option>
+          <option value="confirmedAttendance">Potvrđen dolazak</option>
         </select>
         <select
           value={sortOption}
