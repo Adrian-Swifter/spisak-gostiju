@@ -1,17 +1,39 @@
-import { TableComponentProps } from "../types";
+import { Table, Chair } from "../types";
 import { useState } from "react";
 import ChairComponent from "./ChairComponent";
+import TableHeader from "./TableHeader";
 import { Rnd } from "react-rnd";
 
-const TableComponent = ({
+interface TableComponentProps {
+  table: Table;
+  guests: Array<{
+    id: string;
+    name: string;
+    inviteSent: any;
+    confirmedAttendance: any;
+  }>;
+  onChairDrop: (chairId: string, guestId: string) => void;
+  setTables: React.Dispatch<React.SetStateAction<Table[]>>;
+  calculateChairPositions: (
+    type: "rectangle" | "circle",
+    count: number,
+    width: number,
+    height: number,
+    existingChairs?: Chair[],
+    seatingType?: "one-sided" | "two-sided"
+  ) => Chair[];
+}
+
+const TableComponent: React.FC<TableComponentProps> = ({
   table,
   guests,
   onChairDrop,
   setTables,
   calculateChairPositions,
-}: TableComponentProps) => {
+}) => {
   const [position, setPosition] = useState({ x: table.x, y: table.y });
 
+  // Handler for table position changes from drag operations
   const handlePositionChange = (x: number, y: number) => {
     setPosition({ x, y });
     setTables((prev) =>
@@ -19,7 +41,9 @@ const TableComponent = ({
     );
   };
 
+  // Handler for table resize operations
   const handleResize = (width: number, height: number) => {
+    // For circle tables, maintain aspect ratio
     if (table.type === "circle") {
       const size = Math.max(width, height);
       width = size;
@@ -37,7 +61,7 @@ const TableComponent = ({
                 t.type,
                 t.chairsCount,
                 width,
-                height,
+                t.type === "circle" ? width : height,
                 t.chairs,
                 t.seatingType
               ),
@@ -47,10 +71,13 @@ const TableComponent = ({
     );
   };
 
+  // Handler for adding/removing chairs
   const handleChairCount = (delta: number) => {
     const newCount = Math.max(1, table.chairsCount + delta);
 
+    // When removing chairs
     if (delta < 0) {
+      // Try to remove only empty chairs
       let remainingToRemove = Math.abs(delta);
       const newChairs = table.chairs.filter((chair) => {
         if (remainingToRemove > 0 && !chair.occupiedBy) {
@@ -60,49 +87,49 @@ const TableComponent = ({
         return true;
       });
 
+      // If there are still chairs to remove but all remaining have guests
       if (remainingToRemove > 0) {
         alert("Ne možete ukloniti stolicu sa gostom!");
         return;
       }
 
-      setTables((prev) =>
-        prev.map((t) =>
-          t.id === table.id
-            ? {
-                ...t,
-                chairsCount: newCount,
-                chairs: calculateChairPositions(
-                  t.type,
-                  newCount,
-                  t.width,
-                  t.height,
-                  newChairs,
-                  t.seatingType
-                ),
-              }
-            : t
-        )
-      );
+      updateTableWithNewChairs(newCount, newChairs);
     } else {
-      setTables((prev) =>
-        prev.map((t) =>
-          t.id === table.id
-            ? {
-                ...t,
-                chairsCount: newCount,
-                chairs: calculateChairPositions(
-                  t.type,
-                  newCount,
-                  t.width,
-                  t.height,
-                  t.chairs.slice(0, newCount),
-                  t.seatingType
-                ),
-              }
-            : t
-        )
+      // When adding chairs
+      updateTableWithNewChairs(
+        newCount,
+        table.chairs.slice(0, Math.min(table.chairs.length, newCount))
       );
     }
+  };
+
+  // Helper to update the table with new chair configuration
+  const updateTableWithNewChairs = (newCount: number, chairs: Chair[]) => {
+    setTables((prev) =>
+      prev.map((t) =>
+        t.id === table.id
+          ? {
+              ...t,
+              chairsCount: newCount,
+              chairs: calculateChairPositions(
+                t.type,
+                newCount,
+                t.width,
+                t.type === "circle" ? t.width : t.height,
+                chairs,
+                t.seatingType
+              ),
+            }
+          : t
+      )
+    );
+  };
+
+  // Handler for table name changes
+  const handleNameChange = (name: string) => {
+    setTables((prev) =>
+      prev.map((t) => (t.id === table.id ? { ...t, name } : t))
+    );
   };
 
   return (
@@ -130,46 +157,13 @@ const TableComponent = ({
         className={`table ${table.type} table-drag-handle`}
         title="Prevuci da pomeriš sto"
       >
-        <div className="table-header">
-          <input
-            type="text"
-            value={table.name}
-            onChange={(e) => {
-              setTables((prev) =>
-                prev.map((t) =>
-                  t.id === table.id ? { ...t, name: e.target.value } : t
-                )
-              );
-            }}
-            className="table-name-input"
-            onClick={(e) => e.stopPropagation()}
-          />
-          <div className="chair-controls">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleChairCount(-1);
-              }}
-            >
-              -
-            </button>
-            <span>
-              {table.chairs.length}{" "}
-              {table.chairs.length % 10 === 1 &&
-              table.chairs.length % 100 !== 11
-                ? "mesto"
-                : "mesta"}
-            </span>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleChairCount(1);
-              }}
-            >
-              +
-            </button>
-          </div>
-        </div>
+        <TableHeader
+          table={table}
+          onNameChange={handleNameChange}
+          onChairCountChange={handleChairCount}
+        />
+
+        {/* Render all chairs */}
         {table.chairs.map((chair) => (
           <ChairComponent
             key={chair.id}

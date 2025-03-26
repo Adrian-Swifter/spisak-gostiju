@@ -1,4 +1,4 @@
-import { Guest, Table } from "../types";
+import { Guest, Table, Chair } from "../types";
 import TableComponent from "./TableComponent";
 
 interface TableCanvasProps {
@@ -6,7 +6,14 @@ interface TableCanvasProps {
   guests: Guest[];
   handleChairDrop: (chairId: string, guestId: string) => void;
   setTables: React.Dispatch<React.SetStateAction<Table[]>>;
-  calculateChairPositions: any; // Using any type to match the original implementation
+  calculateChairPositions: (
+    type: "rectangle" | "circle",
+    count: number,
+    width: number,
+    height: number,
+    existingChairs?: Chair[],
+    seatingType?: "one-sided" | "two-sided"
+  ) => Chair[];
 }
 
 const TableCanvas = ({

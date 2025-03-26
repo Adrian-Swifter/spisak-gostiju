@@ -35,6 +35,8 @@ export interface Guest {
       type: "rectangle" | "circle",
       count: number,
       width: number,
-      height: number
+      height: number,
+      existingChairs?: Chair[],
+      seatingType?: "one-sided" | "two-sided"
     ) => Chair[];
   }
