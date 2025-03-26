@@ -6,25 +6,15 @@ import { utils, writeFile } from "xlsx";
 import jsPDF from "jspdf";
 import { Guest, Table } from "./types";
 import calculateChairPositions from "./utils/calculateChairPositions";
-import GuestForm from "./components/guests/GuestForm";
-import GuestList from "./components/guests/GuestList";
-import TableComponent from "./components/TableComponent";
 import exportCanvasToPDF from "./utils/exportCanvasToPDF";
-import {
-  FaFileExport,
-  FaFileImport,
-  FaFileExcel,
-  FaFilePdf,
-  FaChair,
-  FaTrash,
-  FaRedo,
-  FaUser,
-  FaCog,
-} from "react-icons/fa";
 import DeviceWrapper from "./components/DeviceWrapper";
-import logo from "./assets/logo.png";
-import getItemCountFromLocalStorage from "./utils/getItemCountFromLocalStorage";
-import TableIcon from "./utils/TableIcon";
+import Sidebar from "./components/Sidebar";
+import GuestsTab from "./components/tabs/GuestsTab";
+import TablesTab from "./components/tabs/TablesTab";
+import SettingsTab from "./components/tabs/SettingsTab";
+import TableCanvas from "./components/TableCanvas";
+import InfoPopups from "./components/InfoPopups";
+import ResetPopup from "./components/ResetPopup";
 
 const App = () => {
   const [newTableName, setNewTableName] = useState("");
@@ -41,6 +31,12 @@ const App = () => {
   const [activeTab, setActiveTab] = useState<"guests" | "tables" | "settings">(
     "guests"
   );
+  const [seatingType, setSeatingType] = useState<"one-sided" | "two-sided">(
+    "two-sided"
+  );
+  const [tableType, setTableType] = useState<"rectangle" | "circle">(
+    "rectangle"
+  );
 
   useEffect(() => {
     localStorage.setItem("tables", JSON.stringify(tables));
@@ -48,7 +44,12 @@ const App = () => {
   }, [tables, guests]);
 
   const addGuest = (name: string) => {
-    const newGuest = { id: uuidv4(), name };
+    const newGuest: Guest = {
+      id: uuidv4(),
+      name,
+      inviteSent: false,
+      confirmedAttendance: false,
+    };
     setGuests([...guests, newGuest]);
     localStorage.setItem("guests", JSON.stringify([...guests, newGuest]));
   };
@@ -80,14 +81,6 @@ const App = () => {
     setGuests(updatedGuests);
     localStorage.setItem("guests", JSON.stringify(updatedGuests));
   };
-
-  const [seatingType, setSeatingType] = useState<"one-sided" | "two-sided">(
-    "two-sided"
-  );
-
-  const [tableType, setTableType] = useState<"rectangle" | "circle">(
-    "rectangle"
-  );
 
   const calculateInitialSize = (
     type: "rectangle" | "circle",
@@ -219,516 +212,77 @@ const App = () => {
     setShowResetPopup(false);
   };
 
-  const buttonStyle = {
-    padding: "10px",
-    border: "none",
-    borderRadius: "5px",
-    display: "flex",
-    alignItems: "center",
-    gap: "5px",
-    cursor: "pointer",
-    fontSize: "16px",
+  // Render the appropriate tab content based on activeTab
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "guests":
+        return (
+          <GuestsTab
+            guests={guests}
+            tables={tables}
+            addGuest={addGuest}
+            deleteGuest={deleteGuest}
+            editGuest={editGuest}
+            setGuests={setGuests}
+          />
+        );
+      case "tables":
+        return (
+          <TablesTab
+            tables={tables}
+            deleteTable={deleteTable}
+            addTable={addTable}
+            newTableName={newTableName}
+            setNewTableName={setNewTableName}
+            newChairCount={newChairCount}
+            setNewChairCount={setNewChairCount}
+            tableType={tableType}
+            setTableType={setTableType}
+            seatingType={seatingType}
+            setSeatingType={setSeatingType}
+          />
+        );
+      case "settings":
+        return (
+          <SettingsTab
+            exportData={exportData}
+            importData={importData}
+            exportExcel={exportExcel}
+            exportPDF={exportPDF}
+            exportCanvasToPDF={exportCanvasToPDF}
+            setShowResetPopup={setShowResetPopup}
+          />
+        );
+      default:
+        return null;
+    }
   };
-
-  const iconStyle = { marginRight: "5px" };
 
   return (
     <DeviceWrapper>
       <DndProvider backend={HTML5Backend}>
         <div className="app">
-          <div className="sidebar">
-            <div
-              style={{
-                textAlign: "center",
-                borderBottom: "1px solid #eee",
-              }}
-            >
-              <img
-                src={logo}
-                alt="App Logo"
-                style={{
-                  maxWidth: "150px",
-                  height: "auto",
-                  margin: "0 auto",
-                  display: "block",
-                }}
-              />
-            </div>
-            <div
-              style={{
-                overflowY: "auto",
-                height: "calc(100vh - 180px)",
-              }}
-            >
-              {activeTab === "guests" && (
-                <>
-                  <GuestForm onAdd={addGuest} />
-                  <GuestList
-                    guests={guests}
-                    tables={tables}
-                    onDelete={deleteGuest}
-                    onEdit={editGuest}
-                    setGuests={setGuests}
-                  />
-                </>
-              )}
-              {activeTab === "settings" && (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    height: "100%",
-                  }}
-                >
-                  <div
-                    className="button-group"
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "10px",
-                      marginTop: "20px",
-                    }}
-                  >
-                    <label
-                      style={{
-                        ...buttonStyle,
-                        backgroundColor: "#fff",
-                        color: "#000",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "5px",
-                        cursor: "pointer",
-                        border: "1px solid #ccc",
-                      }}
-                      title="Fajl koji ste sačuvali. Završava se sa .json ekstenzijom."
-                    >
-                      <FaFileImport style={iconStyle} />
-                      Uvezite Konfiguraciju
-                      <input
-                        type="file"
-                        onChange={importData}
-                        accept=".json"
-                        style={{
-                          display: "none",
-                        }}
-                      />
-                    </label>
-                    <button
-                      onClick={exportData}
-                      style={{
-                        ...buttonStyle,
-                        backgroundColor: "#fff",
-                        color: "#000",
-                        border: "1px solid #ccc",
-                      }}
-                      title="Sačuvajte podatke (goste,stolove...) za kasnije korišćenje."
-                    >
-                      <FaFileExport style={iconStyle} />
-                      Sačuvaj Konfiguraciju
-                    </button>
-                    <button
-                      onClick={exportExcel}
-                      style={{
-                        ...buttonStyle,
-                        backgroundColor: "#fff",
-                        color: "#000",
-                        border: "1px solid #ccc",
-                      }}
-                    >
-                      <FaFileExcel style={iconStyle} />
-                      Izvezi Excel Spisak Gostiju
-                    </button>
-                    <button
-                      onClick={exportPDF}
-                      style={{
-                        ...buttonStyle,
-                        backgroundColor: "#fff",
-                        color: "#000",
-                        border: "1px solid #ccc",
-                      }}
-                    >
-                      <FaFilePdf style={iconStyle} />
-                      Izvezi PDF Spisak Gostiju
-                    </button>
-                    <button
-                      onClick={exportCanvasToPDF}
-                      style={{
-                        ...buttonStyle,
-                        backgroundColor: "#fff",
-                        color: "#000",
-                        border: "1px solid #ccc",
-                      }}
-                    >
-                      <FaChair style={iconStyle} />
-                      Izvezi Plan Sale PDF
-                    </button>
-                    <button
-                      onClick={() => setShowResetPopup(true)}
-                      style={{
-                        ...buttonStyle,
-                        backgroundColor: "#fff",
-                        color: "#000",
-                        border: "1px solid #ccc",
-                      }}
-                      title="Briše sve podatke (goste, stolove...). Koristiti u slučaju potrebe za rasporedom gostiju u dodatnoj sali i slično."
-                    >
-                      <FaRedo style={iconStyle} />
-                      Resetuj Sve
-                    </button>
-                  </div>
-                  <div>
-                    <p>
-                      Za dodatne funkcionalnosti ili za prijavu problema pri
-                      korišćenju, molimo pošaljite email na{" "}
-                      <a href="mailto:contact@milosdraskovic.com">
-                        contact@milosdraskovic.com
-                      </a>
-                    </p>
-                  </div>
-                </div>
-              )}
+          <Sidebar activeTab={activeTab} setActiveTab={setActiveTab}>
+            {renderTabContent()}
+          </Sidebar>
 
-              {activeTab === "tables" && (
-                <>
-                  <h3 style={{ marginBottom: "10px" }}>Napravi Sto</h3>
-                  <div className="table-creator">
-                    <select
-                      value={tableType}
-                      onChange={(e) =>
-                        setTableType(e.target.value as "rectangle" | "circle")
-                      }
-                    >
-                      <option value="rectangle">Četvrtasti</option>
-                      <option value="circle">Kružni</option>
-                    </select>
+          <TableCanvas
+            tables={tables}
+            guests={guests}
+            handleChairDrop={handleChairDrop}
+            setTables={setTables}
+            calculateChairPositions={calculateChairPositions}
+          />
 
-                    {tableType === "rectangle" && (
-                      <select
-                        value={seatingType}
-                        onChange={(e) =>
-                          setSeatingType(
-                            e.target.value as "one-sided" | "two-sided"
-                          )
-                        }
-                      >
-                        <option value="one-sided">Jednostrano sedenje</option>
-                        <option value="two-sided">Dvostrano sedenje</option>
-                      </select>
-                    )}
-                    <input
-                      type="text"
-                      placeholder="Ime stola"
-                      value={newTableName}
-                      onChange={(e) => setNewTableName(e.target.value)}
-                    />
-                    <input
-                      type="number"
-                      min="1"
-                      value={newChairCount}
-                      onChange={(e) => setNewChairCount(Number(e.target.value))}
-                    />
-                    <button
-                      onClick={() => addTable(tableType)}
-                      style={{
-                        ...buttonStyle,
-                        backgroundColor: "#fff",
-                        color: "#000",
-                        border: "1px solid #ccc",
-                      }}
-                    >
-                      <TableIcon />
-                      Dodaj Sto
-                    </button>
-                  </div>
-                  <h3 style={{ marginBottom: "10px" }}>
-                    Lista Stolova ({getItemCountFromLocalStorage("tables")})
-                  </h3>
-                  <div className="table-list" style={{ marginTop: "20px" }}>
-                    {tables.map((table) => (
-                      <div
-                        key={table.id}
-                        className="table-item"
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          padding: "10px",
-                          border: "1px solid #ccc",
-                          borderRadius: "5px",
-                          marginBottom: "10px",
-                          backgroundColor: "#f9f9f9",
-                        }}
-                      >
-                        <span style={{ fontSize: "16px", fontWeight: "500" }}>
-                          {table.name}
-                        </span>
-                        <button
-                          onClick={() => deleteTable(table.id)}
-                          title="Obriši Sto"
-                          style={{
-                            padding: "5px 10px",
-                            borderRadius: "3px",
-                            backgroundColor: "inherit",
-                            color: "black",
-                            fontSize: "1.2rem",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-            <div
-              style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                width: "100%",
-                backgroundColor: "#fff",
-                borderTop: "1px solid #eee",
-                display: "flex",
-                justifyContent: "space-around",
-                padding: "10px 0",
-                boxSizing: "border-box",
-              }}
-            >
-              <button
-                onClick={() => setActiveTab("guests")}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: activeTab === "guests" ? "#000" : "#666",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <FaUser size={20} />
-                <span style={{ fontSize: "12px" }}>Gosti</span>
-              </button>
+          <InfoPopups guests={guests} tables={tables} />
 
-              <button
-                onClick={() => setActiveTab("tables")}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: activeTab === "tables" ? "#000" : "#666",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <TableIcon size={"20px"} />
-                <span style={{ fontSize: "12px" }}>Stolovi</span>
-              </button>
-
-              <button
-                onClick={() => setActiveTab("settings")}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: activeTab === "settings" ? "#000" : "#666",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <FaCog size={20} />
-                <span style={{ fontSize: "12px" }}>Postavke</span>
-              </button>
-            </div>
-          </div>
-          <div className="canvas">
-            {tables.map((table) => (
-              <TableComponent
-                key={table.id}
-                table={table}
-                guests={guests}
-                onChairDrop={handleChairDrop}
-                setTables={setTables}
-                calculateChairPositions={calculateChairPositions}
-              />
-            ))}
-          </div>
-          <div
-            className="fixed-popup"
-            style={{
-              position: "fixed",
-              bottom: "10px",
-              right: "10px",
-              backgroundColor: "#fff",
-              padding: "10px",
-              borderRadius: "5px",
-              boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-              fontSize: "14px",
-              zIndex: 1000,
-            }}
-          >
-            <p>
-              <strong>Za više prostora za stolove odzumirati:</strong>
-            </p>
-            <p>
-              <strong>Windows:</strong> Držite <kbd>Ctrl</kbd> i pritisnite{" "}
-              <kbd>-</kbd> za odzumiranje.
-            </p>
-            <p>
-              <strong>Mac:</strong> Držite <kbd>⌘ Command</kbd> i pritisnite{" "}
-              <kbd>-</kbd> za odzumiranje.
-            </p>
-          </div>
-          <div
-            className="fixed-popup"
-            style={{
-              position: "fixed",
-              bottom: "10px",
-              left: "390px",
-              backgroundColor: "#fff",
-              padding: "10px",
-              borderRadius: "5px",
-              boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-              fontSize: "14px",
-              zIndex: 1000,
-              display: "flex",
-              alignItems: "center",
-              gap: "15px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-                flexDirection: "column",
-              }}
-            >
-              <p style={{ margin: 0 }}>Ukupno</p>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "3px",
-                }}
-              >
-                <span>{guests.length}</span>
-                <FaUser />
-              </div>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-                flexDirection: "column",
-              }}
-            >
-              <p style={{ margin: 0 }}>Potvrđeno</p>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "3px",
-                }}
-              >
-                <span>
-                  {guests.filter((guest) => guest.confirmedAttendance).length}
-                </span>
-                <FaUser style={{ color: "green" }} />
-              </div>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-                flexDirection: "column",
-              }}
-            >
-              <p style={{ margin: 0 }}>Stolova</p>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "3px",
-                }}
-              >
-                <span>{tables.length}</span>
-                <TableIcon />
-              </div>
-            </div>
-          </div>
+          <ResetPopup
+            showResetPopup={showResetPopup}
+            setShowResetPopup={setShowResetPopup}
+            exportData={exportData}
+            resetEverything={resetEverything}
+          />
         </div>
-        {showResetPopup && (
-          <div
-            className="reset-popup"
-            style={{
-              position: "fixed",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              backgroundColor: "#fff",
-              padding: "20px",
-              boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-              zIndex: 1000,
-            }}
-          >
-            <h3>Da li želite da sačuvate konfiguraciju pre resetovanja?</h3>
-            <div
-              className="button-group"
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginTop: "20px",
-              }}
-            >
-              <button
-                onClick={exportData}
-                style={{
-                  ...buttonStyle,
-                  backgroundColor: "#fff",
-                  color: "#000",
-                  border: "1px solid #ccc",
-                }}
-                title="Sačuvajte podatke (goste,stolove...) za kasnije korišćenje."
-              >
-                <FaFileExport style={iconStyle} />
-                Sačuvaj konfiguraciju
-              </button>
-              <button
-                onClick={resetEverything}
-                style={{
-                  ...buttonStyle,
-                  backgroundColor: "#fff",
-                  color: "#000",
-                  border: "1px solid #ccc",
-                }}
-              >
-                <FaRedo style={iconStyle} />
-                Resetuj Sve
-              </button>
-              <button
-                onClick={() => setShowResetPopup(false)}
-                style={{
-                  ...buttonStyle,
-                  backgroundColor: "#fff",
-                  color: "#000",
-                  border: "1px solid #ccc",
-                }}
-              >
-                Otkaži
-              </button>
-            </div>
-          </div>
-        )}
       </DndProvider>
     </DeviceWrapper>
   );

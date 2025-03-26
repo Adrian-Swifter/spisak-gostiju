@@ -21,7 +21,6 @@ const TableComponent = ({
 
   const handleResize = (width: number, height: number) => {
     if (table.type === "circle") {
-      // Maintain aspect ratio
       const size = Math.max(width, height);
       width = size;
       height = size;
@@ -51,7 +50,6 @@ const TableComponent = ({
   const handleChairCount = (delta: number) => {
     const newCount = Math.max(1, table.chairsCount + delta);
 
-    // Prevent removing chairs with guests
     if (delta < 0) {
       let remainingToRemove = Math.abs(delta);
       const newChairs = table.chairs.filter((chair) => {
