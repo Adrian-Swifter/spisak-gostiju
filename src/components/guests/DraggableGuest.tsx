@@ -13,7 +13,13 @@ const DraggableGuest = ({ guest }: { guest: Guest }) => {
   return (
     <div
       ref={drag as any}
-      style={{ opacity: isDragging ? 0.5 : 1 }}
+      style={{
+        opacity: isDragging ? 0.5 : 1,
+        maxWidth: "160px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+      }}
       className="guest-item"
       title="Klikni i prevuci do stolice"
     >

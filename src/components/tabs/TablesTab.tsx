@@ -1,7 +1,8 @@
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaEdit, FaChair, FaSave } from "react-icons/fa";
 import { Table } from "../../types";
 import TableIcon from "../../utils/TableIcon";
 import getItemCountFromLocalStorage from "../../utils/getItemCountFromLocalStorage";
+import { useState } from "react";
 
 interface TablesTabProps {
   tables: Table[];
@@ -15,6 +16,7 @@ interface TablesTabProps {
   setTableType: (type: "rectangle" | "circle") => void;
   seatingType: "one-sided" | "two-sided";
   setSeatingType: (type: "one-sided" | "two-sided") => void;
+  setTables: React.Dispatch<React.SetStateAction<Table[]>>;
 }
 
 const TablesTab = ({
@@ -29,7 +31,12 @@ const TablesTab = ({
   setTableType,
   seatingType,
   setSeatingType,
+  setTables,
 }: TablesTabProps) => {
+  const [editingTableId, setEditingTableId] = useState<string | null>(null);
+  const [editingTableName, setEditingTableName] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
   const buttonStyle = {
     padding: "10px",
     border: "none",
@@ -39,6 +46,33 @@ const TablesTab = ({
     gap: "5px",
     cursor: "pointer",
     fontSize: "16px",
+  };
+
+  const handleEditClick = (table: Table) => {
+    setEditingTableId(table.id);
+    setEditingTableName(table.name);
+  };
+
+  const handleSaveClick = (tableId: string) => {
+    if (editingTableName.trim()) {
+      const updatedTables = tables.map((table) =>
+        table.id === tableId ? { ...table, name: editingTableName } : table
+      );
+
+      // Update both the localStorage and the state
+      localStorage.setItem("tables", JSON.stringify(updatedTables));
+      setTables(updatedTables);
+    }
+
+    setEditingTableId(null);
+  };
+
+  const filteredTables = tables.filter((table) =>
+    table.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const getOccupiedChairsCount = (table: Table) => {
+    return table.chairs.filter((chair) => chair.occupiedBy).length;
   };
 
   return (
@@ -91,46 +125,182 @@ const TablesTab = ({
           Dodaj Sto
         </button>
       </div>
+
       <h3 style={{ marginBottom: "10px" }}>
         Lista Stolova ({getItemCountFromLocalStorage("tables")})
       </h3>
+
+      <input
+        type="text"
+        placeholder="Pretraži stolove"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        style={{
+          width: "100%",
+          padding: "10px",
+          marginBottom: "10px",
+          boxSizing: "border-box",
+        }}
+      />
+
       <div className="table-list" style={{ marginTop: "20px" }}>
-        {tables.map((table) => (
-          <div
-            key={table.id}
-            className="table-item"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: "10px",
-              border: "1px solid #ccc",
-              borderRadius: "5px",
-              marginBottom: "10px",
-              backgroundColor: "#f9f9f9",
-            }}
-          >
-            <span style={{ fontSize: "16px", fontWeight: "500" }}>
-              {table.name}
-            </span>
-            <button
-              onClick={() => deleteTable(table.id)}
-              title="Obriši Sto"
+        <ol style={{ padding: 0, listStyleType: "none" }}>
+          {filteredTables.map((table, index) => (
+            <li
+              key={table.id}
+              className="table-item-list"
               style={{
-                padding: "5px 10px",
-                borderRadius: "3px",
-                backgroundColor: "inherit",
-                color: "black",
-                fontSize: "1.2rem",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
+                paddingRight: "5px",
+                marginBottom: "10px",
+                backgroundColor: "#fff",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                textOverflow: "ellipsis",
+                whiteSpace: "normal",
+                wordWrap: "break-word",
               }}
             >
-              <FaTrash />
-            </button>
-          </div>
-        ))}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    flex: "1",
+                    gap: "10px",
+                  }}
+                >
+                  <span style={{ fontWeight: "bold" }}>{index + 1}.</span>
+                  {table.type === "circle" ? (
+                    <div
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        borderRadius: "50%",
+                        border: "2px solid #0066cc",
+                        marginRight: "5px",
+                      }}
+                    ></div>
+                  ) : (
+                    <div
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        border: "2px solid #0066cc",
+                        marginRight: "5px",
+                      }}
+                    ></div>
+                  )}
+
+                  {editingTableId === table.id ? (
+                    <input
+                      type="text"
+                      value={editingTableName}
+                      onChange={(e) => setEditingTableName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleSaveClick(table.id);
+                        if (e.key === "Escape") setEditingTableId(null);
+                      }}
+                      autoFocus
+                      style={{
+                        flex: "1",
+                        marginRight: "10px",
+                        padding: "5px",
+                      }}
+                    />
+                  ) : (
+                    <span
+                      style={{
+                        fontSize: "16px",
+                        maxWidth: "160px",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        display: "block",
+                      }}
+                    >
+                      {table.name}
+                    </span>
+                  )}
+                </div>
+
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                      backgroundColor: "#f5f5f5",
+                      padding: "4px 8px",
+                      borderRadius: "4px",
+                      fontSize: "12px",
+                      visibility:
+                        editingTableId === table.id ? "hidden" : "visible",
+                    }}
+                  >
+                    <FaChair size={12} />
+                    <span>
+                      {getOccupiedChairsCount(table)}/{table.chairs.length}
+                    </span>
+                  </div>
+
+                  {editingTableId === table.id ? (
+                    <button
+                      onClick={() => handleSaveClick(table.id)}
+                      title="Sačuvaj"
+                      style={{
+                        background: "none",
+                        border: "none",
+                        padding: "5px",
+                        color: "#28a745",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <FaSave size={16} />
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => handleEditClick(table)}
+                        title="Izmeni ime stola"
+                        style={{
+                          background: "none",
+                          border: "none",
+                          padding: "5px",
+                          color: "#0066cc",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <FaEdit size={16} />
+                      </button>
+
+                      <button
+                        onClick={() => deleteTable(table.id)}
+                        title="Obriši Sto"
+                        style={{
+                          background: "none",
+                          border: "none",
+                          padding: "5px",
+                          color: "#f44336",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <FaTrash size={16} />
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ol>
       </div>
     </>
   );

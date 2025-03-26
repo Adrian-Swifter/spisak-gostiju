@@ -14,6 +14,7 @@ interface TableCanvasProps {
     existingChairs?: Chair[],
     seatingType?: "one-sided" | "two-sided"
   ) => Chair[];
+  deleteTable?: (tableId: string) => void;
 }
 
 const TableCanvas = ({
@@ -22,7 +23,17 @@ const TableCanvas = ({
   handleChairDrop,
   setTables,
   calculateChairPositions,
+  deleteTable,
 }: TableCanvasProps) => {
+  // Handler for deleting a table
+  const handleDeleteTable = (tableId: string) => {
+    if (deleteTable) {
+      deleteTable(tableId);
+    } else {
+      setTables((prev) => prev.filter((table) => table.id !== tableId));
+    }
+  };
+
   return (
     <div className="canvas">
       {tables.map((table) => (
@@ -33,6 +44,7 @@ const TableCanvas = ({
           onChairDrop={handleChairDrop}
           setTables={setTables}
           calculateChairPositions={calculateChairPositions}
+          onDeleteTable={handleDeleteTable}
         />
       ))}
     </div>

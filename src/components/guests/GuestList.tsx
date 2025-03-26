@@ -196,44 +196,6 @@ const GuestList = ({
                     alignItems: "center",
                   }}
                 >
-                  <button
-                    onClick={() => handleInviteClick(guest.id)}
-                    title="Poslata pozivnica"
-                    style={{
-                      padding: "3px",
-                      border: "none",
-                      borderRadius: "3px",
-                      backgroundColor: guest.inviteSent ? "#4caf50" : "white",
-                      color: guest.inviteSent ? "white" : "black",
-                      fontSize: "1rem",
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <FaEnvelope />
-                  </button>
-                  <button
-                    onClick={() => handleConfirmClick(guest.id)}
-                    title="Potvrdi dolazak"
-                    style={{
-                      padding: "3px",
-                      border: "none",
-                      borderRadius: "3px",
-                      backgroundColor: guest.confirmedAttendance
-                        ? "#4caf50"
-                        : "white",
-                      color: guest.confirmedAttendance ? "white" : "black",
-                      fontSize: "1rem",
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <FaCheck />
-                  </button>
                   {editingGuestId === guest.id ? (
                     <button
                       onClick={handleSaveClick}
@@ -254,43 +216,85 @@ const GuestList = ({
                       <FaSave />
                     </button>
                   ) : (
-                    <button
-                      onClick={() => handleEditClick(guest)}
-                      title="Izmeni"
-                      style={{
-                        padding: "3px",
-                        border: "none",
-                        borderRadius: "3px",
-                        backgroundColor: "white",
-                        color: "black",
-                        fontSize: "1rem",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <FaEdit />
-                    </button>
+                    <>
+                      <button
+                        onClick={() => handleInviteClick(guest.id)}
+                        title="Poslata pozivnica"
+                        style={{
+                          padding: "3px",
+                          border: "none",
+                          borderRadius: "3px",
+                          backgroundColor: guest.inviteSent
+                            ? "#4caf50"
+                            : "white",
+                          color: guest.inviteSent ? "white" : "black",
+                          fontSize: "1rem",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <FaEnvelope />
+                      </button>
+                      <button
+                        onClick={() => handleConfirmClick(guest.id)}
+                        title="Potvrdi dolazak"
+                        style={{
+                          padding: "3px",
+                          border: "none",
+                          borderRadius: "3px",
+                          backgroundColor: guest.confirmedAttendance
+                            ? "#4caf50"
+                            : "white",
+                          color: guest.confirmedAttendance ? "white" : "black",
+                          fontSize: "1rem",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <FaCheck />
+                      </button>
+                      <button
+                        onClick={() => handleEditClick(guest)}
+                        title="Izmeni"
+                        style={{
+                          padding: "3px",
+                          border: "none",
+                          borderRadius: "3px",
+                          backgroundColor: "white",
+                          color: "black",
+                          fontSize: "1rem",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        onClick={() => onDelete(guest.id)}
+                        title="Izbriši"
+                        style={{
+                          padding: "3px",
+                          border: "none",
+                          borderRadius: "3px",
+                          backgroundColor: "white",
+                          color: "#f44336",
+                          fontSize: "1rem",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <FaTrash />
+                      </button>
+                    </>
                   )}
-                  <button
-                    onClick={() => onDelete(guest.id)}
-                    title="Izbriši"
-                    style={{
-                      padding: "3px",
-                      border: "none",
-                      borderRadius: "3px",
-                      backgroundColor: "white",
-                      color: "#f44336",
-                      fontSize: "1rem",
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <FaTrash />
-                  </button>
                 </div>
               </div>
               <div
@@ -302,13 +306,32 @@ const GuestList = ({
                   backgroundColor: "#6d4c41",
                   padding: "3px",
                   borderRadius: "3px",
+                  maxWidth: "200px",
+                  overflow: "hidden",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    maxWidth: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
                   {getTableNameForGuest(guest.id) ? (
                     <>
                       <TableIcon />
-                      {getTableNameForGuest(guest.id)}
+                      <span
+                        style={{
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {getTableNameForGuest(guest.id)}
+                      </span>
                     </>
                   ) : (
                     "Nije dodeljen stolu"

@@ -240,6 +240,7 @@ const App = () => {
             setTableType={setTableType}
             seatingType={seatingType}
             setSeatingType={setSeatingType}
+            setTables={setTables}
           />
         );
       case "settings":
@@ -272,6 +273,7 @@ const App = () => {
             handleChairDrop={handleChairDrop}
             setTables={setTables}
             calculateChairPositions={calculateChairPositions}
+            deleteTable={deleteTable}
           />
 
           <InfoPopups guests={guests} tables={tables} />

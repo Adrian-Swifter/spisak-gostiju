@@ -1,8 +1,10 @@
 import { Table, Chair } from "../types";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import ChairComponent from "./ChairComponent";
 import TableHeader from "./TableHeader";
+import TableContextMenu from "./TableContextMenu";
 import { Rnd } from "react-rnd";
+import { v4 as uuidv4 } from "uuid";
 
 interface TableComponentProps {
   table: Table;
@@ -22,6 +24,7 @@ interface TableComponentProps {
     existingChairs?: Chair[],
     seatingType?: "one-sided" | "two-sided"
   ) => Chair[];
+  onDeleteTable?: (tableId: string) => void;
 }
 
 const TableComponent: React.FC<TableComponentProps> = ({
@@ -30,8 +33,17 @@ const TableComponent: React.FC<TableComponentProps> = ({
   onChairDrop,
   setTables,
   calculateChairPositions,
+  onDeleteTable,
 }) => {
   const [position, setPosition] = useState({ x: table.x, y: table.y });
+  const [contextMenu, setContextMenu] = useState({
+    visible: false,
+    position: { x: 0, y: 0 },
+  });
+
+  // Size constraints for circle tables
+  const MIN_SIZE = 200;
+  const MAX_SIZE = 500;
 
   // Handler for table position changes from drag operations
   const handlePositionChange = (x: number, y: number) => {
@@ -43,13 +55,28 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
   // Handler for table resize operations
   const handleResize = (width: number, height: number) => {
-    // For circle tables, maintain aspect ratio
+    // For circle tables, maintain aspect ratio and enforce size constraints
     if (table.type === "circle") {
       const size = Math.max(width, height);
-      width = size;
-      height = size;
+      // Enforce min/max size for circles
+      width = Math.min(Math.max(size, MIN_SIZE), MAX_SIZE);
+      height = width; // Keep it circular
     }
 
+    updateTableSize(width, height);
+  };
+
+  // Handler for size slider from context menu
+  const handleSizeChange = (newSize: number) => {
+    if (table.type === "circle") {
+      // For circle tables, adjust both width and height
+      const size = Math.min(Math.max(newSize, MIN_SIZE), MAX_SIZE);
+      updateTableSize(size, size);
+    }
+  };
+
+  // Shared function for updating table size
+  const updateTableSize = (width: number, height: number) => {
     setTables((prev) =>
       prev.map((t) =>
         t.id === table.id
@@ -132,48 +159,116 @@ const TableComponent: React.FC<TableComponentProps> = ({
     );
   };
 
-  return (
-    <Rnd
-      position={position}
-      size={{ width: table.width, height: table.height }}
-      onDragStop={(e, d) => handlePositionChange(d.x, d.y)}
-      onResizeStop={(e, direction, ref, delta, position) => {
-        handleResize(parseInt(ref.style.width), parseInt(ref.style.height));
-        handlePositionChange(position.x, position.y);
-      }}
-      dragHandleClassName="table-drag-handle"
-      enableResizing={{
-        bottom: true,
-        bottomLeft: true,
-        bottomRight: true,
-        left: true,
-        right: true,
-        top: true,
-        topLeft: true,
-        topRight: true,
-      }}
-    >
-      <div
-        className={`table ${table.type} table-drag-handle`}
-        title="Prevuci da pomeriš sto"
-      >
-        <TableHeader
-          table={table}
-          onNameChange={handleNameChange}
-          onChairCountChange={handleChairCount}
-        />
+  // Handler for right-click to open context menu
+  const handleContextMenu = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setContextMenu({
+      visible: true,
+      position: { x: e.clientX, y: e.clientY },
+    });
+  }, []);
 
-        {/* Render all chairs */}
-        {table.chairs.map((chair) => (
-          <ChairComponent
-            key={chair.id}
-            chair={chair}
-            guest={guests.find((g) => g.id === chair.occupiedBy)}
-            onDrop={(guestId) => onChairDrop(chair.id, guestId)}
+  // Close context menu
+  const closeContextMenu = useCallback(() => {
+    setContextMenu({ ...contextMenu, visible: false });
+  }, [contextMenu]);
+
+  // Duplicate table
+  const handleDuplicateTable = useCallback(() => {
+    const newTable = {
+      ...table,
+      id: uuidv4(),
+      name: `${table.name} (Kopija)`,
+      x: table.x + 50,
+      y: table.y + 50,
+      chairs: table.chairs.map((chair) => ({
+        ...chair,
+        id: uuidv4(),
+        occupiedBy: undefined,
+      })),
+    };
+
+    setTables((prev) => [...prev, newTable]);
+    closeContextMenu();
+  }, [table, setTables, closeContextMenu]);
+
+  // Delete table
+  const handleDeleteTable = useCallback(() => {
+    if (onDeleteTable) {
+      onDeleteTable(table.id);
+    } else {
+      setTables((prev) => prev.filter((t) => t.id !== table.id));
+    }
+    closeContextMenu();
+  }, [table.id, onDeleteTable, setTables, closeContextMenu]);
+
+  // Configure resize handles based on table type
+  const resizeHandles =
+    table.type === "circle"
+      ? false // Disable resize handles for circle tables
+      : {
+          // Enable all resize handles for rectangle tables
+          bottom: true,
+          bottomLeft: true,
+          bottomRight: true,
+          left: true,
+          right: true,
+          top: true,
+          topLeft: true,
+          topRight: true,
+        };
+
+  return (
+    <>
+      <Rnd
+        position={position}
+        size={{ width: table.width, height: table.height }}
+        onDragStop={(e, d) => handlePositionChange(d.x, d.y)}
+        onResizeStop={(e, direction, ref, delta, position) => {
+          handleResize(parseInt(ref.style.width), parseInt(ref.style.height));
+          handlePositionChange(position.x, position.y);
+        }}
+        dragHandleClassName="table-drag-handle"
+        enableResizing={resizeHandles}
+      >
+        <div
+          className={`table ${table.type} table-drag-handle`}
+          title={
+            table.type === "circle"
+              ? "Prevuci da pomeriš sto (Desni klik za opcije veličine)"
+              : "Prevuci da pomeriš sto (Desni klik za opcije)"
+          }
+          onContextMenu={handleContextMenu}
+        >
+          <TableHeader
+            table={table}
+            onNameChange={handleNameChange}
+            onChairCountChange={handleChairCount}
           />
-        ))}
-      </div>
-    </Rnd>
+
+          {/* Render all chairs */}
+          {table.chairs.map((chair) => (
+            <ChairComponent
+              key={chair.id}
+              chair={chair}
+              guest={guests.find((g) => g.id === chair.occupiedBy)}
+              onDrop={(guestId) => onChairDrop(chair.id, guestId)}
+            />
+          ))}
+        </div>
+      </Rnd>
+
+      <TableContextMenu
+        visible={contextMenu.visible}
+        position={contextMenu.position}
+        table={table}
+        onClose={closeContextMenu}
+        onSizeChange={handleSizeChange}
+        onDuplicate={handleDuplicateTable}
+        onDelete={handleDeleteTable}
+        onNameChange={handleNameChange}
+      />
+    </>
   );
 };
 

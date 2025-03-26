@@ -40,3 +40,119 @@
 .read-the-docs {
   color: #888;
 }
+
+.table {
+  position: relative;
+}
+
+.table::after {
+  content: "Desni klik za opcije";
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+.table:hover::after {
+  opacity: 1;
+}
+
+.table.rectangle::before {
+  content: "";
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 8px;
+  height: 8px;
+  background-color: #0088ff;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.table.rectangle:hover::before {
+  opacity: 1;
+}
+
+.table-drag-handle {
+  cursor: grab;
+}
+
+.table-drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Special styles for circle tables */
+.table.circle::after {
+  content: "Desni klik za promenu veličine";
+}
+
+/* Indicate that circle tables are resizable with a resize cursor icon on hover */
+.table.circle:hover {
+  box-shadow: 0 0 0 2px #0088ff;
+}
+
+/* Different visual cue to show rectangular tables can be resized manually */
+.table.rectangle .table-drag-handle {
+  resize: both;
+  overflow: auto;
+}
+
+/* Update the circle table styles */
+
+.table.circle::before {
+  content: "";
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 10px;
+  height: 10px;
+  background-color: #0088ff;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 0 4px rgba(0, 136, 255, 0.5);
+}
+
+.table.circle:hover::before {
+  opacity: 1;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+}
+
+/* Table list styling */
+.table-item-list {
+  transition: all 0.2s ease;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.table-item-list:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
