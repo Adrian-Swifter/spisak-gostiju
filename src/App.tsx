@@ -2,11 +2,16 @@ import { useState, useEffect } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { v4 as uuidv4 } from "uuid";
-import { utils, writeFile } from "xlsx";
-import jsPDF from "jspdf";
 import { Guest, Table } from "./types";
+
+// Import utility functions instead of inline implementations
 import calculateChairPositions from "./utils/calculateChairPositions";
 import exportCanvasToPDF from "./utils/exportCanvasToPDF";
+import exportToPdf from "./utils/exportToPdf";
+import exportToExcel from "./utils/exportToExcel";
+import { exportData, importData } from "./utils/dataUtils";
+
+// Component imports
 import DeviceWrapper from "./components/DeviceWrapper";
 import Sidebar from "./components/Sidebar";
 import GuestsTab from "./components/tabs/GuestsTab";
@@ -153,55 +158,20 @@ const App = () => {
     );
   };
 
-  const exportData = () => {
-    const data = { guests, tables };
-    const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "spisak-gostiju.json";
-    a.click();
-  };
-
-  const importData = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImportData = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const data = JSON.parse(event.target?.result as string);
-        setGuests(data.guests);
-        setTables(data.tables);
-        localStorage.setItem("guests", JSON.stringify(data.guests));
-        localStorage.setItem("tables", JSON.stringify(data.tables));
-      };
-      reader.readAsText(file);
+      importData(file)
+        .then((data) => {
+          setGuests(data.guests);
+          setTables(data.tables);
+          localStorage.setItem("guests", JSON.stringify(data.guests));
+          localStorage.setItem("tables", JSON.stringify(data.tables));
+        })
+        .catch((error) => {
+          alert(`Error importing data: ${error.message}`);
+        });
     }
-  };
-
-  const exportExcel = () => {
-    const formattedData = guests.map((guest, index) => ({
-      "Redni broj": index + 1,
-      "Ime gosta": guest.name,
-    }));
-
-    const ws = utils.json_to_sheet(formattedData, {
-      header: ["Redni broj", "Ime gosta"],
-    });
-
-    ws["!cols"] = [{ wch: 10 }, { wch: 30 }];
-
-    const wb = utils.book_new();
-    utils.book_append_sheet(wb, ws, "Spisak gostiju");
-    writeFile(wb, "spisak-gostiju.xlsx");
-  };
-
-  const exportPDF = () => {
-    const doc = new jsPDF();
-    doc.text("Spisak Gostiju", 10, 10);
-    guests.forEach((guest, index) => {
-      doc.text(`${index + 1}. ${guest.name}`, 10, 20 + index * 10);
-    });
-    doc.save("spisak-gostiju.pdf");
   };
 
   const resetEverything = () => {
@@ -246,10 +216,10 @@ const App = () => {
       case "settings":
         return (
           <SettingsTab
-            exportData={exportData}
-            importData={importData}
-            exportExcel={exportExcel}
-            exportPDF={exportPDF}
+            exportData={() => exportData(guests, tables)}
+            importData={handleImportData}
+            exportExcel={() => exportToExcel(guests, tables)}
+            exportPDF={() => exportToPdf(guests, tables)}
             exportCanvasToPDF={exportCanvasToPDF}
             setShowResetPopup={setShowResetPopup}
           />
@@ -281,7 +251,7 @@ const App = () => {
           <ResetPopup
             showResetPopup={showResetPopup}
             setShowResetPopup={setShowResetPopup}
-            exportData={exportData}
+            exportData={() => exportData(guests, tables)}
             resetEverything={resetEverything}
           />
         </div>
