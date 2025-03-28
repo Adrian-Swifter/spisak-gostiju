@@ -42,7 +42,7 @@ const InfoPopups = ({ guests, tables }: InfoPopupsProps) => {
         style={{
           position: "fixed",
           bottom: "10px",
-          left: "390px",
+          left: "410px",
           backgroundColor: "#fff",
           padding: "10px",
           borderRadius: "5px",
