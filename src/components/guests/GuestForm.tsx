@@ -13,25 +13,35 @@ const GuestForm = ({ onAdd }: { onAdd: (name: string) => void }) => {
       style={{
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
         gap: "15px",
-        padding: "25px",
-        border: "1px solid #000",
-        borderRadius: "10px",
-        boxShadow: "0 6px 12px rgba(0, 0, 0, 0.1)",
+        marginTop: "10px",
+        borderRadius: "var(--radius-lg)",
+        boxShadow: "var(--shadow-md)",
         maxWidth: "450px",
-        margin: "20px auto",
-        backgroundColor: "#fff",
+        margin: "0 auto 20px",
+        backgroundColor: "white",
+        border: "1px solid var(--primary-light)",
       }}
     >
+      <h3
+        style={{
+          margin: "0 0 10px",
+          color: "var(--primary-dark)",
+          fontFamily: "var(--font-secondary)",
+          fontSize: "1.8rem",
+        }}
+      >
+        Dodaj Gosta
+      </h3>
+
       <div style={{ position: "relative", width: "100%" }}>
         <FaUser
           style={{
             position: "absolute",
-            left: "10px",
+            left: "15px",
             top: "50%",
             transform: "translateY(-50%)",
-            color: "#000",
+            color: "var(--primary-color)",
             zIndex: 1,
           }}
         />
@@ -40,13 +50,14 @@ const GuestForm = ({ onAdd }: { onAdd: (name: string) => void }) => {
           onChange={(e) => setName(e.target.value)}
           required
           style={{
-            padding: "12px 12px 12px 35px",
-            borderRadius: "5px",
-            border: "1px solid #000",
+            padding: "12px 12px 12px 40px",
+            borderRadius: "var(--radius-md)",
+            border: "1px solid var(--primary-light)",
             width: "100%",
             boxSizing: "border-box",
             fontSize: "16px",
             position: "relative",
+            transition: "all 0.2s ease",
           }}
           placeholder="Unesi ime gosta"
         />
@@ -54,18 +65,20 @@ const GuestForm = ({ onAdd }: { onAdd: (name: string) => void }) => {
 
       <button
         type="submit"
+        className="btn-primary"
         style={{
           display: "flex",
           alignItems: "center",
           padding: "12px 10px",
-          borderRadius: "5px",
-          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-          border: "1px solid #ccc",
-          backgroundColor: "#fff",
-          color: "#000",
+          borderRadius: "var(--radius-md)",
+          border: "none",
+          backgroundColor: "rgb(126, 63, 94)",
+          color: "#ffffff",
           cursor: "pointer",
           fontSize: "16px",
           width: "100%",
+          transition: "all 0.2s ease",
+          fontWeight: "500",
         }}
       >
         <FaPlus style={{ marginRight: "8px" }} />

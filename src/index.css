@@ -25,7 +25,7 @@ input {
 }
 
 .sidebar {
-  width: 360px;
+  width: 400px;
   padding: 0.5rem;
   background: var(--surface);
   border-right: 1px solid #e2e8f0;
@@ -68,10 +68,6 @@ input {
   border-radius: 0.375rem;
   cursor: move;
   transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.guest-item-list {
-  padding: 0.75rem 1rem;
 }
 
 .guest-item:hover {

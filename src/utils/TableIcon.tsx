@@ -2,13 +2,14 @@ import React from "react";
 
 interface TableIconProps {
   size?: string | number; // Optional prop to set size
+  color?: string;
 }
 
-const TableIcon: React.FC<TableIconProps> = ({ size = "1em" }) => {
+const TableIcon: React.FC<TableIconProps> = ({ size = "1em", color }) => {
   return (
     <svg
       stroke="currentColor"
-      fill="currentColor"
+      fill={color || "currentColor"}
       strokeWidth="0"
       viewBox="0 0 24 24"
       height={size}

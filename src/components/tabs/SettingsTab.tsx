@@ -142,7 +142,7 @@ const SettingsTab = ({
           Resetuj Sve
         </button>
       </div>
-      <div>
+      <div style={{ position: "relative", bottom: "10px", left: "10px" }}>
         <p>
           Za dodatne funkcionalnosti ili za prijavu problema pri korišćenju,
           molimo pošaljite email na{" "}

@@ -174,9 +174,9 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
               <button
                 onClick={handleNameSubmit}
                 style={{
-                  background: "#0066cc",
-                  color: "white",
-                  border: "1px solid #0055aa",
+                  background: "#4caf50",
+                  color: "#ffffff",
+                  border: "1px solid #388e3c",
                   borderRadius: "4px",
                   padding: "4px 8px",
                   fontSize: "12px",

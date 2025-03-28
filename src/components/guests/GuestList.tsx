@@ -92,7 +92,16 @@ const GuestList = ({
 
   return (
     <div>
-      <h3>Gosti ({guests.length})</h3>
+      <h3
+        style={{
+          fontFamily: "var(--font-secondary)",
+          color: "var(--primary-dark)",
+          fontSize: "1.8rem",
+          marginBottom: "15px",
+        }}
+      >
+        Gosti ({guests.length})
+      </h3>
       <input
         type="text"
         placeholder="Pretraži goste"
@@ -100,12 +109,16 @@ const GuestList = ({
         onChange={(e) => setSearchQuery(e.target.value)}
         style={{
           width: "100%",
-          padding: "10px",
-          marginBottom: "10px",
+          padding: "12px 15px",
+          marginBottom: "12px",
           boxSizing: "border-box",
+          borderRadius: "var(--radius-md)",
+          border: "1px solid var(--primary-light)",
+          fontSize: "14px",
+          transition: "all 0.2s ease",
         }}
       />
-      <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+      <div style={{ display: "flex", gap: "10px", marginBottom: "15px" }}>
         <select
           value={filterOption}
           onChange={(e) =>
@@ -118,7 +131,14 @@ const GuestList = ({
                 | "confirmedAttendance"
             )
           }
-          style={{ padding: "5px" }}
+          style={{
+            padding: "8px 12px",
+            flex: "1",
+            borderRadius: "var(--radius-md)",
+            border: "1px solid var(--primary-light)",
+            fontSize: "14px",
+            cursor: "pointer",
+          }}
         >
           <option value="all">Svi gosti</option>
           <option value="assigned">Dodeljeni stolu</option>
@@ -129,7 +149,14 @@ const GuestList = ({
         <select
           value={sortOption}
           onChange={(e) => setSortOption(e.target.value as "none" | "table")}
-          style={{ padding: "5px" }}
+          style={{
+            padding: "8px 12px",
+            flex: "1",
+            borderRadius: "var(--radius-md)",
+            border: "1px solid var(--primary-light)",
+            fontSize: "14px",
+            cursor: "pointer",
+          }}
         >
           <option value="none">Bez sortiranja</option>
           <option value="table">Sortiraj po stolu</option>
@@ -138,7 +165,11 @@ const GuestList = ({
       <div
         className="guest-list"
         style={{
-          padding: "10px",
+          padding: "15px",
+          borderRadius: "var(--radius-lg)",
+          backgroundColor: "white",
+          boxShadow: "var(--shadow-sm)",
+          border: "1px solid var(--primary-light)",
         }}
       >
         <ol style={{ padding: 0, listStyleType: "none" }}>
@@ -147,32 +178,52 @@ const GuestList = ({
               key={guest.id}
               className="guest-item-list"
               style={{
-                paddingRight: "5px",
+                paddingRight: "8px",
                 marginBottom: "10px",
                 backgroundColor: "#fff",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                textOverflow: "ellipsis",
-                whiteSpace: "normal",
-                wordWrap: "break-word",
+                boxShadow: "var(--shadow-sm)",
+                borderRadius: "var(--radius-md)",
+                borderLeft: "4px solid var(--primary-color)",
+                overflow: "hidden",
+                transition: "all 0.2s ease",
               }}
             >
               <div
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  flex: "1",
                   justifyContent: "space-between",
+                  padding: "0",
                 }}
               >
                 <div
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    flex: "1",
-                    gap: "10px",
+                    flexGrow: 1,
+                    gap: "6px",
+                    minWidth: 0,
+                    overflow: "hidden",
                   }}
                 >
-                  <span style={{ fontWeight: "bold" }}>{index + 1}.</span>{" "}
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      flexShrink: 0,
+                      width: "22px",
+                      height: "22px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "var(--primary-light)",
+                      color: "var(--primary-dark)",
+                      borderRadius: "50%",
+                      fontSize: "12px",
+                    }}
+                  >
+                    {index + 1}
+                  </span>
+
                   {editingGuestId === guest.id ? (
                     <input
                       type="text"
@@ -180,20 +231,36 @@ const GuestList = ({
                       onChange={(e) => setEditingGuestName(e.target.value)}
                       style={{
                         flex: "1",
-                        marginRight: "10px",
-                        padding: "5px",
+                        marginRight: "5px",
+                        padding: "6px 8px",
+                        borderRadius: "var(--radius-md)",
+                        border: "1px solid var(--primary-light)",
+                        fontSize: "14px",
+                        minWidth: 0,
                       }}
+                      autoFocus
                     />
                   ) : (
-                    <DraggableGuest guest={guest} />
+                    <div
+                      style={{
+                        flexGrow: 1,
+                        minWidth: 0,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <DraggableGuest guest={guest} />
+                    </div>
                   )}
                 </div>
                 <div
                   className="guest-controls"
                   style={{
                     display: "flex",
-                    gap: "2px",
+                    gap: "3px",
                     alignItems: "center",
+                    flexShrink: 0,
                   }}
                 >
                   {editingGuestId === guest.id ? (
@@ -201,16 +268,19 @@ const GuestList = ({
                       onClick={handleSaveClick}
                       title="Sačuvaj"
                       style={{
-                        padding: "3px",
+                        width: "26px",
+                        height: "26px",
+                        padding: "0",
                         border: "none",
-                        borderRadius: "3px",
+                        borderRadius: "var(--radius-circle)",
                         backgroundColor: "#4caf50",
-                        color: "white",
-                        fontSize: "1rem",
+                        color: "#ffffff",
+                        fontSize: "0.85rem",
                         cursor: "pointer",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
+                        transition: "all 0.2s ease",
                       }}
                     >
                       <FaSave />
@@ -221,18 +291,24 @@ const GuestList = ({
                         onClick={() => handleInviteClick(guest.id)}
                         title="Poslata pozivnica"
                         style={{
-                          padding: "3px",
+                          width: "26px",
+                          height: "26px",
+                          padding: "0",
                           border: "none",
-                          borderRadius: "3px",
+                          borderRadius: "var(--radius-circle)",
                           backgroundColor: guest.inviteSent
-                            ? "#4caf50"
+                            ? "#8bc34a"
                             : "white",
-                          color: guest.inviteSent ? "white" : "black",
-                          fontSize: "1rem",
+                          color: guest.inviteSent
+                            ? "#ffffff"
+                            : "var(--primary-dark)",
+                          fontSize: "0.85rem",
                           cursor: "pointer",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
+                          transition: "all 0.2s ease",
+                          boxShadow: "var(--shadow-sm)",
                         }}
                       >
                         <FaEnvelope />
@@ -241,18 +317,24 @@ const GuestList = ({
                         onClick={() => handleConfirmClick(guest.id)}
                         title="Potvrdi dolazak"
                         style={{
-                          padding: "3px",
+                          width: "26px",
+                          height: "26px",
+                          padding: "0",
                           border: "none",
-                          borderRadius: "3px",
+                          borderRadius: "var(--radius-circle)",
                           backgroundColor: guest.confirmedAttendance
-                            ? "#4caf50"
+                            ? "#6d4c41"
                             : "white",
-                          color: guest.confirmedAttendance ? "white" : "black",
-                          fontSize: "1rem",
+                          color: guest.confirmedAttendance
+                            ? "#ffffff"
+                            : "var(--primary-dark)",
+                          fontSize: "0.85rem",
                           cursor: "pointer",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
+                          transition: "all 0.2s ease",
+                          boxShadow: "var(--shadow-sm)",
                         }}
                       >
                         <FaCheck />
@@ -261,16 +343,20 @@ const GuestList = ({
                         onClick={() => handleEditClick(guest)}
                         title="Izmeni"
                         style={{
-                          padding: "3px",
+                          width: "26px",
+                          height: "26px",
+                          padding: "0",
                           border: "none",
-                          borderRadius: "3px",
+                          borderRadius: "var(--radius-circle)",
                           backgroundColor: "white",
-                          color: "black",
-                          fontSize: "1rem",
+                          color: "var(--accent-color)",
+                          fontSize: "0.85rem",
                           cursor: "pointer",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
+                          transition: "all 0.2s ease",
+                          boxShadow: "var(--shadow-sm)",
                         }}
                       >
                         <FaEdit />
@@ -279,16 +365,20 @@ const GuestList = ({
                         onClick={() => onDelete(guest.id)}
                         title="Izbriši"
                         style={{
-                          padding: "3px",
+                          width: "26px",
+                          height: "26px",
+                          padding: "0",
                           border: "none",
-                          borderRadius: "3px",
+                          borderRadius: "var(--radius-circle)",
                           backgroundColor: "white",
-                          color: "#f44336",
-                          fontSize: "1rem",
+                          color: "var(--danger-color)",
+                          fontSize: "0.85rem",
                           cursor: "pointer",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
+                          transition: "all 0.2s ease",
+                          boxShadow: "var(--shadow-sm)",
                         }}
                       >
                         <FaTrash />
@@ -299,21 +389,22 @@ const GuestList = ({
               </div>
               <div
                 style={{
-                  marginTop: "5px",
-                  fontSize: "0.7rem",
-                  color: "#fff",
-                  display: "inline-flex",
-                  backgroundColor: "#6d4c41",
-                  padding: "3px",
-                  borderRadius: "3px",
-                  maxWidth: "200px",
+                  marginTop: "0",
+                  padding: "5px 8px",
+                  fontSize: "0.75rem",
+                  color: "rgb(126, 63, 94)",
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: "var(--primary-color)",
                   overflow: "hidden",
+                  borderTop: "1px solid var(--primary-light)",
                 }}
               >
                 <div
                   style={{
                     display: "flex",
                     alignItems: "center",
+                    gap: "5px",
                     maxWidth: "100%",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
@@ -322,19 +413,31 @@ const GuestList = ({
                 >
                   {getTableNameForGuest(guest.id) ? (
                     <>
-                      <TableIcon />
+                      <div style={{ flexShrink: 0 }}>
+                        <TableIcon color="rgb(126, 63, 94)" />
+                      </div>
                       <span
                         style={{
                           overflow: "hidden",
                           textOverflow: "ellipsis",
                           whiteSpace: "nowrap",
+                          fontWeight: "500",
+                          color: "rgb(126, 63, 94)",
                         }}
                       >
                         {getTableNameForGuest(guest.id)}
                       </span>
                     </>
                   ) : (
-                    "Nije dodeljen stolu"
+                    <span
+                      style={{
+                        fontStyle: "italic",
+                        opacity: 0.8,
+                        color: "rgb(126, 63, 94)",
+                      }}
+                    >
+                      Nije dodeljen stolu
+                    </span>
                   )}
                 </div>
               </div>
