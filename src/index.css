@@ -1,9 +1,10 @@
 :root {
   --primary: #4a5568;
   --secondary: #718096;
-  --accent: #6d4c41;
-  --background: #f8f9fa;
+  --accent: #7e3f5e;
+  --background: #ffffff;
   --surface: #ffffff;
+  --green-accent: #8bc34a;
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
@@ -272,7 +273,7 @@ input[type="file"] {
   text-align: center;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #6d4c41;
+  color: var(--accent);
   width: 100%;
   padding: 4px;
   margin-bottom: 8px;

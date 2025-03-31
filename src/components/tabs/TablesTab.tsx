@@ -274,7 +274,7 @@ const TablesTab = ({
                         width: "18px",
                         height: "18px",
                         borderRadius: "50%",
-                        border: "2px solid #6d4c41",
+                        border: "2px solid var(--accent)",
                         flexShrink: 0,
                       }}
                     ></div>
@@ -283,7 +283,7 @@ const TablesTab = ({
                       style={{
                         width: "18px",
                         height: "18px",
-                        border: "2px solid #6d4c41",
+                        border: "2px solid var(--accent)",
                         flexShrink: 0,
                       }}
                     ></div>
@@ -365,7 +365,7 @@ const TablesTab = ({
                         padding: "0",
                         border: "none",
                         borderRadius: "var(--radius-circle)",
-                        backgroundColor: "#4caf50",
+                        backgroundColor: "var(--green-accent)",
                         color: "#ffffff",
                         fontSize: "0.85rem",
                         cursor: "pointer",

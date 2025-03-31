@@ -273,7 +273,7 @@ const GuestList = ({
                         padding: "0",
                         border: "none",
                         borderRadius: "var(--radius-circle)",
-                        backgroundColor: "#4caf50",
+                        backgroundColor: "var(--green-accent)",
                         color: "#ffffff",
                         fontSize: "0.85rem",
                         cursor: "pointer",
@@ -297,7 +297,7 @@ const GuestList = ({
                           border: "none",
                           borderRadius: "var(--radius-circle)",
                           backgroundColor: guest.inviteSent
-                            ? "#8bc34a"
+                            ? "var(--green-accent)"
                             : "white",
                           color: guest.inviteSent
                             ? "#ffffff"
@@ -323,7 +323,7 @@ const GuestList = ({
                           border: "none",
                           borderRadius: "var(--radius-circle)",
                           backgroundColor: guest.confirmedAttendance
-                            ? "#6d4c41"
+                            ? "var(--accent)"
                             : "white",
                           color: guest.confirmedAttendance
                             ? "#ffffff"

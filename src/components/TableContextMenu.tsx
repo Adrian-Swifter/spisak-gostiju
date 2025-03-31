@@ -57,9 +57,9 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
 
   const tableIcon =
     table.type === "circle" ? (
-      <FaCircle size={16} style={{ color: "#0066cc" }} />
+      <FaCircle size={16} style={{ color: "var(--accent)" }} />
     ) : (
-      <FaSquare size={16} style={{ color: "#0066cc" }} />
+      <FaSquare size={16} style={{ color: "var(--accent)" }} />
     );
 
   const handleNameSubmit = () => {
@@ -118,11 +118,11 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
                 background: "none",
                 border: "none",
                 cursor: "pointer",
-                color: "#0066cc",
+                color: "var(--accent)",
                 padding: "4px",
               }}
             >
-              <FaEdit />
+              <FaEdit color="var(--accent)" />
             </button>
           </div>
         ) : (
@@ -174,9 +174,9 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
               <button
                 onClick={handleNameSubmit}
                 style={{
-                  background: "#4caf50",
+                  background: "var(--green-accent)",
                   color: "#ffffff",
-                  border: "1px solid #388e3c",
+                  border: "1px solid var(--green-accent)",
                   borderRadius: "4px",
                   padding: "4px 8px",
                   fontSize: "12px",

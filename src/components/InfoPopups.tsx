@@ -82,6 +82,26 @@ const InfoPopups = ({ guests, tables }: InfoPopupsProps) => {
             flexDirection: "column",
           }}
         >
+          <p style={{ margin: 0 }}>Poslato</p>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "3px",
+            }}
+          >
+            <span>{guests.filter((guest) => guest.inviteSent).length}</span>
+            <FaUser style={{ color: "var(--green-accent)" }} />
+          </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+            flexDirection: "column",
+          }}
+        >
           <p style={{ margin: 0 }}>Potvrđeno</p>
           <div
             style={{
@@ -93,7 +113,7 @@ const InfoPopups = ({ guests, tables }: InfoPopupsProps) => {
             <span>
               {guests.filter((guest) => guest.confirmedAttendance).length}
             </span>
-            <FaUser style={{ color: "green" }} />
+            <FaUser style={{ color: "var(--accent)" }} />
           </div>
         </div>
         <div
