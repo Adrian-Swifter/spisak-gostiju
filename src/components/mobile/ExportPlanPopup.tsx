@@ -64,8 +64,8 @@ const ExportPlanPopup: React.FC<ExportPlanPopupProps> = ({
 
         <div style={{ marginBottom: "20px" }}>
           <p style={{ lineHeight: "1.5", marginBottom: "15px" }}>
-            Funkcija "Izvezi Plan Sale PDF" je optimizovana za desktop računare
-            gde možete vizuelno rasporediti stolove pre izvoza.
+            Funkcija "Preuzmi plan rasporeda stolova (PDF)" je optimizovana za
+            desktop računare gde možete vizuelno rasporediti stolove pre izvoza.
           </p>
           <p style={{ lineHeight: "1.5", marginBottom: "15px" }}>
             Za najbolje rezultate, molimo vas koristite ovu funkciju na desktop
@@ -83,7 +83,7 @@ const ExportPlanPopup: React.FC<ExportPlanPopupProps> = ({
               fontWeight: "bold",
             }}
           >
-            https://app.spisakgostiju.rs/
+            app.spisakgostiju.rs
           </div>
         </div>
 
