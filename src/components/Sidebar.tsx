@@ -26,7 +26,7 @@ const Sidebar = ({
       style={{
         background:
           "linear-gradient(135deg, #f5d4e2 0%, var(--primary-color) 100%)",
-        padding: "0",
+        padding: "5px",
         display: "flex",
         flexDirection: "column",
         boxShadow: "var(--shadow-lg)",
