@@ -1,18 +1,32 @@
 import { useEffect, useState } from "react";
-import { MobileWarning } from "./MobileWarning";
+import MobileApp from "../MobileApp";
 
-const DeviceWrapper = ({ children }: { children: React.ReactNode }) => {
+type DeviceWrapperProps = {
+  children: React.ReactNode;
+};
+
+const DeviceWrapper = ({ children }: DeviceWrapperProps) => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    setIsMobile(/Mobi|Android/i.test(navigator.userAgent));
+    // Check both screen size and user agent for better mobile detection
+    const checkMobile = () => {
+      const isMobileByAgent = /Mobi|Android/i.test(navigator.userAgent);
+      const isMobileByWidth = window.innerWidth <= 768;
+      setIsMobile(isMobileByAgent || isMobileByWidth);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
   }, []);
 
-  if (isMobile) {
-    return <MobileWarning />;
-  }
-
-  return <>{children}</>;
+  return (
+    <div className="device-wrapper">{isMobile ? <MobileApp /> : children}</div>
+  );
 };
 
 export default DeviceWrapper;

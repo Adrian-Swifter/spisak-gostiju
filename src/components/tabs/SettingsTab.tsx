@@ -6,6 +6,8 @@ import {
   FaChair,
   FaRedo,
 } from "react-icons/fa";
+import { useState } from "react";
+import ExportPlanPopup from "../mobile/ExportPlanPopup";
 
 interface SettingsTabProps {
   exportData: () => void;
@@ -14,6 +16,7 @@ interface SettingsTabProps {
   exportPDF: () => void;
   exportCanvasToPDF: () => void;
   setShowResetPopup: (show: boolean) => void;
+  isMobile?: boolean;
 }
 
 const SettingsTab = ({
@@ -23,7 +26,10 @@ const SettingsTab = ({
   exportPDF,
   exportCanvasToPDF,
   setShowResetPopup,
+  isMobile = false,
 }: SettingsTabProps) => {
+  const [showExportPlanPopup, setShowExportPlanPopup] = useState(false);
+
   const buttonStyle = {
     padding: "10px",
     border: "none",
@@ -36,6 +42,14 @@ const SettingsTab = ({
   };
 
   const iconStyle = { marginRight: "5px" };
+
+  const handleExportPlanClick = () => {
+    if (isMobile) {
+      setShowExportPlanPopup(true);
+    } else {
+      exportCanvasToPDF();
+    }
+  };
 
   return (
     <div
@@ -117,7 +131,7 @@ const SettingsTab = ({
           Izvezi PDF Spisak Gostiju
         </button>
         <button
-          onClick={exportCanvasToPDF}
+          onClick={handleExportPlanClick}
           style={{
             ...buttonStyle,
             backgroundColor: "#fff",
@@ -151,6 +165,12 @@ const SettingsTab = ({
           </a>
         </p>
       </div>
+
+      {/* Mobile popup for export plan */}
+      <ExportPlanPopup
+        showPopup={showExportPlanPopup}
+        onClose={() => setShowExportPlanPopup(false)}
+      />
     </div>
   );
 };

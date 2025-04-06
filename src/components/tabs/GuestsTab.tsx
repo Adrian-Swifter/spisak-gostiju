@@ -9,6 +9,9 @@ interface GuestsTabProps {
   deleteGuest: (guestId: string) => void;
   editGuest: (id: string, name: string) => void;
   setGuests: React.Dispatch<React.SetStateAction<Guest[]>>;
+  isMobile?: boolean;
+  addGuestToTable?: (guestId: string, tableId: string) => void;
+  removeGuestFromChair?: (guestId: string) => void;
 }
 
 const GuestsTab = ({
@@ -18,6 +21,9 @@ const GuestsTab = ({
   deleteGuest,
   editGuest,
   setGuests,
+  isMobile = false,
+  addGuestToTable,
+  removeGuestFromChair,
 }: GuestsTabProps) => {
   return (
     <>
@@ -28,6 +34,9 @@ const GuestsTab = ({
         onDelete={deleteGuest}
         onEdit={editGuest}
         setGuests={setGuests}
+        isMobile={isMobile}
+        addGuestToTable={addGuestToTable}
+        removeGuestFromChair={removeGuestFromChair}
       />
     </>
   );

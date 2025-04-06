@@ -8,12 +8,17 @@ interface SidebarProps {
   activeTab: Tab;
   setActiveTab: (tab: Tab) => void;
   children: ReactNode;
+  isMobile?: boolean;
 }
 
-const Sidebar = ({ activeTab, setActiveTab, children }: SidebarProps) => {
-  // Increase the spacing to ensure text in settings tab is fully visible
-  const tabNavigationHeight = 110; // Increased to ensure full visibility
-  const headerHeight = 160; // Approximate header height
+const Sidebar = ({
+  activeTab,
+  setActiveTab,
+  children,
+  isMobile = false,
+}: SidebarProps) => {
+  // Calculate the tab navigation height including its padding and the raised button height
+  const tabNavigationHeight = 90; // Approx height of bottom tabs: padding (30px) + content (60px)
 
   return (
     <div
@@ -27,7 +32,8 @@ const Sidebar = ({ activeTab, setActiveTab, children }: SidebarProps) => {
         boxShadow: "var(--shadow-lg)",
         position: "relative",
         overflow: "hidden",
-        height: "100vh", // Ensure sidebar takes full height
+        width: isMobile ? "100%" : undefined,
+        height: "100vh",
       }}
     >
       <div
@@ -66,9 +72,9 @@ const Sidebar = ({ activeTab, setActiveTab, children }: SidebarProps) => {
         className="sidebar-content"
         style={{
           overflowY: "auto",
-          height: `calc(100vh - ${headerHeight}px - ${tabNavigationHeight}px)`,
-          marginLeft: "5px",
-          padding: "0",
+          height: `calc(100vh - 180px - ${tabNavigationHeight}px)`,
+          margin: "0 15px 15px",
+          padding: "15px",
           borderRadius: "var(--radius-md)",
           backgroundColor: "white",
           boxShadow: "var(--shadow-md)",
