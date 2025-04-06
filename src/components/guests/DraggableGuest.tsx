@@ -22,6 +22,7 @@ const DraggableGuest = ({ guest }: { guest: Guest }) => {
         whiteSpace: "nowrap",
         display: "flex",
         alignItems: "center",
+        justifyContent: "start",
         gap: "5px",
         fontWeight: "500",
         fontSize: "14px",

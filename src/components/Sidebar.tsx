@@ -73,8 +73,6 @@ const Sidebar = ({
         style={{
           overflowY: "auto",
           height: `calc(100vh - 180px - ${tabNavigationHeight}px)`,
-          margin: "0 15px 15px",
-          padding: "15px",
           borderRadius: "var(--radius-md)",
           backgroundColor: "white",
           boxShadow: "var(--shadow-md)",

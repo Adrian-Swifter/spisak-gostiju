@@ -327,7 +327,7 @@ const GuestList = ({
       <div
         className="guest-list"
         style={{
-          padding: "15px",
+          padding: "5px",
           borderRadius: "var(--radius-lg)",
           backgroundColor: "white",
           boxShadow: "var(--shadow-sm)",
