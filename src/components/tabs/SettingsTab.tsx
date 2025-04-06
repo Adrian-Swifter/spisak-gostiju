@@ -83,7 +83,7 @@ const SettingsTab = ({
           title="Fajl koji ste sačuvali. Završava se sa .json ekstenzijom."
         >
           <FaFileImport style={iconStyle} />
-          Uvezite Konfiguraciju
+          Učitaj prethodno sačuvane podatke
           <input
             type="file"
             onChange={importData}
@@ -104,7 +104,7 @@ const SettingsTab = ({
           title="Sačuvajte podatke (goste,stolove...) za kasnije korišćenje."
         >
           <FaFileExport style={iconStyle} />
-          Sačuvaj Konfiguraciju
+          Sačuvaj podatke za kasnije
         </button>
         <button
           onClick={exportExcel}
@@ -116,7 +116,7 @@ const SettingsTab = ({
           }}
         >
           <FaFileExcel style={iconStyle} />
-          Izvezi Excel Spisak Gostiju
+          Preuzmi listu gostiju (Excel)
         </button>
         <button
           onClick={exportPDF}
@@ -128,7 +128,7 @@ const SettingsTab = ({
           }}
         >
           <FaFilePdf style={iconStyle} />
-          Izvezi PDF Spisak Gostiju
+          Preuzmi listu gostiju (PDF)
         </button>
         <button
           onClick={handleExportPlanClick}
@@ -140,7 +140,7 @@ const SettingsTab = ({
           }}
         >
           <FaChair style={iconStyle} />
-          Izvezi Plan Sale PDF
+          Preuzmi plan rasporeda stolova (PDF)
         </button>
         <button
           onClick={() => setShowResetPopup(true)}
@@ -153,8 +153,19 @@ const SettingsTab = ({
           title="Briše sve podatke (goste, stolove...). Koristiti u slučaju potrebe za rasporedom gostiju u dodatnoj sali i slično."
         >
           <FaRedo style={iconStyle} />
-          Resetuj Sve
+          Obriši sve podatke
         </button>
+      </div>
+      <div>
+        <p>
+          📌 <b>Kako sačuvati vaše podatke?</b>
+          <br />
+          Da biste koristili podatke na drugom uređaju ili nakon brisanja
+          istorije pregledača, kliknite na „Sačuvaj podatke za kasnije“ i
+          preuzmite fajl na svoj uređaj. Zatim kliknite „Učitaj prethodno
+          sačuvane podatke“ na novom uređaju ili nakon brisanja podataka
+          pregledača, i odaberite preuzeti fajl.
+        </p>
       </div>
       <div style={{ position: "relative", bottom: "10px", left: "10px" }}>
         <p>

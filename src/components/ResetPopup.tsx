@@ -62,7 +62,7 @@ const ResetPopup = ({
           title="Sačuvajte podatke (goste,stolove...) za kasnije korišćenje."
         >
           <FaFileExport style={iconStyle} />
-          Sačuvaj konfiguraciju
+          Sačuvaj podatke za kasnije
         </button>
         <button
           onClick={resetEverything}
@@ -74,7 +74,7 @@ const ResetPopup = ({
           }}
         >
           <FaRedo style={iconStyle} />
-          Resetuj Sve
+          Obriši sve podatke
         </button>
         <button
           onClick={() => setShowResetPopup(false)}
