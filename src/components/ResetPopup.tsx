@@ -40,6 +40,7 @@ const ResetPopup = ({
         padding: "20px",
         boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
         zIndex: 1000,
+        width: "75%",
       }}
     >
       <h3>Da li želite da sačuvate konfiguraciju pre resetovanja?</h3>

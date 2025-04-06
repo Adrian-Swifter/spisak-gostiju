@@ -62,25 +62,37 @@ const ExportPlanPopup: React.FC<ExportPlanPopupProps> = ({
           </button>
         </div>
 
-        <div style={{ marginBottom: "20px" }}>
-          <p style={{ lineHeight: "1.5", marginBottom: "15px" }}>
-            Funkcija "Preuzmi plan rasporeda stolova (PDF)" je optimizovana za
-            desktop računare gde možete vizuelno rasporediti stolove pre izvoza.
+        <div
+          style={{
+            marginBottom: "20px",
+            color: "#333",
+          }}
+        >
+          <h2 style={{ fontSize: "18px", marginBottom: "10px" }}>
+            Važna napomena
+          </h2>
+          <p style={{ lineHeight: "1.6", marginBottom: "12px" }}>
+            Opcija <strong>„Preuzmi plan rasporeda stolova (PDF)”</strong>{" "}
+            najbolje radi na desktop ili laptop uređajima.
           </p>
-          <p style={{ lineHeight: "1.5", marginBottom: "15px" }}>
-            Za najbolje rezultate, molimo vas koristite ovu funkciju na desktop
-            računaru.
+          <p style={{ lineHeight: "1.6", marginBottom: "12px" }}>
+            Na većem ekranu možete lako vizuelno rasporediti stolove pre nego
+            što preuzmete dokument.
           </p>
-          <p style={{ lineHeight: "1.5", marginBottom: "15px" }}>
-            Posetite aplikaciju na desktop računaru:
+          <p style={{ lineHeight: "1.6", marginBottom: "15px" }}>
+            Za optimalno iskustvo preporučujemo da koristite ovu opciju na
+            desktop ili laptop računaru tako što ćete posetiti sledeću web
+            adresu:
           </p>
           <div
             style={{
               padding: "10px",
-              backgroundColor: "#f5f5f5",
+              backgroundColor: "#e7f3ff",
               borderRadius: "5px",
               textAlign: "center",
               fontWeight: "bold",
+              fontSize: "16px",
+              wordBreak: "break-word",
             }}
           >
             app.spisakgostiju.rs
@@ -93,11 +105,12 @@ const ExportPlanPopup: React.FC<ExportPlanPopupProps> = ({
             width: "100%",
             padding: "12px",
             backgroundColor: "var(--primary-color)",
-            color: "white",
+            color: "#333",
             border: "none",
             borderRadius: "5px",
             fontSize: "16px",
             cursor: "pointer",
+            marginTop: "15px",
           }}
         >
           Razumem
