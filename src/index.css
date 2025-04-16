@@ -25,6 +25,12 @@ input {
   font-family: "Montserrat", sans-serif;
 }
 
+input {
+  border: 1px solid red;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+}
+
 .sidebar {
   width: 400px;
   padding: 0.5rem;

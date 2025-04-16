@@ -163,7 +163,7 @@ const TablesTab = ({
             style={{
               padding: "12px 15px",
               borderRadius: "var(--radius-md)",
-              border: "1px solid var(--primary-light)",
+              border: "1px solid var(--accent)",
               fontSize: "14px",
               transition: "all 0.2s ease",
             }}
@@ -215,8 +215,8 @@ const TablesTab = ({
             padding: "12px 15px",
             marginBottom: "12px",
             boxSizing: "border-box",
+            border: "1px solid var(--accent)",
             borderRadius: "var(--radius-md)",
-            border: "1px solid var(--primary-light)",
             fontSize: "14px",
             transition: "all 0.2s ease",
           }}
@@ -398,7 +398,7 @@ const TablesTab = ({
           style={{
             padding: "12px 15px",
             borderRadius: "var(--radius-md)",
-            border: "1px solid var(--primary-light)",
+            border: "1px solid var(--accent)",
             fontSize: "14px",
             cursor: "pointer",
             transition: "all 0.2s ease",
@@ -417,7 +417,7 @@ const TablesTab = ({
             style={{
               padding: "12px 15px",
               borderRadius: "var(--radius-md)",
-              border: "1px solid var(--primary-light)",
+              border: "1px solid var(--accent)",
               fontSize: "14px",
               cursor: "pointer",
               transition: "all 0.2s ease",
@@ -435,7 +435,7 @@ const TablesTab = ({
           style={{
             padding: "12px 15px",
             borderRadius: "var(--radius-md)",
-            border: "1px solid var(--primary-light)",
+            border: "1px solid var(--accent)",
             fontSize: "14px",
             transition: "all 0.2s ease",
           }}
@@ -448,7 +448,7 @@ const TablesTab = ({
           style={{
             padding: "12px 15px",
             borderRadius: "var(--radius-md)",
-            border: "1px solid var(--primary-light)",
+            border: "1px solid var(--accent)",
             fontSize: "14px",
             transition: "all 0.2s ease",
           }}
@@ -488,7 +488,7 @@ const TablesTab = ({
           marginBottom: "12px",
           boxSizing: "border-box",
           borderRadius: "var(--radius-md)",
-          border: "1px solid var(--primary-light)",
+          border: "1px solid var(--accent)",
           fontSize: "14px",
           transition: "all 0.2s ease",
         }}

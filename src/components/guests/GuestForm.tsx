@@ -51,8 +51,8 @@ const GuestForm = ({ onAdd }: { onAdd: (name: string) => void }) => {
           required
           style={{
             padding: "12px 12px 12px 40px",
+            border: "1px solid var(--accent)",
             borderRadius: "var(--radius-md)",
-            border: "1px solid var(--primary-light)",
             width: "100%",
             boxSizing: "border-box",
             fontSize: "16px",

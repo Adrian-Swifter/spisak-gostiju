@@ -1,6 +1,8 @@
 import { useState } from "react";
 import DraggableGuest from "./DraggableGuest";
 import { Guest, Table } from "../../types";
+import InfoIcon from "../../assets/info.png";
+
 import {
   FaEdit,
   FaTrash,
@@ -160,7 +162,7 @@ const GuestList = ({
           marginBottom: "12px",
           boxSizing: "border-box",
           borderRadius: "var(--radius-md)",
-          border: "1px solid var(--primary-light)",
+          border: "1px solid var(--accent)",
           fontSize: "14px",
           transition: "all 0.2s ease",
         }}
@@ -182,7 +184,7 @@ const GuestList = ({
             padding: "8px 12px",
             flex: "1",
             borderRadius: "var(--radius-md)",
-            border: "1px solid var(--primary-light)",
+            border: "1px solid var(--accent)",
             fontSize: "14px",
             cursor: "pointer",
           }}
@@ -200,7 +202,7 @@ const GuestList = ({
             padding: "8px 12px",
             flex: "1",
             borderRadius: "var(--radius-md)",
-            border: "1px solid var(--primary-light)",
+            border: "1px solid var(--accent)",
             fontSize: "14px",
             cursor: "pointer",
           }}
@@ -208,6 +210,19 @@ const GuestList = ({
           <option value="none">Bez sortiranja</option>
           <option value="table">Sortiraj po stolu</option>
         </select>
+      </div>
+      <div>
+        <p
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+            fontSize: "0.7rem",
+          }}
+        >
+          <img src={InfoIcon} alt="" style={{ width: "1rem" }} /> Klikni, drži i
+          prevuci gosta do stolice da bi ga dodelio stolu.
+        </p>
       </div>
 
       {/* Table Selection UI (shown when selecting a table for a guest) */}
