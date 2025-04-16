@@ -46,17 +46,6 @@ const TableHeader: React.FC<TableHeaderProps> = ({
           +
         </button>
       </div>
-      <p
-        style={{
-          fontSize: "0.7rem",
-          display: "flex",
-          alignItems: "center",
-          gap: "5px",
-        }}
-      >
-        <img src={InfoIcon} alt="" style={{ width: "1rem" }} /> Desni klik na
-        sto za više opcija.
-      </p>
     </div>
   );
 };

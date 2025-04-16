@@ -1,6 +1,7 @@
 import { FaUser } from "react-icons/fa";
 import { Guest, Table } from "../types";
 import TableIcon from "../utils/TableIcon";
+import InfoIcon from "../assets/info.png";
 
 interface InfoPopupsProps {
   guests: Guest[];
@@ -10,6 +11,31 @@ interface InfoPopupsProps {
 const InfoPopups = ({ guests, tables }: InfoPopupsProps) => {
   return (
     <>
+      <div
+        className="fixed-popup"
+        style={{
+          position: "fixed",
+          top: "10px",
+          left: "420px",
+          backgroundColor: "#fff",
+          padding: "10px",
+          borderRadius: "5px",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+          fontSize: "14px",
+          zIndex: 1000,
+        }}
+      >
+        <p
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+          }}
+        >
+          <img src={InfoIcon} alt="" style={{ width: "1rem" }} /> Desni klik na
+          sto za više opcija.
+        </p>
+      </div>
       <div
         className="fixed-popup"
         style={{
