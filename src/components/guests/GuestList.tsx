@@ -14,6 +14,7 @@ import {
   FaTimesCircle,
 } from "react-icons/fa";
 import TableIcon from "../../utils/TableIcon";
+import { isMobileDevice } from "../../utils/deviceDetector";
 
 interface GuestListProps {
   guests: Guest[];
@@ -211,20 +212,21 @@ const GuestList = ({
           <option value="table">Sortiraj po stolu</option>
         </select>
       </div>
-      <div>
-        <p
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "5px",
-            fontSize: "0.7rem",
-          }}
-        >
-          <img src={InfoIcon} alt="" style={{ width: "1rem" }} /> Klikni, drži i
-          prevuci gosta do stolice da bi ga dodelio stolu.
-        </p>
-      </div>
-
+      {!isMobileDevice() && (
+        <div>
+          <p
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
+              fontSize: "0.7rem",
+            }}
+          >
+            <img src={InfoIcon} alt="" style={{ width: "1rem" }} /> Klikni, drži
+            i prevuci gosta do stolice da bi ga dodelio stolu.
+          </p>
+        </div>
+      )}
       {/* Table Selection UI (shown when selecting a table for a guest) */}
       {selectingTableFor && isMobile && (
         <div
