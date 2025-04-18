@@ -15,6 +15,7 @@ interface TableContextMenuProps {
   onDuplicate: () => void;
   onDelete: () => void;
   onNameChange: (name: string) => void;
+  extraInfo?: React.ReactNode;
 }
 
 const TableContextMenu: React.FC<TableContextMenuProps> = ({
@@ -26,6 +27,7 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
   onDuplicate,
   onDelete,
   onNameChange,
+  extraInfo,
 }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [editingName, setEditingName] = useState(false);
@@ -221,6 +223,8 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
           </div>
         </div>
       )}
+
+      {extraInfo}
 
       <div
         style={{

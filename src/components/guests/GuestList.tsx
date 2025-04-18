@@ -217,9 +217,9 @@ const GuestList = ({
           <p
             style={{
               display: "flex",
-              alignItems: "center",
+              alignItems: "start",
+              margin: 0,
               gap: "5px",
-              fontSize: "0.7rem",
             }}
           >
             <img src={InfoIcon} alt="" style={{ width: "1rem" }} /> Klikni, drži

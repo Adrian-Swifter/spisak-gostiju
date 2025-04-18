@@ -5,6 +5,7 @@ import TableHeader from "./TableHeader";
 import TableContextMenu from "./TableContextMenu";
 import { Rnd } from "react-rnd";
 import { v4 as uuidv4 } from "uuid";
+import InfoIcon from "../assets/info.png";
 
 interface TableComponentProps {
   table: Table;
@@ -267,6 +268,27 @@ const TableComponent: React.FC<TableComponentProps> = ({
         onDuplicate={handleDuplicateTable}
         onDelete={handleDeleteTable}
         onNameChange={handleNameChange}
+        // Add this prop to pass extra info for rectangles
+        extraInfo={
+          table.type === "rectangle" ? (
+            <div
+              className="rectangle-info"
+              style={{
+                marginTop: 8,
+                color: "#888",
+                fontSize: 13,
+                display: "flex",
+                alignItems: "start",
+              }}
+            >
+              <img src={InfoIcon} alt="" style={{ width: "20px" }} />
+              <p style={{ margin: 0, marginLeft: 5 }}>
+                Za uvećanje stola, pređite mišem preko njegove ivice i prevucite
+                kada se pojavi ikonica.
+              </p>
+            </div>
+          ) : null
+        }
       />
     </>
   );
