@@ -220,6 +220,7 @@ const GuestList = ({
               alignItems: "start",
               margin: 0,
               gap: "5px",
+              fontSize: "0.9rem",
             }}
           >
             <img src={InfoIcon} alt="" style={{ width: "1rem" }} /> Klikni, drži

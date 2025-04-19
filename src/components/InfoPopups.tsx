@@ -30,6 +30,7 @@ const InfoPopups = ({ guests, tables }: InfoPopupsProps) => {
             display: "flex",
             alignItems: "center",
             gap: "5px",
+            margin: 0,
           }}
         >
           <img src={InfoIcon} alt="" style={{ width: "1rem" }} /> Desni klik na
@@ -48,16 +49,21 @@ const InfoPopups = ({ guests, tables }: InfoPopupsProps) => {
           boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
           fontSize: "14px",
           zIndex: 1000,
+          maxWidth: "350px",
         }}
       >
-        <p>
-          <strong>Za više prostora za stolove odzumirati:</strong>
-        </p>
-        <p>
+        <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+          <img src={InfoIcon} alt="" style={{ width: "1rem" }} />
+          <p style={{ margin: 0 }}>
+            <strong>Za više prostora za stolove odzumirati:</strong>
+          </p>
+        </div>
+
+        <p style={{ margin: "5px 0" }}>
           <strong>Windows:</strong> Držite <kbd>Ctrl</kbd> i pritisnite{" "}
-          <kbd>-</kbd> za odzumiranje.
+          <kbd>-</kbd>, ili koristite točkić miša dok držite <kbd>Ctrl</kbd>.
         </p>
-        <p>
+        <p style={{ margin: 0 }}>
           <strong>Mac:</strong> Držite <kbd>⌘ Command</kbd> i pritisnite{" "}
           <kbd>-</kbd> za odzumiranje.
         </p>
