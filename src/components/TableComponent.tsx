@@ -231,6 +231,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
         }}
         dragHandleClassName="table-drag-handle"
         enableResizing={resizeHandles}
+        bounds=".canvas" // <--- Add this line
       >
         <div
           className={`table ${table.type} table-drag-handle`}

@@ -35,7 +35,21 @@ const TableCanvas = ({
   };
 
   return (
-    <div className="canvas">
+    <div
+      className="canvas"
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        minHeight: "400px",
+        minWidth: "400px",
+        overflow: "auto",
+        background: "#f8f8f8",
+        margin: 0,
+        flex: 1,
+        boxSizing: "border-box",
+      }}
+    >
       {tables.map((table) => (
         <TableComponent
           key={table.id}
