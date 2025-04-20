@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import { useState } from "react";
 import ExportPlanPopup from "../mobile/ExportPlanPopup";
+import InfoIcon from "../../assets/info.png";
 
 interface SettingsTabProps {
   exportData: () => void;
@@ -156,9 +157,10 @@ const SettingsTab = ({
           Obriši sve podatke
         </button>
       </div>
-      <div>
-        <p>
-          📌 <b>Kako sačuvati vaše podatke?</b>
+      <div style={{ display: "flex", gap: "5px", alignItems: "start" }}>
+        <img src={InfoIcon} alt="" style={{ width: "1rem" }} />
+        <p style={{ fontSize: "0.9rem", margin: 0 }}>
+          <b>Kako sačuvati vaše podatke?</b>
           <br />
           Da biste koristili podatke na drugom uređaju ili nakon brisanja
           istorije pregledača, kliknite na „Sačuvaj podatke za kasnije“ i
@@ -167,13 +169,22 @@ const SettingsTab = ({
           pregledača, i odaberite preuzeti fajl.
         </p>
       </div>
-      <div style={{ position: "relative", bottom: "10px", left: "10px" }}>
+      <div>
         <p>
           Za dodatne funkcionalnosti ili za prijavu problema pri korišćenju,
           molimo pošaljite email na{" "}
           <a href="mailto:contact@milosdraskovic.com">
             contact@milosdraskovic.com
           </a>
+        </p>
+        <p style={{ fontSize: "0.9rem" }}>
+          Ako ti je aplikacija bila korisna, počasti nas kafom ☕ na{" "}
+          <a href="https://ko-fi.com/spisakgostijurs" target="_blank">
+            ko-fi.com/spisakgostijurs
+          </a>
+          {". "}
+          Aplikacija je besplatna i uvek će biti – tvoja donacija pomaže da
+          ostane online i da se dalje razvija.
         </p>
       </div>
 
