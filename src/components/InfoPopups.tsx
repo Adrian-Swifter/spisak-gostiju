@@ -16,6 +16,34 @@ const InfoPopups = ({ guests, tables }: InfoPopupsProps) => {
         style={{
           position: "fixed",
           top: "10px",
+          right: "10px",
+          padding: "10px",
+          fontSize: "14px",
+          zIndex: 1000,
+        }}
+      >
+        <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSc9pInnPFbJweSjuEcvRUa2sLIHSEpRMPlXCjBuYiHDLK9ZbQ/viewform?usp=header"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: "inline-block",
+            background: "linear-gradient(45deg,#7e3f5e 0%, #9c4d7a 100%)",
+            color: "#fff",
+            fontWeight: 700,
+            padding: "4px 8px",
+            textDecoration: "none",
+            boxShadow: "0 6px 20px rgba(126,63,94,.35)",
+          }}
+        >
+          💍 Sajt za venčanje za samo 97 €
+        </a>
+      </div>
+      <div
+        className="fixed-popup"
+        style={{
+          position: "fixed",
+          top: "10px",
           left: "420px",
           backgroundColor: "#fff",
           padding: "10px",
