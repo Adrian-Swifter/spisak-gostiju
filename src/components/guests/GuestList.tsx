@@ -12,6 +12,7 @@ import {
   FaChair,
   FaPlus,
   FaTimesCircle,
+  FaGripVertical,
 } from "react-icons/fa";
 import TableIcon from "../../utils/TableIcon";
 import { isMobileDevice } from "../../utils/deviceDetector";
@@ -49,6 +50,10 @@ const GuestList = ({
   const [selectingTableFor, setSelectingTableFor] = useState<string | null>(
     null
   );
+
+  // Drag and drop state
+  const [draggedGuestId, setDraggedGuestId] = useState<string | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   const handleEditClick = (guest: Guest) => {
     setEditingGuestId(guest.id);
@@ -106,6 +111,80 @@ const GuestList = ({
     }
   };
 
+  // Handle drag start
+  const handleDragStart = (e: React.DragEvent, guest: Guest, index: number) => {
+    setDraggedGuestId(guest.id);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/html", e.currentTarget.outerHTML);
+    e.dataTransfer.setDragImage(e.currentTarget as HTMLElement, 0, 0);
+  };
+
+  // Handle drag over
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setDragOverIndex(index);
+  };
+
+  // Handle drag leave
+  const handleDragLeave = (e: React.DragEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX;
+    const y = e.clientY;
+
+    // Only clear drag over if mouse is outside the element
+    if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+      setDragOverIndex(null);
+    }
+  };
+
+  // Handle drop
+  const handleDrop = (e: React.DragEvent, dropIndex: number) => {
+    e.preventDefault();
+    setDragOverIndex(null);
+
+    if (!draggedGuestId) return;
+
+    const draggedIndex = sortedGuests.findIndex(
+      (guest) => guest.id === draggedGuestId
+    );
+    if (draggedIndex === -1 || draggedIndex === dropIndex) {
+      setDraggedGuestId(null);
+      return;
+    }
+
+    // Create new array with reordered guests
+    const newSortedGuests = [...sortedGuests];
+    const draggedGuest = newSortedGuests[draggedIndex];
+
+    // Remove from old position
+    newSortedGuests.splice(draggedIndex, 1);
+
+    // Insert at new position
+    newSortedGuests.splice(dropIndex, 0, draggedGuest);
+
+    // Update the original guests array to maintain the new order
+    const updatedGuests = [...guests];
+
+    // Find the positions of reordered guests in the original array and update
+    newSortedGuests.forEach((guest, newIndex) => {
+      const originalIndex = updatedGuests.findIndex((g) => g.id === guest.id);
+      if (originalIndex !== -1) {
+        updatedGuests[originalIndex] = { ...guest, order: newIndex };
+      }
+    });
+
+    setGuests(updatedGuests);
+    localStorage.setItem("guests", JSON.stringify(updatedGuests));
+    setDraggedGuestId(null);
+  };
+
+  // Handle drag end
+  const handleDragEnd = () => {
+    setDraggedGuestId(null);
+    setDragOverIndex(null);
+  };
+
   const getTableNameForGuest = (guestId: string): string | null => {
     for (const table of tables) {
       for (const chair of table.chairs) {
@@ -136,6 +215,10 @@ const GuestList = ({
       const tableA = getTableNameForGuest(a.id) || "";
       const tableB = getTableNameForGuest(b.id) || "";
       return tableA.localeCompare(tableB);
+    }
+    // Sort by order property if available, otherwise maintain original order
+    if (a.order !== undefined && b.order !== undefined) {
+      return a.order - b.order;
     }
     return 0;
   });
@@ -221,10 +304,24 @@ const GuestList = ({
               margin: 0,
               gap: "5px",
               fontSize: "0.9rem",
+              marginBottom: "10px",
             }}
           >
             <img src={InfoIcon} alt="" style={{ width: "1rem" }} /> Klikni, drži
             i prevuci gosta do stolice da bi ga dodelio stolu.
+          </p>
+          <p
+            style={{
+              display: "flex",
+              alignItems: "start",
+              margin: 0,
+              gap: "5px",
+              fontSize: "0.9rem",
+              color: "var(--primary-dark)",
+            }}
+          >
+            <FaGripVertical style={{ width: "1rem", marginTop: "2px" }} />{" "}
+            Koristi ručicu za prevlačenje da promeniš redosled gostiju.
           </p>
         </div>
       )}
@@ -369,15 +466,35 @@ const GuestList = ({
               <li
                 key={guest.id}
                 className="guest-item-list"
+                draggable={!isMobile && sortOption === "none"}
+                onDragStart={(e) => handleDragStart(e, guest, index)}
+                onDragOver={(e) => handleDragOver(e, index)}
+                onDragLeave={handleDragLeave}
+                onDrop={(e) => handleDrop(e, index)}
+                onDragEnd={handleDragEnd}
                 style={{
                   paddingRight: "8px",
                   marginBottom: "10px",
-                  backgroundColor: "#fff",
-                  boxShadow: "var(--shadow-sm)",
+                  backgroundColor:
+                    draggedGuestId === guest.id ? "#f0f0f0" : "#fff",
+                  boxShadow:
+                    draggedGuestId === guest.id
+                      ? "var(--shadow-lg)"
+                      : "var(--shadow-sm)",
                   borderRadius: "var(--radius-md)",
-                  borderLeft: "4px solid var(--primary-color)",
+                  borderLeft:
+                    dragOverIndex === index
+                      ? "4px solid var(--accent-color)"
+                      : "4px solid var(--primary-color)",
                   overflow: "hidden",
                   transition: "all 0.2s ease",
+                  cursor:
+                    !isMobile && sortOption === "none" ? "grab" : "default",
+                  opacity: draggedGuestId === guest.id ? 0.5 : 1,
+                  transform:
+                    dragOverIndex === index
+                      ? "translateY(-2px)"
+                      : "translateY(0)",
                 }}
               >
                 <div
@@ -398,6 +515,22 @@ const GuestList = ({
                       overflow: "hidden",
                     }}
                   >
+                    {/* Drag handle for desktop */}
+                    {!isMobile && sortOption === "none" && (
+                      <div
+                        style={{
+                          color: "var(--primary-color)",
+                          cursor: "grab",
+                          display: "flex",
+                          alignItems: "center",
+                          padding: "2px",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <FaGripVertical size={14} />
+                      </div>
+                    )}
+
                     <span
                       style={{
                         fontWeight: "bold",

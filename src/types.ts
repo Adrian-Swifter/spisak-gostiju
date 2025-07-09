@@ -3,6 +3,7 @@ export interface Guest {
     confirmedAttendance: any;
     id: string;
     name: string;
+    order?: number;
   }
   
   export interface Table {
