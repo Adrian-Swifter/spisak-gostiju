@@ -1,4 +1,77 @@
 import { Guest, Table } from "../types";
+import { v4 as uuidv4 } from "uuid";
+
+const isRecord = (value: unknown): value is Record<string, unknown> => {
+  return typeof value === "object" && value !== null;
+};
+
+export const sanitizeGuests = (guests: unknown): Guest[] => {
+  if (!Array.isArray(guests)) return [];
+
+  return guests
+    .filter(isRecord)
+    .map((guest, index) => ({
+      id: typeof guest.id === "string" && guest.id ? guest.id : uuidv4(),
+      name: typeof guest.name === "string" ? guest.name.trim() : "",
+      inviteSent: guest.inviteSent === true,
+      confirmedAttendance: guest.confirmedAttendance === true,
+      order: typeof guest.order === "number" ? guest.order : index,
+    }))
+    .filter((guest) => guest.name.length > 0);
+};
+
+export const sanitizeTables = (tables: unknown): Table[] => {
+  if (!Array.isArray(tables)) return [];
+
+  return tables.filter(isRecord).map((table, index) => {
+    const type = table.type === "circle" ? "circle" : "rectangle";
+    const width = typeof table.width === "number" ? table.width : 200;
+    const height = typeof table.height === "number" ? table.height : 100;
+    const chairs = Array.isArray(table.chairs)
+      ? table.chairs
+          .filter(isRecord)
+          .filter(
+            (chair) =>
+              typeof chair.x === "number" && typeof chair.y === "number"
+          )
+          .map((chair) => ({
+            id: typeof chair.id === "string" && chair.id ? chair.id : uuidv4(),
+            x: chair.x as number,
+            y: chair.y as number,
+            occupiedBy:
+              typeof chair.occupiedBy === "string"
+                ? chair.occupiedBy
+                : undefined,
+            side:
+              chair.side === "front" ||
+              chair.side === "top" ||
+              chair.side === "bottom"
+                ? chair.side
+                : undefined,
+          }))
+      : [];
+
+    return {
+      id: typeof table.id === "string" && table.id ? table.id : uuidv4(),
+      name:
+        typeof table.name === "string" && table.name.trim()
+          ? table.name
+          : `Sto ${index + 1}`,
+      type,
+      seatingType:
+        table.seatingType === "one-sided" || table.seatingType === "two-sided"
+          ? table.seatingType
+          : undefined,
+      x: typeof table.x === "number" ? table.x : 100,
+      y: typeof table.y === "number" ? table.y : 100,
+      width,
+      height: type === "circle" ? width : height,
+      chairsCount:
+        typeof table.chairsCount === "number" ? table.chairsCount : chairs.length,
+      chairs,
+    };
+  });
+};
 
 /**
  * Export guests and tables as a JSON file
@@ -34,7 +107,10 @@ export const importData = (file: File): Promise<{ guests: Guest[], tables: Table
           throw new Error("Invalid file format");
         }
         
-        resolve(data);
+        resolve({
+          guests: sanitizeGuests(data.guests),
+          tables: sanitizeTables(data.tables),
+        });
       } catch (error) {
         reject(error);
       }

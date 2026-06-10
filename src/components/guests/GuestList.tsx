@@ -187,7 +187,8 @@ const GuestList = ({
 
   const getTableNameForGuest = (guestId: string): string | null => {
     for (const table of tables) {
-      for (const chair of table.chairs) {
+      for (const chair of table.chairs ?? []) {
+        if (!chair) continue;
         if (chair.occupiedBy === guestId) {
           return table.name;
         }
@@ -385,7 +386,8 @@ const GuestList = ({
             ) : (
               <ul style={{ padding: 0, listStyle: "none" }}>
                 {tables.map((table) => {
-                  const availableSeats = table.chairs.filter(
+                  const chairs = (table.chairs ?? []).filter(Boolean);
+                  const availableSeats = chairs.filter(
                     (chair) => !chair.occupiedBy
                   ).length;
                   return (
@@ -428,7 +430,7 @@ const GuestList = ({
                           borderRadius: "var(--radius-sm)",
                         }}
                       >
-                        {availableSeats} slobodno od {table.chairs.length}
+                        {availableSeats} slobodno od {chairs.length}
                       </div>
                     </li>
                   );

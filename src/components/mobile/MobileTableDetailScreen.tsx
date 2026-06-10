@@ -16,7 +16,8 @@ const MobileTableDetailScreen: React.FC<MobileTableDetailScreenProps> = ({
   removeGuestFromChair,
 }) => {
   // Find guests assigned to this table
-  const assignedGuestIds = table.chairs
+  const chairs = (table.chairs ?? []).filter(Boolean);
+  const assignedGuestIds = chairs
     .filter((chair) => chair.occupiedBy)
     .map((chair) => chair.occupiedBy as string);
 
@@ -24,7 +25,7 @@ const MobileTableDetailScreen: React.FC<MobileTableDetailScreenProps> = ({
     assignedGuestIds.includes(guest.id)
   );
 
-  const totalChairs = table.chairs.length;
+  const totalChairs = chairs.length;
   const occupiedChairs = assignedGuestIds.length;
   const freeChairs = totalChairs - occupiedChairs;
 

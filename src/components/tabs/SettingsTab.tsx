@@ -13,6 +13,7 @@ import InfoIcon from "../../assets/info.png";
 interface SettingsTabProps {
   exportData: () => void;
   importData: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  importGuestList: (e: React.ChangeEvent<HTMLInputElement>) => void;
   exportExcel: () => void;
   exportPDF: () => void;
   exportCanvasToPDF: () => void;
@@ -23,6 +24,7 @@ interface SettingsTabProps {
 const SettingsTab = ({
   exportData,
   importData,
+  importGuestList,
   exportExcel,
   exportPDF,
   exportCanvasToPDF,
@@ -89,6 +91,30 @@ const SettingsTab = ({
             type="file"
             onChange={importData}
             accept=".json"
+            style={{
+              display: "none",
+            }}
+          />
+        </label>
+        <label
+          style={{
+            ...buttonStyle,
+            backgroundColor: "#fff",
+            color: "#000",
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+            cursor: "pointer",
+            border: "1px solid #ccc",
+          }}
+          title="Uvezite goste iz Excel, Google Sheets, CSV, TXT ili Word DOCX fajla."
+        >
+          <FaFileImport style={iconStyle} />
+          Učitaj listu gostiju iz drugog fajla
+          <input
+            type="file"
+            onChange={importGuestList}
+            accept=".xlsx,.xls,.xlsm,.xlsb,.ods,.csv,.tsv,.txt,.docx"
             style={{
               display: "none",
             }}

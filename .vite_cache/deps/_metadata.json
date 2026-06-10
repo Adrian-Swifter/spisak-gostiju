@@ -1,103 +1,106 @@
 {
-  "hash": "bf402b9d",
+  "hash": "fb933eae",
   "configHash": "db9bb917",
-  "lockfileHash": "a4c7ba37",
-  "browserHash": "df5cbd72",
+  "lockfileHash": "49c1c8b6",
+  "browserHash": "0f6abded",
   "optimized": {
     "react": {
       "src": "../../node_modules/react/index.js",
       "file": "react.js",
-      "fileHash": "68f2dff5",
+      "fileHash": "53cc4e3e",
       "needsInterop": true
     },
     "react-dom": {
       "src": "../../node_modules/react-dom/index.js",
       "file": "react-dom.js",
-      "fileHash": "82578845",
+      "fileHash": "a924fc4f",
       "needsInterop": true
     },
     "react/jsx-dev-runtime": {
       "src": "../../node_modules/react/jsx-dev-runtime.js",
       "file": "react_jsx-dev-runtime.js",
-      "fileHash": "939a67ec",
+      "fileHash": "586ab8b1",
       "needsInterop": true
     },
     "react/jsx-runtime": {
       "src": "../../node_modules/react/jsx-runtime.js",
       "file": "react_jsx-runtime.js",
-      "fileHash": "6472e95e",
+      "fileHash": "000a55f8",
       "needsInterop": true
     },
     "html2canvas": {
       "src": "../../node_modules/html2canvas/dist/html2canvas.esm.js",
       "file": "html2canvas.js",
-      "fileHash": "c6029502",
+      "fileHash": "f474b81d",
       "needsInterop": false
     },
     "jspdf": {
       "src": "../../node_modules/jspdf/dist/jspdf.es.min.js",
       "file": "jspdf.js",
-      "fileHash": "b750a560",
+      "fileHash": "7f500f4a",
       "needsInterop": false
+    },
+    "mammoth": {
+      "src": "../../node_modules/mammoth/lib/index.js",
+      "file": "mammoth.js",
+      "fileHash": "46386413",
+      "needsInterop": true
     },
     "posthog-js/react": {
       "src": "../../node_modules/posthog-js/react/dist/esm/index.js",
       "file": "posthog-js_react.js",
-      "fileHash": "a1592fd0",
+      "fileHash": "aa4cb4fb",
       "needsInterop": false
     },
     "react-dnd": {
       "src": "../../node_modules/react-dnd/dist/index.js",
       "file": "react-dnd.js",
-      "fileHash": "c5c48d12",
+      "fileHash": "ed498539",
       "needsInterop": false
     },
     "react-dnd-html5-backend": {
       "src": "../../node_modules/react-dnd-html5-backend/dist/index.js",
       "file": "react-dnd-html5-backend.js",
-      "fileHash": "93ebfded",
+      "fileHash": "e67799bd",
       "needsInterop": false
     },
     "react-dom/client": {
       "src": "../../node_modules/react-dom/client.js",
       "file": "react-dom_client.js",
-      "fileHash": "28faaa81",
+      "fileHash": "a6e05a36",
       "needsInterop": true
     },
     "react-icons/fa": {
       "src": "../../node_modules/react-icons/fa/index.mjs",
       "file": "react-icons_fa.js",
-      "fileHash": "49e0876b",
+      "fileHash": "3e5160ea",
       "needsInterop": false
     },
     "react-rnd": {
       "src": "../../node_modules/react-rnd/lib/index.js",
       "file": "react-rnd.js",
-      "fileHash": "1c811545",
+      "fileHash": "548d1fb6",
       "needsInterop": false
     },
     "uuid": {
       "src": "../../node_modules/uuid/dist/esm-browser/index.js",
       "file": "uuid.js",
-      "fileHash": "351b1daa",
+      "fileHash": "9658e68c",
       "needsInterop": false
     },
     "xlsx": {
       "src": "../../node_modules/xlsx/xlsx.mjs",
       "file": "xlsx.js",
-      "fileHash": "9d81c94a",
+      "fileHash": "6cad4ba3",
       "needsInterop": false
     }
   },
   "chunks": {
-    "purify.es-MO5P2FLV": {
-      "file": "purify__es-MO5P2FLV.js"
+    "index.es-SGTFDDNO": {
+      "file": "index__es-SGTFDDNO.js"
     },
-    "index.es-QQVHLAAH": {
-      "file": "index__es-QQVHLAAH.js"
-    },
-    "chunk-4AJF6FOG": {
-      "file": "chunk-4AJF6FOG.js"
+    "purify.es-UBNS2FSP": {
+      "file": "purify__es-UBNS2FSP.js"
     },
     "chunk-SO2FIUG4": {
       "file": "chunk-SO2FIUG4.js"
@@ -105,14 +108,17 @@
     "chunk-SITVF2AJ": {
       "file": "chunk-SITVF2AJ.js"
     },
-    "chunk-CN66GVJG": {
-      "file": "chunk-CN66GVJG.js"
+    "chunk-JV66NACN": {
+      "file": "chunk-JV66NACN.js"
     },
-    "chunk-GWAROZSO": {
-      "file": "chunk-GWAROZSO.js"
+    "chunk-RPH2OU3C": {
+      "file": "chunk-RPH2OU3C.js"
     },
-    "chunk-V4OQ3NZ2": {
-      "file": "chunk-V4OQ3NZ2.js"
+    "chunk-OGOWPD6T": {
+      "file": "chunk-OGOWPD6T.js"
+    },
+    "chunk-PLDDJCW6": {
+      "file": "chunk-PLDDJCW6.js"
     }
   }
 }

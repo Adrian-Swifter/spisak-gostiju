@@ -9,7 +9,13 @@ import calculateChairPositions from "./utils/calculateChairPositions";
 import exportCanvasToPDF from "./utils/exportCanvasToPDF";
 import exportToPdf from "./utils/exportToPdf";
 import exportToExcel from "./utils/exportToExcel";
-import { exportData, importData } from "./utils/dataUtils";
+import {
+  exportData,
+  importData,
+  sanitizeGuests,
+  sanitizeTables,
+} from "./utils/dataUtils";
+import { importGuestList } from "./utils/importGuestList";
 
 // Component imports
 import DeviceWrapper from "./components/DeviceWrapper";
@@ -27,11 +33,11 @@ const App = () => {
   const [showResetPopup, setShowResetPopup] = useState(false);
   const [guests, setGuests] = useState<Guest[]>(() => {
     const saved = localStorage.getItem("guests");
-    return saved ? JSON.parse(saved) : [];
+    return saved ? sanitizeGuests(JSON.parse(saved)) : [];
   });
   const [tables, setTables] = useState<Table[]>(() => {
     const saved = localStorage.getItem("tables");
-    return saved ? JSON.parse(saved) : [];
+    return saved ? sanitizeTables(JSON.parse(saved)) : [];
   });
   const [activeTab, setActiveTab] = useState<"guests" | "tables" | "settings">(
     "guests"
@@ -102,19 +108,21 @@ const App = () => {
     return 200;
   };
 
-  const addTable = (type: "rectangle" | "circle") => {
+  const addTable = (type: "rectangle" | "circle", quantity = 1) => {
     if (!newTableName) return alert("Unesite naziv stola!");
 
     const initialWidth = calculateInitialSize(type, newChairCount);
     const initialHeight = type === "circle" ? initialWidth : 100;
+    const requestedQuantity = Number.isFinite(quantity) ? quantity : 1;
+    const tableQuantity = Math.max(1, Math.floor(requestedQuantity));
 
-    const newTable: Table = {
+    const newTables: Table[] = Array.from({ length: tableQuantity }, (_, index) => ({
       id: uuidv4(),
-      name: newTableName,
+      name: tableQuantity > 1 ? `${newTableName} ${index + 1}` : newTableName,
       type,
       seatingType: type === "rectangle" ? seatingType : undefined,
-      x: 100,
-      y: 100,
+      x: 100 + index * 30,
+      y: 100 + index * 30,
       width: initialWidth,
       height: initialHeight,
       chairsCount: newChairCount,
@@ -126,9 +134,9 @@ const App = () => {
         [],
         seatingType
       ),
-    };
+    }));
 
-    setTables([...tables, newTable]);
+    setTables((prevTables) => [...prevTables, ...newTables]);
     setNewTableName("");
     setNewChairCount(8);
   };
@@ -172,6 +180,40 @@ const App = () => {
           alert(`Error importing data: ${error.message}`);
         });
     }
+    e.target.value = "";
+  };
+
+  const handleImportGuestList = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      importGuestList(file)
+        .then((importedGuests) => {
+          const existingNames = new Set(
+            guests.map((guest) => guest.name.toLowerCase().trim())
+          );
+          const newGuests = importedGuests
+            .filter((guest) => !existingNames.has(guest.name.toLowerCase().trim()))
+            .map((guest, index) => ({
+              id: uuidv4(),
+              name: guest.name,
+              inviteSent: guest.inviteSent,
+              confirmedAttendance: guest.confirmedAttendance,
+              order: guests.length + index,
+            }));
+
+          if (newGuests.length === 0) {
+            alert("Nisu pronaÄ‘eni novi gosti za uvoz.");
+            return;
+          }
+
+          setGuests((prevGuests) => [...prevGuests, ...newGuests]);
+          alert(`Uvezeno gostiju: ${newGuests.length}`);
+        })
+        .catch((error) => {
+          alert(`Error importing guest list: ${error.message}`);
+        });
+    }
+    e.target.value = "";
   };
 
   const resetEverything = () => {
@@ -221,6 +263,7 @@ const App = () => {
             exportExcel={() => exportToExcel(guests, tables)}
             exportPDF={() => exportToPdf(guests, tables)}
             exportCanvasToPDF={exportCanvasToPDF}
+            importGuestList={handleImportGuestList}
             setShowResetPopup={setShowResetPopup}
           />
         );

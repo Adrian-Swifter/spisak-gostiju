@@ -7,7 +7,7 @@ import { useState } from "react";
 interface TablesTabProps {
   tables: Table[];
   deleteTable: (id: string) => void;
-  addTable: (type: "rectangle" | "circle") => void;
+  addTable: (type: "rectangle" | "circle", quantity?: number) => void;
   newTableName: string;
   setNewTableName: (name: string) => void;
   newChairCount: number;
@@ -41,6 +41,7 @@ const TablesTab = ({
   const [editingTableName, setEditingTableName] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
+  const [tableQuantity, setTableQuantity] = useState<number>(1);
 
   const buttonStyle = {
     padding: "12px 15px",
@@ -53,6 +54,28 @@ const TablesTab = ({
     fontSize: "14px",
     fontWeight: "500",
     transition: "all 0.2s ease",
+  };
+
+  const fieldStyle = {
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: "6px",
+  };
+
+  const labelStyle = {
+    color: "var(--primary-dark)",
+    fontSize: "14px",
+    fontWeight: "600",
+  };
+
+  const getCreateTablesButtonText = () => {
+    if (tableQuantity <= 1) return "Dodaj Sto";
+    const lastDigit = tableQuantity % 10;
+    const lastTwoDigits = tableQuantity % 100;
+    if (lastDigit >= 2 && lastDigit <= 4 && (lastTwoDigits < 12 || lastTwoDigits > 14)) {
+      return `Kreiraj ${tableQuantity} stola`;
+    }
+    return `Kreiraj ${tableQuantity} stolova`;
   };
 
   const handleEditClick = (table: Table) => {
@@ -87,7 +110,7 @@ const TablesTab = ({
   );
 
   const getOccupiedChairsCount = (table: Table) => {
-    return table.chairs.filter((chair) => chair.occupiedBy).length;
+    return (table.chairs ?? []).filter((chair) => chair?.occupiedBy).length;
   };
 
   // Render mobile or desktop view
@@ -118,7 +141,9 @@ const TablesTab = ({
             border: "1px solid var(--primary-light)",
           }}
         >
-          <select
+          <label style={fieldStyle}>
+            <span style={labelStyle}>Tip stola</span>
+            <select
             value={tableType}
             onChange={(e) =>
               setTableType(e.target.value as "rectangle" | "circle")
@@ -134,10 +159,13 @@ const TablesTab = ({
           >
             <option value="rectangle">Četvrtasti</option>
             <option value="circle">Kružni</option>
-          </select>
+            </select>
+          </label>
 
           {tableType === "rectangle" && (
-            <select
+            <label style={fieldStyle}>
+              <span style={labelStyle}>Raspored sedenja</span>
+              <select
               value={seatingType}
               onChange={(e) =>
                 setSeatingType(e.target.value as "one-sided" | "two-sided")
@@ -153,9 +181,12 @@ const TablesTab = ({
             >
               <option value="one-sided">Jednostrano sedenje</option>
               <option value="two-sided">Dvostrano sedenje</option>
-            </select>
+              </select>
+            </label>
           )}
-          <input
+          <label style={fieldStyle}>
+            <span style={labelStyle}>Naziv ili prefiks stolova</span>
+            <input
             type="text"
             placeholder="Ime stola"
             value={newTableName}
@@ -167,8 +198,11 @@ const TablesTab = ({
               fontSize: "14px",
               transition: "all 0.2s ease",
             }}
-          />
-          <input
+            />
+          </label>
+          <label style={fieldStyle}>
+            <span style={labelStyle}>Broj stolica po stolu</span>
+            <input
             type="number"
             min="1"
             value={newChairCount}
@@ -180,9 +214,26 @@ const TablesTab = ({
               fontSize: "14px",
               transition: "all 0.2s ease",
             }}
-          />
+            />
+          </label>
+          <label style={fieldStyle}>
+            <span style={labelStyle}>Broj stolova za kreiranje</span>
+            <input
+              type="number"
+              min="1"
+              value={tableQuantity}
+              onChange={(e) => setTableQuantity(Number(e.target.value))}
+              style={{
+                padding: "12px 15px",
+                borderRadius: "var(--radius-md)",
+                border: "1px solid var(--primary-light)",
+                fontSize: "14px",
+                transition: "all 0.2s ease",
+              }}
+            />
+          </label>
           <button
-            onClick={() => addTable(tableType)}
+            onClick={() => addTable(tableType, tableQuantity)}
             style={{
               ...buttonStyle,
               backgroundColor: "rgb(126, 63, 94)",
@@ -190,7 +241,7 @@ const TablesTab = ({
             }}
           >
             <TableIcon color="#ffffff" />
-            Dodaj Sto
+            {getCreateTablesButtonText()}
           </button>
         </div>
 
@@ -390,7 +441,9 @@ const TablesTab = ({
           border: "1px solid var(--primary-light)",
         }}
       >
-        <select
+        <label style={fieldStyle}>
+          <span style={labelStyle}>Tip stola</span>
+          <select
           value={tableType}
           onChange={(e) =>
             setTableType(e.target.value as "rectangle" | "circle")
@@ -406,10 +459,13 @@ const TablesTab = ({
         >
           <option value="rectangle">Četvrtasti</option>
           <option value="circle">Kružni</option>
-        </select>
+          </select>
+        </label>
 
         {tableType === "rectangle" && (
-          <select
+          <label style={fieldStyle}>
+            <span style={labelStyle}>Raspored sedenja</span>
+            <select
             value={seatingType}
             onChange={(e) =>
               setSeatingType(e.target.value as "one-sided" | "two-sided")
@@ -425,22 +481,28 @@ const TablesTab = ({
           >
             <option value="one-sided">Jednostrano sedenje</option>
             <option value="two-sided">Dvostrano sedenje</option>
-          </select>
+            </select>
+          </label>
         )}
-        <input
-          type="text"
-          placeholder="Ime stola"
-          value={newTableName}
-          onChange={(e) => setNewTableName(e.target.value)}
-          style={{
-            padding: "12px 15px",
-            borderRadius: "var(--radius-md)",
-            border: "1px solid var(--accent)",
-            fontSize: "14px",
-            transition: "all 0.2s ease",
-          }}
-        />
-        <input
+        <label style={fieldStyle}>
+          <span style={labelStyle}>Naziv ili prefiks stolova</span>
+          <input
+            type="text"
+            placeholder="Ime stola"
+            value={newTableName}
+            onChange={(e) => setNewTableName(e.target.value)}
+            style={{
+              padding: "12px 15px",
+              borderRadius: "var(--radius-md)",
+              border: "1px solid var(--accent)",
+              fontSize: "14px",
+              transition: "all 0.2s ease",
+            }}
+          />
+        </label>
+        <label style={fieldStyle}>
+          <span style={labelStyle}>Broj stolica po stolu</span>
+          <input
           type="number"
           min="1"
           value={newChairCount}
@@ -452,9 +514,26 @@ const TablesTab = ({
             fontSize: "14px",
             transition: "all 0.2s ease",
           }}
-        />
+          />
+        </label>
+        <label style={fieldStyle}>
+          <span style={labelStyle}>Broj stolova za kreiranje</span>
+          <input
+            type="number"
+            min="1"
+            value={tableQuantity}
+            onChange={(e) => setTableQuantity(Number(e.target.value))}
+            style={{
+              padding: "12px 15px",
+              borderRadius: "var(--radius-md)",
+              border: "1px solid var(--accent)",
+              fontSize: "14px",
+              transition: "all 0.2s ease",
+            }}
+          />
+        </label>
         <button
-          onClick={() => addTable(tableType)}
+          onClick={() => addTable(tableType, tableQuantity)}
           style={{
             ...buttonStyle,
             backgroundColor: "rgb(126, 63, 94)",
@@ -462,7 +541,7 @@ const TablesTab = ({
           }}
         >
           <TableIcon color="#ffffff" />
-          Dodaj Sto
+          {getCreateTablesButtonText()}
         </button>
       </div>
 
